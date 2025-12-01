@@ -19,15 +19,53 @@ body {
 }
 
 .card {
-    background:#ffffffdd;
     width:90%;
     max-width:450px;
-    padding:20px;
+    background:#ffffffdd;
+    padding:22px;
     border-radius:16px;
     text-align:center;
     box-shadow:0 6px 25px rgba(255,80,120,0.25);
     backdrop-filter:blur(8px);
 }
+
+/* --------- ECRÃ DE PASSWORD --------- */
+
+#loginScreen h2 {
+    color:#d6336c;
+    margin-bottom:10px;
+}
+
+#passwordInput {
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border-radius:10px;
+    border:1px solid rgba(214,74,106,0.25);
+    font-size:16px;
+    outline:none;
+}
+
+#enterBtn {
+    margin-top:12px;
+    padding:10px 20px;
+    font-size:16px;
+    font-weight:700;
+    color:white;
+    background:#d6336c;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+#errorMsg {
+    margin-top:10px;
+    color:#b00020;
+    font-weight:600;
+    display:none;
+}
+
+/* --------- ECRÃ PRINCIPAL --------- */
 
 .photo {
     width:100%;
@@ -66,11 +104,6 @@ h1 {
     color:#d6336c;
 }
 
-.heart {
-    margin-top:14px;
-    font-size:32px;
-}
-
 .msg {
     margin-top:16px;
     font-size:14px;
@@ -78,56 +111,94 @@ h1 {
     line-height:1.5;
 }
 
-.error {
-    margin-top:12px;
-    color:#b00020;
-    font-weight:bold;
-    display:none;
+.heart {
+    font-size:32px;
+    margin-top:14px;
 }
 </style>
 </head>
 
 <body>
+
 <div class="card">
 
-    <img src="your-photo.jpg" class="photo" onerror="this.style.display='none'">
+    <!-- LOGIN SCREEN -->
+    <div id="loginScreen">
+        <h2>🔒 Acesso restrito</h2>
+        <p>Introduz a palavra-passe para entrar:</p>
 
-    <h1>Juntos</h1>
-    <div class="names">Salvador ❤ Assunção</div>
+        <input type="text" id="passwordInput" placeholder="Palavra-passe...">
+        <button id="enterBtn">Entrar</button>
 
-    <div id="ymd" class="counter-line"></div>
-    <div id="hms" class="hms"></div>
-
-    <div class="heart">❤️</div>
-
-    <div class="msg">
-        Para te lembrares quantos dias passaram desde que tomei a melhor decisão da minha vida…  
-        E que possamos voltar aqui e ver que os dias só aumentaram.  
-        Amo-te daqui até ao infinito ❤️
+        <div id="errorMsg">Password incorreta 💔</div>
     </div>
 
-    <div id="error" class="error"></div>
+    <!-- MAIN CONTENT -->
+    <div id="mainContent" style="display:none;">
+
+        <img src="your-photo.jpg" class="photo" onerror="this.style.display='none'">
+
+        <h1>Juntos</h1>
+        <div class="names">Salvador ❤ Assunção</div>
+
+        <div id="ymd" class="counter-line"></div>
+        <div id="hms" class="hms"></div>
+
+        <div class="heart">❤️</div>
+
+        <div class="msg">
+            Para te lembrares quantos dias passaram desde que tomei a melhor decisão da minha vida…  
+            E que possamos voltar aqui e ver que os dias só aumentaram.  
+            Amo-te daqui até ao infinito ❤️
+        </div>
+
+    </div>
+
 </div>
 
 <script>
-/* DATA DO INÍCIO DO NAMORO */
+/* --------- PASSWORD DEFINIDA --------- */
+
+const PASSWORD = "1 de junho";
+
+const loginScreen = document.getElementById("loginScreen");
+const mainContent = document.getElementById("mainContent");
+const passwordInput = document.getElementById("passwordInput");
+const errorMsg = document.getElementById("errorMsg");
+const enterBtn = document.getElementById("enterBtn");
+
+enterBtn.addEventListener("click", checkPassword);
+passwordInput.addEventListener("keypress", function(e) {
+    if (e.key === "Enter") checkPassword();
+});
+
+function checkPassword() {
+    const value = passwordInput.value.trim();
+    if (value.toLowerCase() === PASSWORD.toLowerCase()) {
+        loginScreen.style.display = "none";
+        mainContent.style.display = "block";
+    } else {
+        errorMsg.style.display = "block";
+    }
+}
+
+/* --------- CONTADOR DE TEMPO --------- */
+
 const START = new Date("2025-09-17T22:00:00");
 
-/* PLURAL PERFEITO EM PORTUGUÊS */
 function pluralPT(n, singular) {
     const plurais = {
-        "ano": "anos",
-        "mês": "meses",
-        "dia": "dias",
-        "hora": "horas",
-        "minuto": "minutos",
-        "segundo": "segundos"
+        ano: "anos",
+        mês: "meses",
+        dia: "dias",
+        hora: "horas",
+        minuto: "minutos",
+        segundo: "segundos"
     };
     return n + " " + (n === 1 ? singular : plurais[singular]);
 }
 
-/* CÁLCULO CORRETO ENTRE DATAS */
-function calcDiff(start, now){
+function calcDiff(start, now) {
     let years = now.getFullYear() - start.getFullYear();
     let months = now.getMonth() - start.getMonth();
     let days = now.getDate() - start.getDate();
@@ -143,22 +214,15 @@ function calcDiff(start, now){
         months += 12;
     }
 
-    let totalSec = Math.floor((now - start)/1000);
-    let hours = Math.floor(totalSec/3600) % 24;
-    let minutes = Math.floor(totalSec/60) % 60;
-    let seconds = totalSec % 60;
+    let sec = Math.floor((now - start) / 1000);
+    let hours = Math.floor(sec / 3600) % 24;
+    let minutes = Math.floor(sec / 60) % 60;
+    let seconds = sec % 60;
 
-    return {years, months, days, hours, minutes, seconds};
+    return { years, months, days, hours, minutes, seconds };
 }
 
-function update(){
-    const err = document.getElementById("error");
-    if(isNaN(START.getTime())){
-        err.style.display="block";
-        err.textContent="Erro na data!";
-        return;
-    }
-
+function update() {
     const now = new Date();
     const d = calcDiff(START, now);
 
@@ -169,8 +233,8 @@ function update(){
         `${pluralPT(d.hours,"hora")}, ${pluralPT(d.minutes,"minuto")}, ${pluralPT(d.seconds,"segundo")}`;
 }
 
-update();
 setInterval(update, 1000);
+update();
 </script>
 
 </body>
