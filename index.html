@@ -1,241 +1,474 @@
-<!DOCTYPE html>
-<html lang="pt">
+<!doctype html>
+<html lang="pt-PT">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Salvador ❤ Assunção</title>
-
+<link rel="icon" href="data:;base64,iVBORw0KGgo=">
 <style>
-body {
-    margin:0;
-    font-family: "Segoe UI", Arial, sans-serif;
-    background: linear-gradient(180deg,#ffe6ef,#fff9fc,#ffeaf2);
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:20px;
-    color:#2b2b2b;
-}
-
-.card {
-    width:90%;
-    max-width:450px;
-    background:#ffffffdd;
-    padding:22px;
-    border-radius:16px;
-    text-align:center;
-    box-shadow:0 6px 25px rgba(255,80,120,0.25);
-    backdrop-filter:blur(8px);
-}
-
-/* --------- ECRÃ DE PASSWORD --------- */
-
-#loginScreen h2 {
-    color:#d6336c;
-    margin-bottom:10px;
-}
-
-#passwordInput {
-    width:100%;
-    padding:12px;
-    margin-top:10px;
-    border-radius:10px;
-    border:1px solid rgba(214,74,106,0.25);
-    font-size:16px;
-    outline:none;
-}
-
-#enterBtn {
-    margin-top:12px;
-    padding:10px 20px;
-    font-size:16px;
-    font-weight:700;
-    color:white;
-    background:#d6336c;
-    border:none;
-    border-radius:10px;
-    cursor:pointer;
-}
-
-#errorMsg {
-    margin-top:10px;
-    color:#b00020;
-    font-weight:600;
-    display:none;
-}
-
-/* --------- ECRÃ PRINCIPAL --------- */
-
-.photo {
-    width:100%;
-    height:260px;
-    background:#ffccdd;
-    border-radius:12px;
-    object-fit:cover;
-    margin-bottom:14px;
-}
-
-h1 {
-    margin:0;
-    font-size:26px;
-    color:#d6336c;
-    font-weight:bold;
-}
-
-.names {
-    margin:4px 0 14px;
-    font-size:15px;
-    color:#733d4f;
-    font-weight:600;
-}
-
-.counter-line {
-    font-size:20px;
-    font-weight:800;
-    margin-top:10px;
-    color:#d6336c;
-}
-
-.hms {
-    margin-top:8px;
-    font-size:17px;
-    font-weight:700;
-    color:#d6336c;
-}
-
-.msg {
-    margin-top:16px;
-    font-size:14px;
-    color:#704655;
-    line-height:1.5;
-}
-
-.heart {
-    font-size:32px;
-    margin-top:14px;
-}
+  :root{
+    --accent:#d6336c;
+    --muted:#6e4c5a;
+    --bg1:#fff6f8; --bg2:#fff0f5;
+    --card:#ffffffdd;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Segoe UI,Arial,Helvetica,sans-serif;background:linear-gradient(180deg,var(--bg1),var(--bg2));min-height:100vh;color:#2b2b2b}
+  /* top bar */
+  .topbar{position:fixed;left:0;right:0;top:0;height:60px;display:flex;align-items:center;justify-content:space-between;padding:10px 18px;backdrop-filter:blur(6px);z-index:40}
+  .brand{font-weight:800;color:var(--accent);font-size:18px}
+  .hamb{width:44px;height:44px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);display:flex;align-items:center;justify-content:center;background:#fff;cursor:pointer}
+  .container{padding:90px 16px 30px;max-width:980px;margin:0 auto}
+  .card{background:var(--card);padding:18px;border-radius:14px;box-shadow:0 12px 40px rgba(214,74,106,0.08);border:1px solid rgba(214,74,106,0.04)}
+  /* home date/time */
+  .bigDate{font-size:26px;font-weight:800;color:var(--accent);text-align:center}
+  .smallTime{color:var(--muted);text-align:center;margin-top:6px;font-weight:700}
+  /* menu drawer */
+  .drawer{position:fixed;right:-320px;top:0;height:100vh;width:320px;background:#fff;padding:18px;box-shadow:-20px 0 50px rgba(0,0,0,0.12);transition:right .28s;z-index:50;overflow:auto}
+  .drawer.open{right:0}
+  .drawer h3{margin:0 0 6px;color:var(--accent)}
+  .menuitem{padding:12px 10px;border-radius:10px;cursor:pointer;margin:6px 0;font-weight:700}
+  .menuitem:hover{background:linear-gradient(90deg,rgba(214,74,106,0.06),transparent)}
+  /* pages */
+  .page{display:none}
+  .page.active{display:block}
+  /* about split */
+  .split{display:flex;gap:12px}
+  .col{flex:1;background:#fff;padding:12px;border-radius:10px;min-height:220px;border:1px solid rgba(0,0,0,0.03)}
+  .divider{width:1px;background:linear-gradient(#fff,rgba(0,0,0,0.06));margin:0 8px}
+  /* gallery */
+  .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
+  .thumb{width:100%;height:110px;object-fit:cover;border-radius:8px}
+  .top-actions{display:flex;gap:8px;justify-content:flex-end;margin-bottom:10px}
+  .btn{padding:8px 12px;border-radius:10px;border:0;background:var(--accent);color:#fff;font-weight:700;cursor:pointer}
+  .ghost{background:transparent;border:1px solid rgba(0,0,0,0.06);color:var(--muted)}
+  /* notes */
+  .notes-list{display:flex;flex-direction:column;gap:8px}
+  textarea{width:100%;min-height:110px;padding:10px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);resize:vertical}
+  /* calendar */
+  .week{display:flex;gap:6px;justify-content:space-between}
+  .day{flex:1;padding:10px;border-radius:8px;text-align:center;border:1px solid rgba(0,0,0,0.03);cursor:pointer}
+  .day.active{background:linear-gradient(90deg,rgba(214,74,106,0.08),transparent)}
+  .small{font-size:12px;color:var(--muted)}
+  /* footer note */
+  .note{margin-top:12px;color:var(--muted);font-size:13px}
+  @media(max-width:720px){ .split{flex-direction:column} .drawer{width:100%;right:-100%} }
 </style>
 </head>
-
 <body>
+  <div class="topbar">
+    <div class="brand">Salvador ❤ Assunção</div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <div id="currentPageName" class="small" style="font-weight:700;color:var(--muted);margin-right:8px"></div>
+      <div id="hamb" class="hamb" title="Menu">☰</div>
+    </div>
+  </div>
 
-<div class="card">
+  <div id="drawer" class="drawer" role="navigation" aria-hidden="true">
+    <button id="closeDrawer" class="btn ghost" style="float:right">X</button>
+    <h3>Menu</h3>
+    <div id="m_come" class="menuitem">Onde tudo começou</div>
+    <div id="m_sobre" class="menuitem">Sobre Nós</div>
+    <div id="m_gal" class="menuitem">Galeria</div>
+    <div id="m_tempo" class="menuitem">Tempo</div>
+    <div id="m_notas" class="menuitem">Notas</div>
+    <div id="m_cal" class="menuitem">Calendário</div>
+    <div style="margin-top:20px" class="small">Privado — acesso apenas com conta</div>
+  </div>
 
-    <!-- LOGIN SCREEN -->
-    <div id="loginScreen">
-        <h2>🔒 Acesso restrito</h2>
-        <p>Introduz a palavra-passe para entrar:</p>
-
-        <input type="text" id="passwordInput" placeholder="Palavra-passe...">
-        <button id="enterBtn">Entrar</button>
-
-        <div id="errorMsg">Password incorreta 💔</div>
+  <div class="container">
+    <!-- LOGIN CARD -->
+    <div id="loginCard" class="card" style="max-width:520px;margin:0 auto">
+      <h2 style="margin:0 0 8px;color:var(--accent)">Entrar</h2>
+      <div class="small" style="margin-bottom:10px">Usa as credenciais partilhadas</div>
+      <input id="email" placeholder="Email" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);margin-bottom:8px"/>
+      <input id="password" type="password" placeholder="Password" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);margin-bottom:8px"/>
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        <button id="signIn" class="btn">Entrar</button>
+      </div>
+      <div id="loginErr" style="color:#b00020;margin-top:8px;display:none"></div>
+      <div class="note">Dica: usa o email que criaste no Supabase e a password <strong>sasiboy</strong></div>
     </div>
 
-    <!-- MAIN CONTENT -->
-    <div id="mainContent" style="display:none;">
-
-        <img src="your-photo.jpg" class="photo" onerror="this.style.display='none'">
-
-        <h1>Juntos</h1>
-        <div class="names">Salvador ❤ Assunção</div>
-
-        <div id="ymd" class="counter-line"></div>
-        <div id="hms" class="hms"></div>
-
-        <div class="heart">❤️</div>
-
-        <div class="msg">
-            Para te lembrares quantos dias passaram desde que tomei a melhor decisão da minha vida…  
-            E que possamos voltar aqui e ver que os dias só aumentaram.  
-            Amo-te daqui até ao infinito ❤️
+    <!-- APP PAGES -->
+    <div id="app" style="display:none">
+      <!-- HOME -->
+      <section id="page_home" class="page active">
+        <div class="card" style="max-width:520px;margin:0 auto">
+          <div id="dateNow" class="bigDate">--/--/----</div>
+          <div id="timeNow" class="smallTime">--:--</div>
+          <div class="note">Bem-vindo ao vosso espaço privado.</div>
         </div>
+      </section>
 
+      <!-- Onde tudo começou -->
+      <section id="page_come" class="page">
+        <div class="card">
+          <h2>Onde tudo começou</h2>
+          <p class="small">Título — aqui vais poder escrever mais tarde</p>
+        </div>
+      </section>
+
+      <!-- Sobre Nós -->
+      <section id="page_sobre" class="page">
+        <div class="card">
+          <h2>Sobre Nós</h2>
+          <div class="split" style="margin-top:10px">
+            <div class="col">
+              <h3 style="margin-top:0">Sassá</h3>
+              <div contenteditable id="bio_left" style="min-height:140px;outline:none">Escreve sobre ti aqui (tópicos)...</div>
+            </div>
+            <div class="divider"></div>
+            <div class="col">
+              <h3 style="margin-top:0">Assunção</h3>
+              <div contenteditable id="bio_right" style="min-height:140px;outline:none">Escreve sobre ela aqui...</div>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:center;margin-top:10px">
+            <button id="saveBios" class="btn">Salvar biografias</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Galeria -->
+      <section id="page_gal" class="page">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <h2 style="margin:0">Galeria</h2>
+            <div style="display:flex;gap:8px;align-items:center">
+              <button id="addPhotoBtn" class="btn">+</button>
+            </div>
+          </div>
+
+          <div id="galleryGrid" class="gallery" style="margin-top:12px"></div>
+          <div class="note">Podes adicionar fotos através do botão + (tira foto ou escolhe da fototeca).</div>
+
+          <!-- hidden file input -->
+          <input type="file" id="fileInput" accept="image/*" capture="environment" style="display:none"/>
+        </div>
+      </section>
+
+      <!-- Tempo -->
+      <section id="page_tempo" class="page">
+        <div class="card" style="max-width:520px;margin:0 auto">
+          <h2>Tempo</h2>
+          <div id="ymd" class="bigDate" style="margin-top:8px"></div>
+          <div id="hms" class="smallTime" style="margin-top:4px"></div>
+        </div>
+      </section>
+
+      <!-- Notas -->
+      <section id="page_notas" class="page">
+        <div class="card">
+          <h2>Notas</h2>
+          <textarea id="noteInput" placeholder="Escreve algo..." ></textarea>
+          <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
+            <button id="saveNote" class="btn">Guardar</button>
+          </div>
+          <div id="notesList" class="notes-list" style="margin-top:12px"></div>
+        </div>
+      </section>
+
+      <!-- Calendário -->
+      <section id="page_cal" class="page">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <h2 style="margin:0">Calendário</h2>
+            <div>
+              <button id="prevWeek" class="ghost btn">◀</button>
+              <button id="nextWeek" class="ghost btn">▶</button>
+            </div>
+          </div>
+          <div id="monthLabel" class="small" style="margin-top:8px;text-align:center"></div>
+          <div id="weekGrid" class="week" style="margin-top:10px"></div>
+          <div style="margin-top:10px">
+            <textarea id="dayNote" placeholder="Escreve aqui para o dia seleccionado"></textarea>
+            <div style="display:flex;justify-content:space-between;margin-top:8px">
+              <div id="selectedDate" class="small"></div>
+              <div>
+                <button id="saveDay" class="btn">Guardar</button>
+                <button id="clearDay" class="btn ghost">Apagar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
+  </div>
 
-</div>
+<!-- Supabase JS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
 <script>
-/* --------- PASSWORD DEFINIDA --------- */
+/* ===========================
+  CONFIG CLIENT - substitui aqui
+  pega as tuas chaves em Settings -> API
+=========================== */
+const SUPABASE_URL = "https://qtzlyowxjqdsswyxcmzu.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF0emx5b3d4anFkc3N3eXhjbXp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ2MDc1MDUsImV4cCI6MjA4MDE4MzUwNX0.iLb7C7x-qyzY58SHd_n_Fdc2RkVy2hNBkf-n41st02c";
+const supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-const PASSWORD = "1 de junho";
+/* --- helpers de UI --- */
+const show = id => document.getElementById(id).classList.add('active');
+const hide = id => document.getElementById(id).classList.remove('active');
+const showPage = (pageId, pageName) => {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(pageId).classList.add('active');
+  document.getElementById('currentPageName').textContent = pageName || '';
+};
 
-const loginScreen = document.getElementById("loginScreen");
-const mainContent = document.getElementById("mainContent");
-const passwordInput = document.getElementById("passwordInput");
-const errorMsg = document.getElementById("errorMsg");
-const enterBtn = document.getElementById("enterBtn");
+/* drawer menu */
+const drawer = document.getElementById('drawer');
+document.getElementById('hamb').onclick = ()=>{ drawer.classList.add('open'); drawer.setAttribute('aria-hidden','false') };
+document.getElementById('closeDrawer').onclick = ()=>{ drawer.classList.remove('open'); drawer.setAttribute('aria-hidden','true') };
+document.getElementById('m_come').onclick = ()=>{ drawer.classList.remove('open'); showPage('page_come','Onde tudo começou') };
+document.getElementById('m_sobre').onclick = ()=>{ drawer.classList.remove('open'); showPage('page_sobre','Sobre Nós') };
+document.getElementById('m_gal').onclick = ()=>{ drawer.classList.remove('open'); showPage('page_gal','Galeria'); loadGallery(); };
+document.getElementById('m_tempo').onclick = ()=>{ drawer.classList.remove('open'); showPage('page_tempo','Tempo') };
+document.getElementById('m_notas').onclick = ()=>{ drawer.classList.remove('open'); showPage('page_notas','Notas'); loadNotes(); };
+document.getElementById('m_cal').onclick = ()=>{ drawer.classList.remove('open'); showPage('page_cal','Calendário'); renderWeek(0); };
 
-enterBtn.addEventListener("click", checkPassword);
-passwordInput.addEventListener("keypress", function(e) {
-    if (e.key === "Enter") checkPassword();
+/* LOGIN */
+const loginCard = document.getElementById('loginCard');
+const appDiv = document.getElementById('app');
+const signInBtn = document.getElementById('signIn');
+const loginErr = document.getElementById('loginErr');
+
+signInBtn.onclick = async () => {
+  loginErr.style.display = 'none';
+  const email = document.getElementById('email').value.trim();
+  const pw = document.getElementById('password').value;
+  if (!email || !pw) { loginErr.textContent = 'Preenche os campos'; loginErr.style.display='block'; return; }
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password: pw });
+  if (error) { loginErr.textContent = error.message; loginErr.style.display='block'; return; }
+  // success
+  loginCard.style.display='none';
+  appDiv.style.display='block';
+  startApp();
+};
+
+/* keep session */
+supabase.auth.onAuthStateChange((event, session) => {
+  if(session && session.user){
+    loginCard.style.display='none';
+    appDiv.style.display='block';
+    startApp();
+  }
 });
 
-function checkPassword() {
-    const value = passwordInput.value.trim();
-    if (value.toLowerCase() === PASSWORD.toLowerCase()) {
-        loginScreen.style.display = "none";
-        mainContent.style.display = "block";
-    } else {
-        errorMsg.style.display = "block";
+/* ---------------- HOME: date/time ---------------- */
+function pad(n){return String(n).padStart(2,'0')}
+function updateDateTime(){
+  const d = new Date();
+  const dd = pad(d.getDate()), mm = pad(d.getMonth()+1), yy = d.getFullYear();
+  document.getElementById('dateNow').textContent = `${dd}/${mm}/${yy}`;
+  document.getElementById('timeNow').textContent = `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+setInterval(updateDateTime,1000);
+updateDateTime();
+
+/* ---------------- Sobre Nós: save -> store as key/value in 'notes' table (quick) --------------- */
+document.getElementById('saveBios').addEventListener('click', async ()=>{
+  const left = document.getElementById('bio_left').innerText.trim();
+  const right = document.getElementById('bio_right').innerText.trim();
+  // we store two entries in notes table with special tag
+  await supabase.from('notes').insert([{content: JSON.stringify({type:'bio',side:'left',text:left})},{content: JSON.stringify({type:'bio',side:'right',text:right})}]);
+  alert('Biografias salvas!');
+});
+
+/* ---------------- Gallery: upload to storage + record in photos table ---------------- */
+const fileInput = document.getElementById('fileInput');
+document.getElementById('addPhotoBtn').onclick = ()=> fileInput.click();
+fileInput.onchange = async (ev)=>{
+  const f = ev.target.files[0];
+  if(!f) return;
+  const name = `${Date.now()}_${f.name.replace(/\s/g,'_')}`;
+  // upload
+  const { data, error } = await supabase.storage.from('photos').upload(name, f, { cacheControl: '3600', upsert: false });
+  if(error){ alert('Erro ao enviar: '+error.message); return; }
+  // insert meta
+  await supabase.from('photos').insert([{path: data.path, caption: ''}]);
+  loadGallery();
+};
+
+async function loadGallery(){
+  const { data: photos, error } = await supabase.from('photos').select('*').order('uploaded_at',{ascending:false});
+  const grid = document.getElementById('galleryGrid');
+  grid.innerHTML = '';
+  if(photos && photos.length){
+    for(const p of photos){
+      const url = supabase.storage.from('photos').getPublicUrl(p.path).data.publicUrl;
+      const img = document.createElement('img');
+      img.src = url; img.className='thumb';
+      grid.appendChild(img);
     }
+  } else {
+    grid.innerHTML = '<div class="small" style="color:var(--muted)">A galeria está vazia — adiciona a primeira foto!</div>';
+  }
 }
 
-/* --------- CONTADOR DE TEMPO --------- */
+/* ---------------- Notes: CRUD basic ---------------- */
+document.getElementById('saveNote').addEventListener('click', async ()=>{
+  const text = document.getElementById('noteInput').value.trim();
+  if(!text) return alert('Escreve algo primeiro');
+  await supabase.from('notes').insert([{content: text}]);
+  document.getElementById('noteInput').value = '';
+  loadNotes();
+});
 
+async function loadNotes(){
+  const { data, error } = await supabase.from('notes').select('*').order('created_at',{ascending:false}).limit(50);
+  const list = document.getElementById('notesList');
+  list.innerHTML = '';
+  if(data && data.length){
+    data.forEach(r => {
+      const el = document.createElement('div');
+      el.style.padding='8px'; el.style.border='1px solid rgba(0,0,0,0.04)'; el.style.borderRadius='8px';
+      el.innerHTML = `<div style="font-size:13px;color:var(--muted);margin-bottom:6px">${new Date(r.created_at).toLocaleString()}</div><div>${r.content}</div>`;
+      list.appendChild(el);
+    });
+  } else list.innerHTML = '<div class="small" style="color:var(--muted)">Sem notas ainda</div>';
+}
+
+/* ---------------- Calendário (semcronização com calendar_entries) --------------- */
+let weekOffset = 0; // 0 = current week
+const weekGrid = document.getElementById('weekGrid');
+const monthLabel = document.getElementById('monthLabel');
+const dayNote = document.getElementById('dayNote');
+let selected = null;
+
+function startOfWeek(d){
+  const day = d.getDay(); // 0 dom ..6 sab
+  const diff = d.getDate() - day + (day === 0 ? -6 : 1); // monday start
+  return new Date(d.getFullYear(), d.getMonth(), diff);
+}
+
+function renderWeek(offset){
+  weekOffset = offset;
+  const now = new Date();
+  const base = startOfWeek(now);
+  base.setDate(base.getDate() + offset*7);
+  const days = [];
+  for(let i=0;i<7;i++){
+    const dt = new Date(base.getFullYear(), base.getMonth(), base.getDate()+i);
+    days.push(dt);
+  }
+  monthLabel.textContent = `${days[0].toLocaleString('pt-PT',{month:'long'})} ${days[0].getFullYear()}`;
+  weekGrid.innerHTML = '';
+  days.forEach(d => {
+    const btn = document.createElement('div');
+    btn.className='day';
+    btn.innerHTML = `<div class="small">${['S','T','Q','Q','S','S','D'][d.getDay()]}</div><div style="font-weight:800">${d.getDate()}</div>`;
+    btn.onclick = ()=> selectDay(d);
+    weekGrid.appendChild(btn);
+  });
+  // load any saved notes for this week
+  loadWeekEntries(days);
+}
+document.getElementById('prevWeek').onclick = ()=> renderWeek(weekOffset-1);
+document.getElementById('nextWeek').onclick = ()=> renderWeek(weekOffset+1);
+
+async function loadWeekEntries(days){
+  const start = days[0].toISOString().slice(0,10);
+  const end = days[6].toISOString().slice(0,10);
+  const { data } = await supabase.from('calendar_entries').select('*').gte('day_date', start).lte('day_date', end);
+  // mark days with entries
+  const elems = weekGrid.children;
+  for(let i=0;i<elems.length;i++){
+    const dd = days[i].toISOString().slice(0,10);
+    const entry = data && data.find(x=> x.day_date === dd);
+    if(entry) elems[i].classList.add('active');
+  }
+}
+
+function selectDay(dt){
+  selected = dt;
+  document.getElementById('selectedDate').textContent = dt.toLocaleDateString();
+  // fetch entry
+  fetchDayEntry(dt);
+}
+
+async function fetchDayEntry(dt){
+  const d = dt.toISOString().slice(0,10);
+  const { data } = await supabase.from('calendar_entries').select('*').eq('day_date', d).limit(1);
+  if(data && data.length){
+    dayNote.value = data[0].text;
+  } else dayNote.value = '';
+}
+
+document.getElementById('saveDay').addEventListener('click', async ()=>{
+  if(!selected) return alert('Selecciona um dia primeiro');
+  const d = selected.toISOString().slice(0,10);
+  const text = dayNote.value.trim();
+  // upsert: if exists update else insert
+  const { data } = await supabase.from('calendar_entries').select('*').eq('day_date', d).limit(1);
+  if(data && data.length){
+    await supabase.from('calendar_entries').update({text}).eq('day_date', d);
+  } else {
+    await supabase.from('calendar_entries').insert([{day_date: d, text}]);
+  }
+  alert('Guardado');
+  renderWeek(weekOffset);
+});
+document.getElementById('clearDay').addEventListener('click', async ()=>{
+  if(!selected) return;
+  const d = selected.toISOString().slice(0,10);
+  await supabase.from('calendar_entries').delete().eq('day_date', d);
+  dayNote.value=''; alert('Apagado'); renderWeek(weekOffset);
+});
+
+/* ---------------- Tempo (contador) - usa o mesmo cálculo robusto que já tinhas --------------- */
 const START = new Date("2025-09-17T22:00:00");
+function diffYMDHMS(start, now){
+  let ys = start.getFullYear(), ms = start.getMonth(), ds = start.getDate(), hs = start.getHours(), mins = start.getMinutes(), secs = start.getSeconds();
+  let yn = now.getFullYear(), mn = now.getMonth(), dn = now.getDate(), hn = now.getHours(), mnn = now.getMinutes(), sn = now.getSeconds();
+  let years = yn - ys;
+  let months = mn - ms;
+  if (months < 0){ years -= 1; months += 12; }
+  let anchor = new Date(ys + years, ms + months, ds, hs, mins, secs);
+  if (anchor > now){
+    if (months === 0){ years -= 1; months = 11; } else months -= 1;
+    anchor = new Date(ys + years, ms + months, ds, hs, mins, secs);
+  }
+  let diffMs = now - anchor;
+  let totalSeconds = Math.floor(diffMs/1000);
+  const days = Math.floor(totalSeconds / (24*3600));
+  totalSeconds -= days * 24*3600;
+  const hours = Math.floor(totalSeconds/3600);
+  totalSeconds -= hours*3600;
+  const minutes = Math.floor(totalSeconds/60);
+  const seconds = totalSeconds - minutes*60;
+  return { years, months, days, hours, minutes, seconds };
+}
+function plural(n, singular, pluralForm){
+  return n + ' ' + (n === 1 ? singular : pluralForm);
+}
+function updateCounter(){
+  const now = new Date();
+  const d = diffYMDHMS(START, now);
+  document.getElementById('ymd').textContent = `${plural(d.years,'ano','anos')} • ${plural(d.months,'mês','meses')} • ${plural(d.days,'dia','dias')}`;
+  document.getElementById('hms').textContent = `${plural(d.hours,'hora','horas')}, ${plural(d.minutes,'minuto','minutos')}, ${plural(d.seconds,'segundo','segundos')}`;
+}
+setInterval(updateCounter,1000); updateCounter();
 
-function pluralPT(n, singular) {
-    const plurais = {
-        ano: "anos",
-        mês: "meses",
-        dia: "dias",
-        hora: "horas",
-        minuto: "minutos",
-        segundo: "segundos"
-    };
-    return n + " " + (n === 1 ? singular : plurais[singular]);
+/* ---------------- Start app after login -------------- */
+async function startApp(){
+  showPage('page_home','Início');
+  // load essential data
+  loadGallery();
+  loadNotes();
+  renderWeek(0);
+  // set default emails in login hint
+  document.getElementById('email').value = ''; // keep blank
 }
 
-function calcDiff(start, now) {
-    let years = now.getFullYear() - start.getFullYear();
-    let months = now.getMonth() - start.getMonth();
-    let days = now.getDate() - start.getDate();
-
-    if (days < 0) {
-        months--;
-        const prev = new Date(now.getFullYear(), now.getMonth(), 0);
-        days += prev.getDate();
-    }
-
-    if (months < 0) {
-        years--;
-        months += 12;
-    }
-
-    let sec = Math.floor((now - start) / 1000);
-    let hours = Math.floor(sec / 3600) % 24;
-    let minutes = Math.floor(sec / 60) % 60;
-    let seconds = sec % 60;
-
-    return { years, months, days, hours, minutes, seconds };
-}
-
-function update() {
-    const now = new Date();
-    const d = calcDiff(START, now);
-
-    document.getElementById("ymd").textContent =
-        `${pluralPT(d.years,"ano")} • ${pluralPT(d.months,"mês")} • ${pluralPT(d.days,"dia")}`;
-
-    document.getElementById("hms").textContent =
-        `${pluralPT(d.hours,"hora")}, ${pluralPT(d.minutes,"minuto")}, ${pluralPT(d.seconds,"segundo")}`;
-}
-
-setInterval(update, 1000);
-update();
+/* ---------------- Init: try to restore session (if already logged in) --------------- */
+(async function(){
+  const { data } = await supabase.auth.getSession();
+  if(data.session && data.session.user){
+    loginCard.style.display='none'; appDiv.style.display='block'; startApp();
+  }
+})();
 </script>
-
 </body>
 </html>
