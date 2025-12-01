@@ -145,10 +145,10 @@ function calcDiff(start, now){
 
     let totalSec = Math.floor((now - start)/1000);
     let hours = Math.floor(totalSec/3600) % 24;
-    let mins = Math.floor(totalSec/60) % 60;
-    let secs = totalSec % 60;
+    let minutes = Math.floor(totalSec/60) % 60;
+    let seconds = totalSec % 60;
 
-    return {years, months, days, hours, mins, secs};
+    return {years, months, days, hours, minutes, seconds};
 }
 
 function update(){
