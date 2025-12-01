@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Salvador ❤ Assunção</title>
 
-<!-- ESTILOS -->
 <style>
 :root{
   --pink:#d6336c;
@@ -21,6 +20,8 @@ body{
   color:var(--text);
   min-height:100vh;
 }
+
+/* TOPBAR */
 .topbar{
   position:fixed;
   top:0;left:0;right:0;
@@ -30,8 +31,8 @@ body{
   align-items:center;
   padding:10px 16px;
   backdrop-filter:blur(6px);
-  background:#ffffffbb;
-  z-index:100;
+  background:#ffffffdd;
+  z-index:5000;
 }
 .brand{
   font-weight:800;
@@ -56,18 +57,32 @@ body{
   margin-right:8px;
 }
 
+/* MENU LATERAL */
 .drawer{
   position:fixed;
-  top:0;right:-300px;
+  top:0;
+  right:-300px;
   width:300px;
   height:100vh;
   background:#fff;
   box-shadow:-10px 0 30px rgba(0,0,0,0.2);
   padding:20px;
-  z-index:200;
+  z-index:999999; /* CORRIGIDO */
   transition:0.3s ease;
 }
-.drawer.open{ right:0; }
+.drawer.open{
+  right:0;
+}
+
+/* NO TELEMÓVEL → MENU EM ECRÃ INTEIRO */
+@media(max-width:720px){
+  .drawer{
+    width:100%;
+    right:-100%;
+    max-width:none;
+  }
+}
+
 .menuitem{
   padding:12px;
   border-radius:8px;
@@ -79,12 +94,14 @@ body{
   background:rgba(214,51,108,0.08);
 }
 
+/* CONTAINER GERAL */
 .container{
-  padding:90px 16px 30px;
+  padding:100px 16px 40px; /* mais espaço para não cortar nada */
   max-width:640px;
   margin:auto;
 }
 
+/* CARTÕES */
 .card{
   background:#ffffffdd;
   padding:20px;
@@ -121,9 +138,6 @@ body{
   border-radius:12px;
   min-height:200px;
   border:1px solid #eee;
-}
-textarea, input, button{
-  font-family:inherit;
 }
 
 /* GALERIA */
@@ -183,6 +197,7 @@ textarea, input, button{
 <div class="drawer" id="drawer">
   <button id="closeDrawer" style="float:right;margin-bottom:10px;font-size:18px;background:none;border:none;cursor:pointer">✖</button>
   <h3 style="color:var(--pink)">Menu</h3>
+
   <div class="menuitem" data-page="home">Página Inicial</div>
   <div class="menuitem" data-page="come">Onde tudo começou</div>
   <div class="menuitem" data-page="sobre">Sobre Nós</div>
@@ -218,7 +233,7 @@ textarea, input, button{
   <div id="page_come" class="page">
     <div class="card">
       <h2>Onde tudo começou</h2>
-      <p style="color:var(--muted)">(Escreves aqui mais tarde)</p>
+      <p style="color:var(--muted)">(Escreves aqui depois)</p>
     </div>
   </div>
 
@@ -247,7 +262,6 @@ textarea, input, button{
         <h2>Galeria</h2>
         <button id="addPhotoBtn" style="padding:10px 16px;border:none;border-radius:12px;background:var(--pink);color:#fff;font-weight:bold">+</button>
       </div>
-
       <input type="file" id="fileInput" accept="image/*" style="display:none">
       <div class="gallery" id="galleryGrid" style="margin-top:14px"></div>
     </div>
@@ -291,7 +305,8 @@ textarea, input, button{
 <script>
 /* CONFIG SUPABASE */
 const SUPABASE_URL = "https://qtzlyowxjqdsswyxcmzu.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF0emx5b3d4anFkc3N3eXhjbXp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ2MDc1MDUsImV4cCI6MjA4MDE4MzUwNX0.iLb7C7x-qyzY58SHd_n_Fdc2RkVy2hNBkf-n41st02c";
+const SUPABASE_ANON_KEY =
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF0emx5b3d4anFkc3N3eXhjbXp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ2MDc1MDUsImV4cCI6MjA4MDE4MzUwNX0.iLb7C7x-qyzY58SHd_n_Fdc2RkVy2hNBkf-n41st02c";
 
 const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -342,7 +357,9 @@ function updTempo(){
   let now=new Date();
   let diff=now-START;
   let s=Math.floor(diff/1000);
-  let years=now.getFullYear()-START.getFullYear();
+  let years=now.getFullFullYear?now.getFullYear()-START.getFullYear():now.getFullYear()-START.getFullYear();
+  let yearsDiff=now.getFullYear()-START.getFullYear();
+  years = yearsDiff;
   let months=now.getMonth()-START.getMonth();
   if(months<0){years--;months+=12;}
   let anchor=new Date(START.getFullYear()+years,START.getMonth()+months,START.getDate());
@@ -362,7 +379,7 @@ function updTempo(){
 }
 setInterval(updTempo,1000); updTempo();
 
-/* GALERIA — compressão */
+/* GALERIA */
 document.getElementById("addPhotoBtn").onclick=()=>document.getElementById("fileInput").click();
 
 document.getElementById("fileInput").onchange=async(e)=>{
@@ -472,7 +489,8 @@ function renderWeek(off){
   days.forEach(d=>{
     const el=document.createElement("div");
     el.className="day";
-    el.innerHTML=`<div style='color:var(--muted);font-size:12px'>${["S","T","Q","Q","S","S","D"][d.getDay()]}</div><div>${d.getDate()}</div>`;
+    el.innerHTML=`<div style='color:var(--muted);font-size:12px'>
+    ${["S","T","Q","Q","S","S","D"][d.getDay()]}</div><div>${d.getDate()}</div>`;
     el.onclick=()=>selectDay(d);
     grid.appendChild(el);
   });
