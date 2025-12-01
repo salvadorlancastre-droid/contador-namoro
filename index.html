@@ -1,476 +1,532 @@
-<!doctype html>
-<html lang="pt-PT">
+<!DOCTYPE html>
+<html lang="pt">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Salvador ❤ Assunção</title>
-<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+
+<!-- ESTILOS -->
 <style>
-  :root{
-    --accent:#d6336c;
-    --muted:#6e4c5a;
-    --bg1:#fff6f8; --bg2:#fff0f5;
-    --card:#ffffffdd;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;font-family:Segoe UI,Arial,Helvetica,sans-serif;background:linear-gradient(180deg,var(--bg1),var(--bg2));min-height:100vh;color:#2b2b2b}
-  /* top bar */
-  .topbar{position:fixed;left:0;right:0;top:0;height:60px;display:flex;align-items:center;justify-content:space-between;padding:10px 18px;backdrop-filter:blur(6px);z-index:40}
-  .brand{font-weight:800;color:var(--accent);font-size:18px}
-  .hamb{width:44px;height:44px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);display:flex;align-items:center;justify-content:center;background:#fff;cursor:pointer}
-  .container{padding:90px 16px 30px;max-width:980px;margin:0 auto}
-  .card{background:var(--card);padding:18px;border-radius:14px;box-shadow:0 12px 40px rgba(214,74,106,0.08);border:1px solid rgba(214,74,106,0.04)}
-  /* home date/time */
-  .bigDate{font-size:26px;font-weight:800;color:var(--accent);text-align:center}
-  .smallTime{color:var(--muted);text-align:center;margin-top:6px;font-weight:700}
-  /* menu drawer */
-  .drawer{position:fixed;right:-320px;top:0;height:100vh;width:320px;background:#fff;padding:18px;box-shadow:-20px 0 50px rgba(0,0,0,0.12);transition:right .28s;z-index:50;overflow:auto}
-  .drawer.open{right:0}
-  .drawer h3{margin:0 0 6px;color:var(--accent)}
-  .menuitem{padding:12px 10px;border-radius:10px;cursor:pointer;margin:6px 0;font-weight:700}
-  .menuitem:hover{background:linear-gradient(90deg,rgba(214,74,106,0.06),transparent)}
-  /* pages */
-  .page{display:none}
-  .page.active{display:block}
-  /* about split */
-  .split{display:flex;gap:12px}
-  .col{flex:1;background:#fff;padding:12px;border-radius:10px;min-height:220px;border:1px solid rgba(0,0,0,0.03)}
-  .divider{width:1px;background:linear-gradient(#fff,rgba(0,0,0,0.06));margin:0 8px}
-  /* gallery */
-  .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
-  .thumb{width:100%;height:110px;object-fit:cover;border-radius:8px}
-  .top-actions{display:flex;gap:8px;justify-content:flex-end;margin-bottom:10px}
-  .btn{padding:8px 12px;border-radius:10px;border:0;background:var(--accent);color:#fff;font-weight:700;cursor:pointer}
-  .ghost{background:transparent;border:1px solid rgba(0,0,0,0.06);color:var(--muted)}
-  /* notes */
-  .notes-list{display:flex;flex-direction:column;gap:8px}
-  textarea{width:100%;min-height:110px;padding:10px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);resize:vertical}
-  /* calendar */
-  .week{display:flex;gap:6px;justify-content:space-between}
-  .day{flex:1;padding:10px;border-radius:8px;text-align:center;border:1px solid rgba(0,0,0,0.03);cursor:pointer}
-  .day.active{background:linear-gradient(90deg,rgba(214,74,106,0.08),transparent)}
-  .small{font-size:12px;color:var(--muted)}
-  /* footer note */
-  .note{margin-top:12px;color:var(--muted);font-size:13px}
-  @media(max-width:720px){ .split{flex-direction:column} .drawer{width:100%;right:-100%} }
+:root{
+  --pink:#d6336c;
+  --bg1:#ffe6ef;
+  --bg2:#fff9fc;
+  --text:#2b2b2b;
+  --muted:#704655;
+}
+body{
+  margin:0;
+  font-family:"Segoe UI",Arial,sans-serif;
+  background:linear-gradient(180deg,var(--bg1),var(--bg2));
+  color:var(--text);
+  min-height:100vh;
+}
+.topbar{
+  position:fixed;
+  top:0;left:0;right:0;
+  height:60px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px 16px;
+  backdrop-filter:blur(6px);
+  background:#ffffffbb;
+  z-index:100;
+}
+.brand{
+  font-weight:800;
+  color:var(--pink);
+  font-size:18px;
+}
+.hamb{
+  width:44px;height:44px;
+  background:#fff;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+#currentPageName{
+  font-size:14px;
+  font-weight:700;
+  color:var(--muted);
+  margin-right:8px;
+}
+
+.drawer{
+  position:fixed;
+  top:0;right:-300px;
+  width:300px;
+  height:100vh;
+  background:#fff;
+  box-shadow:-10px 0 30px rgba(0,0,0,0.2);
+  padding:20px;
+  z-index:200;
+  transition:0.3s ease;
+}
+.drawer.open{ right:0; }
+.menuitem{
+  padding:12px;
+  border-radius:8px;
+  font-weight:700;
+  cursor:pointer;
+  margin-bottom:6px;
+}
+.menuitem:hover{
+  background:rgba(214,51,108,0.08);
+}
+
+.container{
+  padding:90px 16px 30px;
+  max-width:640px;
+  margin:auto;
+}
+
+.card{
+  background:#ffffffdd;
+  padding:20px;
+  border-radius:16px;
+  box-shadow:0 6px 25px rgba(255,80,120,0.25);
+  margin-bottom:20px;
+}
+
+.bigDate{
+  font-size:26px;
+  font-weight:800;
+  color:var(--pink);
+  text-align:center;
+}
+.smallTime{
+  text-align:center;
+  font-size:18px;
+  color:var(--muted);
+  margin-top:4px;
+}
+
+.page{ display:none; }
+.page.active{ display:block; }
+
+/* SOBRE NÓS */
+.split{
+  display:flex;
+  gap:12px;
+}
+.col{
+  flex:1;
+  background:#fff;
+  padding:12px;
+  border-radius:12px;
+  min-height:200px;
+  border:1px solid #eee;
+}
+textarea, input, button{
+  font-family:inherit;
+}
+
+/* GALERIA */
+.gallery{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(110px,1fr));
+  gap:10px;
+}
+.thumb{
+  width:100%;height:110px;
+  object-fit:cover;
+  border-radius:12px;
+}
+
+/* NOTAS */
+.notes-list div{
+  background:#fff;
+  padding:10px;
+  border-radius:10px;
+  border:1px solid #eee;
+  margin-bottom:8px;
+}
+
+/* CALENDÁRIO */
+.week{
+  display:flex;
+  justify-content:space-between;
+  gap:6px;
+}
+.day{
+  flex:1;
+  padding:10px;
+  border-radius:8px;
+  background:#fff;
+  text-align:center;
+  border:1px solid #eee;
+  cursor:pointer;
+}
+.day.active{
+  background:rgba(214,51,108,0.12);
+}
 </style>
 </head>
+
 <body>
-  <div class="topbar">
-    <div class="brand">Salvador ❤ Assunção</div>
-    <div style="display:flex;gap:8px;align-items:center">
-      <div id="currentPageName" class="small" style="font-weight:700;color:var(--muted);margin-right:8px"></div>
-      <div id="hamb" class="hamb" title="Menu">☰</div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="brand">Salvador ❤ Assunção</div>
+  <div style="display:flex;align-items:center">
+    <div id="currentPageName"></div>
+    <div class="hamb" id="hamb">☰</div>
+  </div>
+</div>
+
+<!-- MENU -->
+<div class="drawer" id="drawer">
+  <button id="closeDrawer" style="float:right;margin-bottom:10px;font-size:18px;background:none;border:none;cursor:pointer">✖</button>
+  <h3 style="color:var(--pink)">Menu</h3>
+  <div class="menuitem" data-page="home">Página Inicial</div>
+  <div class="menuitem" data-page="come">Onde tudo começou</div>
+  <div class="menuitem" data-page="sobre">Sobre Nós</div>
+  <div class="menuitem" data-page="gal">Galeria</div>
+  <div class="menuitem" data-page="notas">Notas</div>
+  <div class="menuitem" data-page="cal">Calendário</div>
+  <div class="menuitem" data-page="tempo">Tempo</div>
+</div>
+
+<div class="container">
+
+<!-- LOGIN -->
+<div id="loginCard" class="card">
+  <h2 style="margin:0;color:var(--pink)">Entrar</h2>
+  <p style="color:var(--muted)">Código secreto:</p>
+  <input id="codeInput" placeholder="escreve o código..." style="padding:12px;width:100%;border-radius:12px;border:1px solid #ddd">
+  <button id="enterBtn" style="margin-top:12px;padding:12px 20px;border-radius:12px;background:var(--pink);border:none;color:#fff;font-weight:bold;cursor:pointer;width:100%">Entrar</button>
+  <div id="loginError" style="color:red;margin-top:10px;display:none">Código errado!</div>
+</div>
+
+<!-- APP -->
+<div id="app" style="display:none">
+
+  <!-- HOME -->
+  <div id="page_home" class="page active">
+    <div class="card">
+      <div class="bigDate" id="dateNow"></div>
+      <div class="smallTime" id="timeNow"></div>
     </div>
   </div>
 
-  <div id="drawer" class="drawer" role="navigation" aria-hidden="true">
-    <button id="closeDrawer" class="btn ghost" style="float:right">X</button>
-    <h3>Menu</h3>
-    <div id="m_come" class="menuitem">Onde tudo começou</div>
-    <div id="m_sobre" class="menuitem">Sobre Nós</div>
-    <div id="m_gal" class="menuitem">Galeria</div>
-    <div id="m_tempo" class="menuitem">Tempo</div>
-    <div id="m_notas" class="menuitem">Notas</div>
-    <div id="m_cal" class="menuitem">Calendário</div>
-    <div style="margin-top:20px" class="small">Privado — acesso apenas com conta</div>
+  <!-- ONDE TUDO COMEÇOU -->
+  <div id="page_come" class="page">
+    <div class="card">
+      <h2>Onde tudo começou</h2>
+      <p style="color:var(--muted)">(Escreves aqui mais tarde)</p>
+    </div>
   </div>
 
-  <div class="container">
-    <!-- LOGIN CARD -->
-    <div id="loginCard" class="card" style="max-width:520px;margin:0 auto">
-      <h2 style="margin:0 0 8px;color:var(--accent)">Entrar</h2>
-      <div class="small" style="margin-bottom:10px">Usa as credenciais partilhadas</div>
-      <input id="email" placeholder="Email" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);margin-bottom:8px"/>
-      <input id="password" type="password" placeholder="Password" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);margin-bottom:8px"/>
-      <div style="display:flex;gap:8px;justify-content:flex-end">
-        <button id="signIn" class="btn">Entrar</button>
+  <!-- SOBRE NÓS -->
+  <div id="page_sobre" class="page">
+    <div class="card">
+      <h2>Sobre Nós</h2>
+      <div class="split" style="margin-top:14px">
+        <div class="col">
+          <h3>Sassá</h3>
+          <textarea id="bio_left" style="width:100%;min-height:120px;border-radius:10px;border:1px solid #eee"></textarea>
+        </div>
+        <div class="col">
+          <h3>Assunção</h3>
+          <textarea id="bio_right" style="width:100%;min-height:120px;border-radius:10px;border:1px solid #eee"></textarea>
+        </div>
       </div>
-      <div id="loginErr" style="color:#b00020;margin-top:8px;display:none"></div>
-      <div class="note"></strong></div>
-    </div>
-
-    <!-- APP PAGES -->
-    <div id="app" style="display:none">
-      <!-- HOME -->
-      <section id="page_home" class="page active">
-        <div class="card" style="max-width:520px;margin:0 auto">
-          <div id="dateNow" class="bigDate">--/--/----</div>
-          <div id="timeNow" class="smallTime">--:--</div>
-          <div class="note">Bem-vindo ao vosso espaço privado.</div>
-        </div>
-      </section>
-
-      <!-- Onde tudo começou -->
-      <section id="page_come" class="page">
-        <div class="card">
-          <h2>Onde tudo começou</h2>
-          <p class="small">Título — aqui vais poder escrever mais tarde</p>
-        </div>
-      </section>
-
-      <!-- Sobre Nós -->
-      <section id="page_sobre" class="page">
-        <div class="card">
-          <h2>Sobre Nós</h2>
-          <div class="split" style="margin-top:10px">
-            <div class="col">
-              <h3 style="margin-top:0">Sassá</h3>
-              <div contenteditable id="bio_left" style="min-height:140px;outline:none">Escreve sobre ti aqui (tópicos)...</div>
-            </div>
-            <div class="divider"></div>
-            <div class="col">
-              <h3 style="margin-top:0">Assunção</h3>
-              <div contenteditable id="bio_right" style="min-height:140px;outline:none">Escreve sobre ela aqui...</div>
-            </div>
-          </div>
-          <div style="display:flex;justify-content:center;margin-top:10px">
-            <button id="saveBios" class="btn">Salvar biografias</button>
-          </div>
-        </div>
-      </section>
-
-      <!-- Galeria -->
-      <section id="page_gal" class="page">
-        <div class="card">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <h2 style="margin:0">Galeria</h2>
-            <div style="display:flex;gap:8px;align-items:center">
-              <button id="addPhotoBtn" class="btn">+</button>
-            </div>
-          </div>
-
-          <div id="galleryGrid" class="gallery" style="margin-top:12px"></div>
-          <div class="note">Podes adicionar fotos através do botão + (tira foto ou escolhe da fototeca).</div>
-
-          <!-- hidden file input -->
-          <input type="file" id="fileInput" accept="image/*" capture="environment" style="display:none"/>
-        </div>
-      </section>
-
-      <!-- Tempo -->
-      <section id="page_tempo" class="page">
-        <div class="card" style="max-width:520px;margin:0 auto">
-          <h2>Tempo</h2>
-          <div id="ymd" class="bigDate" style="margin-top:8px"></div>
-          <div id="hms" class="smallTime" style="margin-top:4px"></div>
-        </div>
-      </section>
-
-      <!-- Notas -->
-      <section id="page_notas" class="page">
-        <div class="card">
-          <h2>Notas</h2>
-          <textarea id="noteInput" placeholder="Escreve algo..." ></textarea>
-          <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
-            <button id="saveNote" class="btn">Guardar</button>
-          </div>
-          <div id="notesList" class="notes-list" style="margin-top:12px"></div>
-        </div>
-      </section>
-
-      <!-- Calendário -->
-      <section id="page_cal" class="page">
-        <div class="card">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <h2 style="margin:0">Calendário</h2>
-            <div>
-              <button id="prevWeek" class="ghost btn">◀</button>
-              <button id="nextWeek" class="ghost btn">▶</button>
-            </div>
-          </div>
-          <div id="monthLabel" class="small" style="margin-top:8px;text-align:center"></div>
-          <div id="weekGrid" class="week" style="margin-top:10px"></div>
-          <div style="margin-top:10px">
-            <textarea id="dayNote" placeholder="Escreve aqui para o dia seleccionado"></textarea>
-            <div style="display:flex;justify-content:space-between;margin-top:8px">
-              <div id="selectedDate" class="small"></div>
-              <div>
-                <button id="saveDay" class="btn">Guardar</button>
-                <button id="clearDay" class="btn ghost">Apagar</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <button id="saveBios" style="margin-top:14px;padding:12px 20px;border:none;border-radius:12px;background:var(--pink);color:#fff;font-weight:bold;width:100%">Guardar</button>
     </div>
   </div>
 
-<!-- Supabase JS -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <!-- GALERIA -->
+  <div id="page_gal" class="page">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <h2>Galeria</h2>
+        <button id="addPhotoBtn" style="padding:10px 16px;border:none;border-radius:12px;background:var(--pink);color:#fff;font-weight:bold">+</button>
+      </div>
+
+      <input type="file" id="fileInput" accept="image/*" style="display:none">
+      <div class="gallery" id="galleryGrid" style="margin-top:14px"></div>
+    </div>
+  </div>
+
+  <!-- NOTAS -->
+  <div id="page_notas" class="page">
+    <div class="card">
+      <h2>Notas</h2>
+      <textarea id="noteInput" placeholder="Escreve algo..." style="width:100%;min-height:100px;border-radius:12px;border:1px solid #ddd"></textarea>
+      <button id="saveNote" style="margin-top:12px;padding:12px 20px;border:none;border-radius:12px;background:var(--pink);color:#fff;font-weight:bold;width:100%">Guardar Nota</button>
+      <div id="notesList" class="notes-list" style="margin-top:14px"></div>
+    </div>
+  </div>
+
+  <!-- CALENDÁRIO -->
+  <div id="page_cal" class="page">
+    <div class="card">
+      <h2>Calendário</h2>
+      <div style="text-align:center;color:var(--muted)" id="monthLabel"></div>
+      <div class="week" id="weekGrid" style="margin-top:14px"></div>
+      <textarea id="dayNote" style="width:100%;min-height:100px;border-radius:12px;border:1px solid #ddd;margin-top:14px"></textarea>
+      <button id="saveDay" style="margin-top:10px;padding:12px 20px;border:none;border-radius:12px;background:var(--pink);color:#fff;font-weight:bold;width:100%">Guardar Dia</button>
+    </div>
+  </div>
+
+  <!-- TEMPO -->
+  <div id="page_tempo" class="page">
+    <div class="card">
+      <h2>Tempo</h2>
+      <div class="bigDate" id="ymd"></div>
+      <div class="smallTime" id="hms"></div>
+    </div>
+  </div>
+
+</div></div>
+
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-/* ===========================
-  CONFIG CLIENT - substitui aqui
-  pega as tuas chaves em Settings -> API
-=========================== */
+/* CONFIG SUPABASE */
 const SUPABASE_URL = "https://qtzlyowxjqdsswyxcmzu.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF0emx5b3d4anFkc3N3eXhjbXp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ2MDc1MDUsImV4cCI6MjA4MDE4MzUwNX0.iLb7C7x-qyzY58SHd_n_Fdc2RkVy2hNBkf-n41st02c";
+
 const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-/* --- helpers de UI --- */
-const show = id => document.getElementById(id).classList.add('active');
-const hide = id => document.getElementById(id).classList.remove('active');
-const showPage = (pageId, pageName) => {
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById(pageId).classList.add('active');
-  document.getElementById('currentPageName').textContent = pageName || '';
-};
-
-/* drawer menu */
-const drawer = document.getElementById('drawer');
-document.getElementById('hamb').onclick = ()=>{ drawer.classList.add('open'); drawer.setAttribute('aria-hidden','false') };
-document.getElementById('closeDrawer').onclick = ()=>{ drawer.classList.remove('open'); drawer.setAttribute('aria-hidden','true') };
-document.getElementById('m_come').onclick = ()=>{ drawer.classList.remove('open'); showPage('page_come','Onde tudo começou') };
-document.getElementById('m_sobre').onclick = ()=>{ drawer.classList.remove('open'); showPage('page_sobre','Sobre Nós') };
-document.getElementById('m_gal').onclick = ()=>{ drawer.classList.remove('open'); showPage('page_gal','Galeria'); loadGallery(); };
-document.getElementById('m_tempo').onclick = ()=>{ drawer.classList.remove('open'); showPage('page_tempo','Tempo') };
-document.getElementById('m_notas').onclick = ()=>{ drawer.classList.remove('open'); showPage('page_notas','Notas'); loadNotes(); };
-document.getElementById('m_cal').onclick = ()=>{ drawer.classList.remove('open'); showPage('page_cal','Calendário'); renderWeek(0); };
-
 /* LOGIN */
-const loginCard = document.getElementById('loginCard');
-const appDiv = document.getElementById('app');
-const signInBtn = document.getElementById('signIn');
-const loginErr = document.getElementById('loginErr');
-
-signInBtn.onclick = async () => {
-  loginErr.style.display = 'none';
-  const email = document.getElementById('email').value.trim();
-  const pw = document.getElementById('password').value;
-  if (!email || !pw) { loginErr.textContent = 'Preenche os campos'; loginErr.style.display='block'; return; }
-  const { data, error } = await supabase.auth.signInWithPassword({ email, password: pw });
-  if (error) { loginErr.textContent = error.message; loginErr.style.display='block'; return; }
-  // success
-  loginCard.style.display='none';
-  appDiv.style.display='block';
-  startApp();
+document.getElementById("enterBtn").onclick = () => {
+  if(document.getElementById("codeInput").value === "sasiboy"){
+    document.getElementById("loginCard").style.display="none";
+    document.getElementById("app").style.display="block";
+  } else {
+    document.getElementById("loginError").style.display="block";
+  }
 };
 
-/* keep session */
-supabase.auth.onAuthStateChange((event, session) => {
-  if(session && session.user){
-    loginCard.style.display='none';
-    appDiv.style.display='block';
-    startApp();
-  }
+/* MENU */
+const drawer=document.getElementById("drawer");
+document.getElementById("hamb").onclick=()=>drawer.classList.add("open");
+document.getElementById("closeDrawer").onclick=()=>drawer.classList.remove("open");
+document.querySelectorAll(".menuitem").forEach(el=>{
+  el.onclick=()=>{
+    drawer.classList.remove("open");
+    showPage(el.dataset.page);
+  };
 });
 
-/* ---------------- HOME: date/time ---------------- */
-function pad(n){return String(n).padStart(2,'0')}
-function updateDateTime(){
-  const d = new Date();
-  const dd = pad(d.getDate()), mm = pad(d.getMonth()+1), yy = d.getFullYear();
-  document.getElementById('dateNow').textContent = `${dd}/${mm}/${yy}`;
-  document.getElementById('timeNow').textContent = `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+function showPage(p){
+  document.querySelectorAll(".page").forEach(pg=>pg.classList.remove("active"));
+  document.getElementById("page_"+p).classList.add("active");
+  document.getElementById("currentPageName").textContent=p.charAt(0).toUpperCase()+p.slice(1);
+  if(p==="gal") loadGallery();
+  if(p==="notas") loadNotes();
+  if(p==="cal") renderWeek(0);
 }
-setInterval(updateDateTime,1000);
-updateDateTime();
 
-/* ---------------- Sobre Nós: save -> store as key/value in 'notes' table (quick) --------------- */
-document.getElementById('saveBios').addEventListener('click', async ()=>{
-  const left = document.getElementById('bio_left').innerText.trim();
-  const right = document.getElementById('bio_right').innerText.trim();
-  // we store two entries in notes table with special tag
-  await supabase.from('notes').insert([{content: JSON.stringify({type:'bio',side:'left',text:left})},{content: JSON.stringify({type:'bio',side:'right',text:right})}]);
-  alert('Biografias salvas!');
-});
+/* HOME CLOCK */
+function updateClock(){
+  let d=new Date();
+  document.getElementById("dateNow").textContent=
+    d.toLocaleDateString("pt-PT");
+  document.getElementById("timeNow").textContent=
+    d.toLocaleTimeString("pt-PT",{hour:'2-digit',minute:'2-digit'});
+}
+setInterval(updateClock,1000);
+updateClock();
 
-/* ---------------- Gallery: upload to storage + record in photos table ---------------- */
-const fileInput = document.getElementById('fileInput');
-document.getElementById('addPhotoBtn').onclick = ()=> fileInput.click();
-fileInput.onchange = async (ev)=>{
-  const f = ev.target.files[0];
-  if(!f) return;
-  const name = `${Date.now()}_${f.name.replace(/\s/g,'_')}`;
-  // upload
-  const { data, error } = await supabase.storage.from('photos').upload(name, f, { cacheControl: '3600', upsert: false });
-  if(error){ alert('Erro ao enviar: '+error.message); return; }
-  // insert meta
-  await supabase.from('photos').insert([{path: data.path, caption: ''}]);
+/* TEMPO */
+const START=new Date("2025-09-17T22:00:00");
+function updTempo(){
+  let now=new Date();
+  let diff=now-START;
+  let s=Math.floor(diff/1000);
+  let years=now.getFullYear()-START.getFullYear();
+  let months=now.getMonth()-START.getMonth();
+  if(months<0){years--;months+=12;}
+  let anchor=new Date(START.getFullYear()+years,START.getMonth()+months,START.getDate());
+  if(anchor>now){
+    months--; if(months<0){years--;months+=12;}
+    anchor=new Date(START.getFullYear()+years,START.getMonth()+months,START.getDate());
+  }
+  let days=Math.floor((now-anchor)/(1000*60*60*24));
+  let hrs=Math.floor(s/3600)%24;
+  let mins=Math.floor(s/60)%60;
+  let secs=s%60;
+
+  document.getElementById("ymd").textContent=
+    `${years} anos • ${months} meses • ${days} dias`;
+  document.getElementById("hms").textContent=
+    `${hrs} horas, ${mins} minutos, ${secs} segundos`;
+}
+setInterval(updTempo,1000); updTempo();
+
+/* GALERIA — compressão */
+document.getElementById("addPhotoBtn").onclick=()=>document.getElementById("fileInput").click();
+
+document.getElementById("fileInput").onchange=async(e)=>{
+  const file=e.target.files[0];
+  if(!file) return;
+
+  const compressed=await compressImg(file,0.6);
+
+  const filePath=Date.now()+"_"+file.name.replace(/\s/g,"_");
+
+  let { data, error } = await supabase.storage.from("photos").upload(filePath, compressed);
+  if(error){ alert("Erro a enviar foto"); return; }
+
+  await supabase.from("photos").insert([{path:data.path}]);
+
   loadGallery();
 };
+
+async function compressImg(file,quality){
+  return new Promise(res=>{
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      const img=new Image();
+      img.onload=()=>{
+        const canvas=document.createElement("canvas");
+        const ctx=canvas.getContext("2d");
+
+        canvas.width=img.width;
+        canvas.height=img.height;
+        ctx.drawImage(img,0,0);
+
+        canvas.toBlob(blob=>res(blob),"image/jpeg",quality);
+      };
+      img.src=ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
 
 async function loadGallery(){
-  const { data: photos, error } = await supabase.from('photos').select('*').order('uploaded_at',{ascending:false});
-  const grid = document.getElementById('galleryGrid');
-  grid.innerHTML = '';
-  if(photos && photos.length){
-    for(const p of photos){
-      const url = supabase.storage.from('photos').getPublicUrl(p.path).data.publicUrl;
-      const img = document.createElement('img');
-      img.src = url; img.className='thumb';
-      grid.appendChild(img);
-    }
-  } else {
-    grid.innerHTML = '<div class="small" style="color:var(--muted)">A galeria está vazia — adiciona a primeira foto!</div>';
+  const { data } = await supabase.from("photos").select("*").order("uploaded_at",{ascending:false});
+  const grid=document.getElementById("galleryGrid");
+  grid.innerHTML="";
+  if(!data || data.length===0){
+    grid.innerHTML="<p style='color:var(--muted)'>Galeria vazia.</p>";
+    return;
   }
+  data.forEach(p=>{
+    const url=supabase.storage.from("photos").getPublicUrl(p.path).data.publicUrl;
+    const img=document.createElement("img");
+    img.src=url;
+    img.className="thumb";
+    grid.appendChild(img);
+  });
 }
 
-/* ---------------- Notes: CRUD basic ---------------- */
-document.getElementById('saveNote').addEventListener('click', async ()=>{
-  const text = document.getElementById('noteInput').value.trim();
-  if(!text) return alert('Escreve algo primeiro');
-  await supabase.from('notes').insert([{content: text}]);
-  document.getElementById('noteInput').value = '';
+/* NOTAS */
+document.getElementById("saveNote").onclick=async()=>{
+  const txt=document.getElementById("noteInput").value.trim();
+  if(!txt) return;
+  await supabase.from("notes").insert([{content:txt}]);
+  document.getElementById("noteInput").value="";
   loadNotes();
-});
+};
 
 async function loadNotes(){
-  const { data, error } = await supabase.from('notes').select('*').order('created_at',{ascending:false}).limit(50);
-  const list = document.getElementById('notesList');
-  list.innerHTML = '';
-  if(data && data.length){
-    data.forEach(r => {
-      const el = document.createElement('div');
-      el.style.padding='8px'; el.style.border='1px solid rgba(0,0,0,0.04)'; el.style.borderRadius='8px';
-      el.innerHTML = `<div style="font-size:13px;color:var(--muted);margin-bottom:6px">${new Date(r.created_at).toLocaleString()}</div><div>${r.content}</div>`;
-      list.appendChild(el);
-    });
-  } else list.innerHTML = '<div class="small" style="color:var(--muted)">Sem notas ainda</div>';
+  const { data } = await supabase.from("notes").select("*").order("created_at",{ascending:false});
+  const list=document.getElementById("notesList");
+  list.innerHTML="";
+  if(!data||data.length===0){
+    list.innerHTML="<p style='color:var(--muted)'>sem notas ainda</p>";
+    return;
+  }
+  data.forEach(n=>{
+    const div=document.createElement("div");
+    div.innerHTML=`<div style="font-size:12px;color:var(--muted)">${new Date(n.created_at).toLocaleString()}</div>${n.content}`;
+    list.appendChild(div);
+  });
 }
 
-/* ---------------- Calendário (semcronização com calendar_entries) --------------- */
-let weekOffset = 0; // 0 = current week
-const weekGrid = document.getElementById('weekGrid');
-const monthLabel = document.getElementById('monthLabel');
-const dayNote = document.getElementById('dayNote');
-let selected = null;
+/* CALENDÁRIO */
+let weekOffset=0;
 
 function startOfWeek(d){
-  const day = d.getDay(); // 0 dom ..6 sab
-  const diff = d.getDate() - day + (day === 0 ? -6 : 1); // monday start
-  return new Date(d.getFullYear(), d.getMonth(), diff);
+  const day=d.getDay();
+  const diff=d.getDate()-day+(day===0?-6:1);
+  return new Date(d.getFullYear(),d.getMonth(),diff);
 }
 
-function renderWeek(offset){
-  weekOffset = offset;
-  const now = new Date();
-  const base = startOfWeek(now);
-  base.setDate(base.getDate() + offset*7);
-  const days = [];
+function renderWeek(off){
+  weekOffset=off;
+  const now=new Date();
+  const base=startOfWeek(now);
+  base.setDate(base.getDate()+off*7);
+
+  const days=[];
   for(let i=0;i<7;i++){
-    const dt = new Date(base.getFullYear(), base.getMonth(), base.getDate()+i);
-    days.push(dt);
+    days.push(new Date(base.getFullYear(),base.getMonth(),base.getDate()+i));
   }
-  monthLabel.textContent = `${days[0].toLocaleString('pt-PT',{month:'long'})} ${days[0].getFullYear()}`;
-  weekGrid.innerHTML = '';
-  days.forEach(d => {
-    const btn = document.createElement('div');
-    btn.className='day';
-    btn.innerHTML = `<div class="small">${['S','T','Q','Q','S','S','D'][d.getDay()]}</div><div style="font-weight:800">${d.getDate()}</div>`;
-    btn.onclick = ()=> selectDay(d);
-    weekGrid.appendChild(btn);
+
+  document.getElementById("monthLabel").textContent=
+    days[0].toLocaleString("pt-PT",{month:"long"})+" "+days[0].getFullYear();
+
+  const grid=document.getElementById("weekGrid");
+  grid.innerHTML="";
+
+  days.forEach(d=>{
+    const el=document.createElement("div");
+    el.className="day";
+    el.innerHTML=`<div style='color:var(--muted);font-size:12px'>${["S","T","Q","Q","S","S","D"][d.getDay()]}</div><div>${d.getDate()}</div>`;
+    el.onclick=()=>selectDay(d);
+    grid.appendChild(el);
   });
-  // load any saved notes for this week
-  loadWeekEntries(days);
-}
-document.getElementById('prevWeek').onclick = ()=> renderWeek(weekOffset-1);
-document.getElementById('nextWeek').onclick = ()=> renderWeek(weekOffset+1);
 
-async function loadWeekEntries(days){
-  const start = days[0].toISOString().slice(0,10);
-  const end = days[6].toISOString().slice(0,10);
-  const { data } = await supabase.from('calendar_entries').select('*').gte('day_date', start).lte('day_date', end);
-  // mark days with entries
-  const elems = weekGrid.children;
-  for(let i=0;i<elems.length;i++){
-    const dd = days[i].toISOString().slice(0,10);
-    const entry = data && data.find(x=> x.day_date === dd);
-    if(entry) elems[i].classList.add('active');
+  markEntries(days);
+}
+
+async function markEntries(days){
+  const start=days[0].toISOString().slice(0,10);
+  const end=days[6].toISOString().slice(0,10);
+
+  const { data }=await supabase.from("calendar_entries")
+    .select("*")
+    .gte("day_date",start)
+    .lte("day_date",end);
+
+  const grid=document.getElementById("weekGrid").children;
+  days.forEach((d,i)=>{
+    const dd=d.toISOString().slice(0,10);
+    if(data.find(x=>x.day_date===dd)) grid[i].classList.add("active");
+  });
+}
+
+let selectedDay=null;
+
+async function selectDay(d){
+  selectedDay=d;
+  const key=d.toISOString().slice(0,10);
+  const { data }=await supabase.from("calendar_entries")
+    .select("*").eq("day_date",key).limit(1);
+
+  document.getElementById("dayNote").value =
+    data&&data.length? data[0].text : "";
+}
+
+document.getElementById("saveDay").onclick=async()=>{
+  if(!selectedDay){alert("Escolhe um dia");return;}
+  const key=selectedDay.toISOString().slice(0,10);
+  const txt=document.getElementById("dayNote").value.trim();
+
+  const { data }=await supabase.from("calendar_entries")
+    .select("*").eq("day_date",key).limit(1);
+
+  if(data&&data.length){
+    await supabase.from("calendar_entries").update({text:txt}).eq("day_date",key);
+  }else{
+    await supabase.from("calendar_entries").insert([{day_date:key,text:txt}]);
   }
-}
 
-function selectDay(dt){
-  selected = dt;
-  document.getElementById('selectedDate').textContent = dt.toLocaleDateString();
-  // fetch entry
-  fetchDayEntry(dt);
-}
-
-async function fetchDayEntry(dt){
-  const d = dt.toISOString().slice(0,10);
-  const { data } = await supabase.from('calendar_entries').select('*').eq('day_date', d).limit(1);
-  if(data && data.length){
-    dayNote.value = data[0].text;
-  } else dayNote.value = '';
-}
-
-document.getElementById('saveDay').addEventListener('click', async ()=>{
-  if(!selected) return alert('Selecciona um dia primeiro');
-  const d = selected.toISOString().slice(0,10);
-  const text = dayNote.value.trim();
-  // upsert: if exists update else insert
-  const { data } = await supabase.from('calendar_entries').select('*').eq('day_date', d).limit(1);
-  if(data && data.length){
-    await supabase.from('calendar_entries').update({text}).eq('day_date', d);
-  } else {
-    await supabase.from('calendar_entries').insert([{day_date: d, text}]);
-  }
-  alert('Guardado');
+  alert("Guardado!");
   renderWeek(weekOffset);
-});
-document.getElementById('clearDay').addEventListener('click', async ()=>{
-  if(!selected) return;
-  const d = selected.toISOString().slice(0,10);
-  await supabase.from('calendar_entries').delete().eq('day_date', d);
-  dayNote.value=''; alert('Apagado'); renderWeek(weekOffset);
-});
+};
 
-/* ---------------- Tempo (contador) - usa o mesmo cálculo robusto que já tinhas --------------- */
-const START = new Date("2025-09-17T22:00:00");
-function diffYMDHMS(start, now){
-  let ys = start.getFullYear(), ms = start.getMonth(), ds = start.getDate(), hs = start.getHours(), mins = start.getMinutes(), secs = start.getSeconds();
-  let yn = now.getFullYear(), mn = now.getMonth(), dn = now.getDate(), hn = now.getHours(), mnn = now.getMinutes(), sn = now.getSeconds();
-  let years = yn - ys;
-  let months = mn - ms;
-  if (months < 0){ years -= 1; months += 12; }
-  let anchor = new Date(ys + years, ms + months, ds, hs, mins, secs);
-  if (anchor > now){
-    if (months === 0){ years -= 1; months = 11; } else months -= 1;
-    anchor = new Date(ys + years, ms + months, ds, hs, mins, secs);
-  }
-  let diffMs = now - anchor;
-  let totalSeconds = Math.floor(diffMs/1000);
-  const days = Math.floor(totalSeconds / (24*3600));
-  totalSeconds -= days * 24*3600;
-  const hours = Math.floor(totalSeconds/3600);
-  totalSeconds -= hours*3600;
-  const minutes = Math.floor(totalSeconds/60);
-  const seconds = totalSeconds - minutes*60;
-  return { years, months, days, hours, minutes, seconds };
-}
-function plural(n, singular, pluralForm){
-  return n + ' ' + (n === 1 ? singular : pluralForm);
-}
-function updateCounter(){
-  const now = new Date();
-  const d = diffYMDHMS(START, now);
-  document.getElementById('ymd').textContent = `${plural(d.years,'ano','anos')} • ${plural(d.months,'mês','meses')} • ${plural(d.days,'dia','dias')}`;
-  document.getElementById('hms').textContent = `${plural(d.hours,'hora','horas')}, ${plural(d.minutes,'minuto','minutos')}, ${plural(d.seconds,'segundo','segundos')}`;
-}
-setInterval(updateCounter,1000); updateCounter();
-
-/* ---------------- Start app after login -------------- */
-async function startApp(){
-  showPage('page_home','Início');
-  // load essential data
-  loadGallery();
-  loadNotes();
-  renderWeek(0);
-  // set default emails in login hint
-  document.getElementById('email').value = ''; // keep blank
-}
-
-/* ---------------- Init: try to restore session (if already logged in) --------------- */
-(async function(){
-  const { data } = await supabase.auth.getSession();
-  if(data.session && data.session.user){
-    loginCard.style.display='none'; appDiv.style.display='block'; startApp();
-  }
-})();
 </script>
+
 </body>
 </html>
-
-
