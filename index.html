@@ -388,7 +388,6 @@ function closeDrawer(){ drawer.classList.remove('open'); drawerBackdrop.classLis
 menuItems.forEach(it=> it.addEventListener('click', ()=>{ closeDrawer(); showPage(it.dataset.page); }));
 
 /* ================== LOGIN ================== */
-/* ================== LOGIN (SUBSTITUIR BLOCO) ================== */
 document.addEventListener('DOMContentLoaded', () => {
   // elementos podem já existir; procura de forma defensiva
   const enterBtn = document.getElementById('enterBtn');
@@ -972,4 +971,5 @@ window.renderCalendar = renderCalendar;
 </script>
 </body>
 </html>
+
 
