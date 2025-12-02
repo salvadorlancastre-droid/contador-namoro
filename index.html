@@ -388,18 +388,54 @@ function closeDrawer(){ drawer.classList.remove('open'); drawerBackdrop.classLis
 menuItems.forEach(it=> it.addEventListener('click', ()=>{ closeDrawer(); showPage(it.dataset.page); }));
 
 /* ================== LOGIN ================== */
-enterBtn.addEventListener('click', ()=>{
-  const val = (codeInput.value||'').trim().toLowerCase();
-  if(val === 'sasiboy'){
-    loginError.style.display = 'none';
-    loginCard.style.display = 'none';
-    appDiv.style.display = 'block';
-    initAfterLogin();
-    showPage('home');
-  } else {
-    loginError.style.display = 'block';
+/* ================== LOGIN (SUBSTITUIR BLOCO) ================== */
+document.addEventListener('DOMContentLoaded', () => {
+  // elementos podem já existir; procura de forma defensiva
+  const enterBtn = document.getElementById('enterBtn');
+  const codeInput = document.getElementById('codeInput');
+  const loginError = document.getElementById('loginError');
+  const loginCard = document.getElementById('loginCard');
+  const appDiv = document.getElementById('app');
+
+  if(!enterBtn || !codeInput || !loginError || !loginCard || !appDiv){
+    console.error('Elementos de login não encontrados. Verifica ids: enterBtn, codeInput, loginError, loginCard, app.');
+    return;
   }
+
+  // garante que o botão não é do tipo submit (pode evitar comportamento de form)
+  enterBtn.type = 'button';
+
+  function doLoginAttempt(){
+    const v = (codeInput.value || '').trim().toLowerCase();
+    console.log('Tentativa de login com:', v);
+    if(v === 'sasiboy'){
+      loginError.style.display = 'none';
+      loginCard.style.display = 'none';
+      appDiv.style.display = 'block';
+      // chama init (se existir)
+      try{ if(typeof initAfterLogin === 'function') initAfterLogin(); }catch(e){ console.warn('initAfterLogin erro:', e); }
+      // mostra página inicial
+      try{ if(typeof showPage === 'function') showPage('home'); }catch(e){ console.warn('showPage erro:', e); }
+    } else {
+      loginError.style.display = 'block';
+      // pequena animação visual
+      loginCard.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-6px)' }, { transform: 'translateX(0)' }], { duration: 200 });
+      codeInput.focus();
+    }
+  }
+
+  // click handler
+  enterBtn.addEventListener('click', doLoginAttempt);
+
+  // allow pressing Enter in the input to submit
+  codeInput.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter') { e.preventDefault(); doLoginAttempt(); }
+  });
+
+  // helpful: auto-focus the input on load
+  setTimeout(()=> codeInput.focus(), 250);
 });
+
 
 /* ================== PAGE NAV ================== */
 function showPage(p){
@@ -936,3 +972,4 @@ window.renderCalendar = renderCalendar;
 </script>
 </body>
 </html>
+
