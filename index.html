@@ -387,63 +387,45 @@ drawerBackdrop.addEventListener('click', closeDrawer);
 function closeDrawer(){ drawer.classList.remove('open'); drawerBackdrop.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); drawerBackdrop.setAttribute('aria-hidden','true'); }
 menuItems.forEach(it=> it.addEventListener('click', ()=>{ closeDrawer(); showPage(it.dataset.page); }));
 
-/* ================== LOGIN ================== */
-document.addEventListener('DOMContentLoaded', () => {
-  // elementos podem já existir; procura de forma defensiva
-  const enterBtn = document.getElementById('enterBtn');
-  const codeInput = document.getElementById('codeInput');
-  const loginError = document.getElementById('loginError');
-  const loginCard = document.getElementById('loginCard');
-  const appDiv = document.getElementById('app');
-
+/* ================== LOGIN (robusta - sem DOMContentLoaded) ================== */
+(function initLogin(){
+  // defensive checks
   if(!enterBtn || !codeInput || !loginError || !loginCard || !appDiv){
-    console.error('Elementos de login não encontrados. Verifica ids: enterBtn, codeInput, loginError, loginCard, app.');
+    console.error('Elementos de login não encontrados. Verifica ids.');
     return;
   }
-
-  // garante que o botão não é do tipo submit (pode evitar comportamento de form)
   enterBtn.type = 'button';
 
   function doLoginAttempt(){
     const v = (codeInput.value || '').trim().toLowerCase();
-    console.log('Tentativa de login com:', v);
+    // console.log('Login try', v);
     if(v === 'sasiboy'){
       loginError.style.display = 'none';
       loginCard.style.display = 'none';
       appDiv.style.display = 'block';
-      // chama init (se existir)
-      try{ if(typeof initAfterLogin === 'function') initAfterLogin(); }catch(e){ console.warn('initAfterLogin erro:', e); }
-      // mostra página inicial
-      try{ if(typeof showPage === 'function') showPage('home'); }catch(e){ console.warn('showPage erro:', e); }
+      try{ if(typeof initAfterLogin === 'function') initAfterLogin(); }catch(e){ console.warn('initAfterLogin erro', e); }
+      try{ if(typeof showPage === 'function') showPage('home'); }catch(e){ console.warn('showPage erro', e); }
     } else {
       loginError.style.display = 'block';
-      // pequena animação visual
-      loginCard.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-6px)' }, { transform: 'translateX(0)' }], { duration: 200 });
+      // small shake
+      if(loginCard.animate){
+        loginCard.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-6px)' }, { transform: 'translateX(0)' }], { duration: 200 });
+      }
       codeInput.focus();
     }
   }
 
-  // click handler
   enterBtn.addEventListener('click', doLoginAttempt);
-
-  // allow pressing Enter in the input to submit
-  codeInput.addEventListener('keydown', (e) => {
-    if(e.key === 'Enter') { e.preventDefault(); doLoginAttempt(); }
-  });
-
-  // helpful: auto-focus the input on load
-  setTimeout(()=> codeInput.focus(), 250);
-});
-
+  codeInput.addEventListener('keydown', (e)=>{ if(e.key === 'Enter'){ e.preventDefault(); doLoginAttempt(); } });
+  setTimeout(()=> codeInput.focus(), 150);
+})();
 
 /* ================== PAGE NAV ================== */
 function showPage(p){
   document.querySelectorAll('.page').forEach(x=> x.classList.remove('active'));
   const el = document.getElementById('page_' + p);
   if(el) el.classList.add('active');
-  // close drawer if open
   closeDrawer();
-  // some pages need immediate refresh
   if(p==='gal') loadGallery();
   if(p==='notas') loadNotes();
   if(p==='cal') renderCalendar();
@@ -476,12 +458,13 @@ function diffYMDHMS(start, now){
 
 function updateHomeClock(){
   const now = new Date();
-  document.getElementById('digitalClock').textContent = now.toLocaleTimeString('pt-PT');
   const d = diffYMDHMS(START, now);
-  document.getElementById('yrs').textContent = `${d.years} anos`;
-  document.getElementById('mos').textContent = `${d.months} meses`;
-  document.getElementById('ds').textContent = `${d.days} dias`;
-  document.getElementById('clockHms').textContent = `${pad2(d.hours)}:${pad2(d.minutes)}:${pad2(d.seconds)}`;
+  const digitalEl = document.getElementById('digitalClock');
+  if(digitalEl) digitalEl.textContent = now.toLocaleTimeString('pt-PT');
+  const yrs = document.getElementById('yrs'); if(yrs) yrs.textContent = `${d.years} anos`;
+  const mos = document.getElementById('mos'); if(mos) mos.textContent = `${d.months} meses`;
+  const ds = document.getElementById('ds'); if(ds) ds.textContent = `${d.days} dias`;
+  const hms = document.getElementById('clockHms'); if(hms) hms.textContent = `${pad2(d.hours)}:${pad2(d.minutes)}:${pad2(d.seconds)}`;
 }
 setInterval(updateHomeClock, 1000);
 updateHomeClock();
@@ -499,52 +482,47 @@ const saveBiosBtn = document.getElementById('saveBios');
 
 function applyEditorStyles(){
   [bioLeft, bioRight].forEach(el=>{
+    if(!el) return;
     el.style.fontFamily = fontFamily.value;
     el.style.fontSize = fontSize.value + 'px';
     el.style.color = fontColor.value;
     adjustFontToFit(el);
   });
 }
-fontFamily.addEventListener('input', applyEditorStyles);
-fontSize.addEventListener('input', applyEditorStyles);
-fontColor.addEventListener('input', applyEditorStyles);
-alignLeftBtn.addEventListener('click', ()=> [bioLeft,bioRight].forEach(e=> e.style.textAlign='left'));
-alignCenterBtn.addEventListener('click', ()=> [bioLeft,bioRight].forEach(e=> e.style.textAlign='center'));
-alignRightBtn.addEventListener('click', ()=> [bioLeft,bioRight].forEach(e=> e.style.textAlign='right'));
+if(fontFamily) fontFamily.addEventListener('input', applyEditorStyles);
+if(fontSize) fontSize.addEventListener('input', applyEditorStyles);
+if(fontColor) fontColor.addEventListener('input', applyEditorStyles);
+if(alignLeftBtn) alignLeftBtn.addEventListener('click', ()=> [bioLeft,bioRight].forEach(e=> e.style.textAlign='left'));
+if(alignCenterBtn) alignCenterBtn.addEventListener('click', ()=> [bioLeft,bioRight].forEach(e=> e.style.textAlign='center'));
+if(alignRightBtn) alignRightBtn.addEventListener('click', ()=> [bioLeft,bioRight].forEach(e=> e.style.textAlign='right'));
 
 // auto-shrink function: reduce font-size until content fits in box
 function adjustFontToFit(el){
-  // start from computed or current style
+  if(!el) return;
   let style = window.getComputedStyle(el);
-  let f = parseInt(style.fontSize) || parseInt(fontSize.value) || 16;
+  let f = parseInt(style.fontSize) || parseInt(fontSize?.value) || 16;
   const min = 12;
-  // if content fits, nothing
   function fits(){ return el.scrollHeight <= el.clientHeight + 4; }
-  // increase if there's room (not needed often)
   while(f < 40 && fits() && el.scrollHeight < el.clientHeight - 20){
     f++;
     el.style.fontSize = f + 'px';
-    if(f > parseInt(fontSize.max || 36)) break;
+    if(f > parseInt(fontSize?.max || 36)) break;
   }
-  // reduce until fits or min
   while(f > min && !fits()){
     f--;
     el.style.fontSize = f + 'px';
   }
 }
-
-// adjust on input
 [bioLeft, bioRight].forEach(b=>{
+  if(!b) return;
   b.addEventListener('input', ()=> adjustFontToFit(b));
-  // on paste, run adjust after short delay
   b.addEventListener('paste', ()=> setTimeout(()=> adjustFontToFit(b),100));
 });
 
-// save bios to supabase (as notes flagged type:bio)
-saveBiosBtn.addEventListener('click', async ()=>{
+if(saveBiosBtn) saveBiosBtn.addEventListener('click', async ()=>{
   try{
-    const leftText = bioLeft.innerText.trim();
-    const rightText = bioRight.innerText.trim();
+    const leftText = bioLeft?.innerText.trim() || '';
+    const rightText = bioRight?.innerText.trim() || '';
     await supabase.from('notes').insert([
       { content: JSON.stringify({ type:'bio', side:'left', text:leftText }) },
       { content: JSON.stringify({ type:'bio', side:'right', text:rightText }) }
@@ -556,9 +534,9 @@ saveBiosBtn.addEventListener('click', async ()=>{
 /* ================== GALLERY ================== */
 const fileInput = document.getElementById('fileInput');
 const addPhotoBtn = document.getElementById('addPhotoBtn');
-addPhotoBtn.addEventListener('click', ()=> fileInput.click());
+if(addPhotoBtn) addPhotoBtn.addEventListener('click', ()=> fileInput.click());
 
-fileInput.addEventListener('change', async (e)=>{
+if(fileInput) fileInput.addEventListener('change', async (e)=>{
   const f = e.target.files[0];
   if(!f) return;
   try{
@@ -642,10 +620,9 @@ function loadAlbums(){
   const raw = localStorage.getItem('sa_albums') || '[]';
   let arr = [];
   try{ arr = JSON.parse(raw) } catch(e){ arr = [] }
-  // ensure default album
   if(!arr.find(a=>a.id==='__default')) arr.unshift({id:'__default', name:'Sem álbum'});
-  // populate selects
   function fill(select){
+    if(!select) return;
     select.innerHTML = '';
     const allOpt = document.createElement('option');
     allOpt.value = '__default'; allOpt.textContent = 'Sem álbum';
@@ -655,9 +632,9 @@ function loadAlbums(){
     });
   }
   fill(noteAlbum); fill(albumFilter); fill(modalNoteAlbum);
-  albumFilter.querySelectorAll('option')[0].textContent = 'Todos os álbuns';
-  modalNoteAlbum.querySelectorAll('option')[0].textContent = 'Sem álbum';
-  noteAlbum.querySelectorAll('option')[0].textContent = 'Sem álbum';
+  if(albumFilter) albumFilter.querySelectorAll('option')[0].textContent = 'Todos os álbuns';
+  if(modalNoteAlbum) modalNoteAlbum.querySelectorAll('option')[0].textContent = 'Sem álbum';
+  if(noteAlbum) noteAlbum.querySelectorAll('option')[0].textContent = 'Sem álbum';
 }
 function saveAlbums(arr){ localStorage.setItem('sa_albums', JSON.stringify(arr)); }
 function createAlbum(name){
@@ -669,7 +646,6 @@ function createAlbum(name){
   return id;
 }
 
-// allow user to create album quickly via prompt
 function askCreateAlbum(){
   const n = prompt('Nome do álbum:');
   if(n && n.trim()){
@@ -677,32 +653,31 @@ function askCreateAlbum(){
   }
 }
 
-// new note UI
-newNoteBtn.addEventListener('click', ()=>{
+if(newNoteBtn) newNoteBtn.addEventListener('click', ()=>{
+  if(!noteEditorWrap) return;
   noteEditorWrap.style.display = 'block';
-  noteEditor.innerHTML = '';
-  noteTitle.value = '';
+  if(noteEditor) noteEditor.innerHTML = '';
+  if(noteTitle) noteTitle.value = '';
   loadAlbums();
-  noteAlbum.value = '__default';
+  if(noteAlbum) noteAlbum.value = '__default';
 });
 
-// save note
-document.getElementById('saveNoteBtn').addEventListener('click', async ()=>{
-  const title = (noteTitle.value||'').trim();
-  const content = (noteEditor.innerHTML||'').trim();
-  const size = noteSize.value;
-  const color = noteColor.value;
-  const album = noteAlbum.value || '__default';
+const saveNoteBtn = document.getElementById('saveNoteBtn');
+if(saveNoteBtn) saveNoteBtn.addEventListener('click', async ()=>{
+  const title = (noteTitle?.value||'').trim();
+  const content = (noteEditor?.innerHTML||'').trim();
+  const size = noteSize?.value;
+  const color = noteColor?.value;
+  const album = noteAlbum?.value || '__default';
   if(!content) return alert('Escreve algo na nota.');
   try{
     await supabase.from('notes').insert([{ title, content, meta: JSON.stringify({ size, color, album }) }]);
-    noteEditorWrap.style.display = 'none';
+    if(noteEditorWrap) noteEditorWrap.style.display = 'none';
     loadNotes();
   }catch(e){ console.error(e); alert('Erro ao gravar nota'); }
 });
 
-// edit mode toggle
-editNotesBtn.addEventListener('click', ()=>{
+if(editNotesBtn) editNotesBtn.addEventListener('click', ()=>{
   editMode = !editMode;
   editNotesBtn.textContent = editMode ? 'Sair editar' : 'Editar';
   editNotesBtn.style.background = editMode ? '#fff0f3' : '#fff';
@@ -710,8 +685,7 @@ editNotesBtn.addEventListener('click', ()=>{
   loadNotes();
 });
 
-// delete all notes
-deleteAllBtn.addEventListener('click', async ()=>{
+if(deleteAllBtn) deleteAllBtn.addEventListener('click', async ()=>{
   if(!confirm('Isto apagará todas as notas. Tens a certeza? Esta ação é irreversível.')) return;
   try{
     await supabase.from('notes').delete().neq('id',0);
@@ -720,38 +694,29 @@ deleteAllBtn.addEventListener('click', async ()=>{
   }catch(e){ console.error(e); alert('Erro ao apagar tudo'); }
 });
 
-// load notes from supabase and render, with album filter and edit mode
 async function loadNotes(){
   try{
-    const filter = albumFilter.value || '__all';
+    const filter = albumFilter?.value || '__all';
     const { data } = await supabase.from('notes').select('*').order('created_at',{ascending:false});
+    if(!notesList) return;
     notesList.innerHTML = '';
     if(!data || data.length===0){ notesList.innerHTML = '<div class="small-note">Sem notas.</div>'; return; }
-    // populate albums select if none
     loadAlbums();
-    // render notes
     data.forEach(n=>{
-      // parse meta
       let meta = {size:16,color:'#222',album:'__default'};
       try{ if(n.meta) meta = Object.assign(meta, JSON.parse(n.meta)); }catch(e){}
       if(filter !== '__all' && filter !== '__default' && meta.album !== filter) return;
-      if(filter === '__default' && meta.album !== '__default' && albumFilter.value === '__default') { /* special case handled */ }
       const card = document.createElement('div'); card.className = 'note-card';
       card.dataset.noteId = n.id;
-
       card.innerHTML = `
         <div class="note-meta">${new Date(n.created_at).toLocaleString()}</div>
         <div class="note-title">${n.title || 'Sem título'}</div>
         <div class="note-content" style="font-size:${meta.size}px;color:${meta.color}">${n.content}</div>
       `;
-
-      // clicking opens modal (edit inline)
       card.addEventListener('click', ()=>{
-        if(editMode) return; // in edit mode we don't open editor (to prevent accidental edits)
+        if(editMode) return;
         openEditModal(n);
       });
-
-      // if editMode show delete button
       if(editMode){
         const del = document.createElement('button');
         del.className = 'delete-btn';
@@ -766,31 +731,29 @@ async function loadNotes(){
         });
         card.appendChild(del);
       }
-
       notesList.appendChild(card);
     });
-  }catch(e){ console.error(e); notesList.innerHTML = '<div class="small-note">Erro ao carregar notas.</div>'; }
+  }catch(e){ console.error(e); if(notesList) notesList.innerHTML = '<div class="small-note">Erro ao carregar notas.</div>'; }
 }
 
-// modal functions
 function openEditModal(note){
   currentEditingNote = note;
+  if(!modalBackdrop) return;
   modalBackdrop.style.display = 'flex';
-  modalNoteTitle.value = note.title || '';
-  modalNoteEditor.innerHTML = note.content || '';
+  if(modalNoteTitle) modalNoteTitle.value = note.title || '';
+  if(modalNoteEditor) modalNoteEditor.innerHTML = note.content || '';
   try{
     const meta = note.meta ? JSON.parse(note.meta) : {};
-    modalNoteSize.value = meta.size || '16';
-    modalNoteColor.value = meta.color || '#222';
-    loadAlbums(); modalNoteAlbum.value = meta.album || '__default';
+    if(modalNoteSize) modalNoteSize.value = meta.size || '16';
+    if(modalNoteColor) modalNoteColor.value = meta.color || '#222';
+    loadAlbums(); if(modalNoteAlbum) modalNoteAlbum.value = meta.album || '__default';
   }catch(e){ console.warn(e); }
 }
 
-modalClose.addEventListener('click', ()=> { modalBackdrop.style.display = 'none'; currentEditingNote = null; });
-modalBackdrop.addEventListener('click', (e)=>{ if(e.target === modalBackdrop) { modalBackdrop.style.display='none'; currentEditingNote=null; } });
+if(modalClose) modalClose.addEventListener('click', ()=> { if(modalBackdrop) modalBackdrop.style.display = 'none'; currentEditingNote = null; });
+if(modalBackdrop) modalBackdrop.addEventListener('click', (e)=>{ if(e.target === modalBackdrop) { modalBackdrop.style.display='none'; currentEditingNote=null; } });
 
-// modal save
-modalSaveBtn.addEventListener('click', async ()=>{
+if(modalSaveBtn) modalSaveBtn.addEventListener('click', async ()=>{
   if(!currentEditingNote) return;
   const id = currentEditingNote.id;
   const title = modalNoteTitle.value.trim();
@@ -798,28 +761,26 @@ modalSaveBtn.addEventListener('click', async ()=>{
   const meta = { size: modalNoteSize.value, color: modalNoteColor.value, album: modalNoteAlbum.value || '__default' };
   try{
     await supabase.from('notes').update({ title, content, meta: JSON.stringify(meta) }).eq('id', id);
-    modalBackdrop.style.display = 'none';
+    if(modalBackdrop) modalBackdrop.style.display = 'none';
     currentEditingNote = null;
     loadNotes();
   }catch(e){ console.error(e); alert('Erro ao guardar'); }
 });
 
-// modal delete
-modalDeleteBtn.addEventListener('click', async ()=>{
+if(modalDeleteBtn) modalDeleteBtn.addEventListener('click', async ()=>{
   if(!currentEditingNote) return;
   if(!confirm('Apagar esta nota?')) return;
   try{
     await supabase.from('notes').delete().eq('id', currentEditingNote.id);
-    modalBackdrop.style.display='none';
+    if(modalBackdrop) modalBackdrop.style.display='none';
     currentEditingNote = null;
     loadNotes();
   }catch(e){ console.error(e); alert('Erro ao apagar'); }
 });
 
-// create album quick: double-click album select to add
-noteAlbum.addEventListener('dblclick', ()=> askCreateAlbum());
-modalNoteAlbum.addEventListener('dblclick', ()=> askCreateAlbum());
-albumFilter.addEventListener('change', ()=> loadNotes());
+if(noteAlbum) noteAlbum.addEventListener('dblclick', ()=> askCreateAlbum());
+if(modalNoteAlbum) modalNoteAlbum.addEventListener('dblclick', ()=> askCreateAlbum());
+if(albumFilter) albumFilter.addEventListener('change', ()=> loadNotes());
 
 /* ================== CALENDAR (week/month/year/day) ================== */
 let calDate = new Date();
@@ -827,9 +788,9 @@ let calView = 'week';
 const calViewSelect = document.getElementById('calView');
 const calLabel = document.getElementById('calLabel');
 const calendarGrid = document.getElementById('calendarGrid');
-document.getElementById('calPrev').addEventListener('click', ()=> navCal(-1));
-document.getElementById('calNext').addEventListener('click', ()=> navCal(1));
-calViewSelect.addEventListener('change', (e)=>{ calView = e.target.value; renderCalendar(); });
+if(document.getElementById('calPrev')) document.getElementById('calPrev').addEventListener('click', ()=> navCal(-1));
+if(document.getElementById('calNext')) document.getElementById('calNext').addEventListener('click', ()=> navCal(1));
+if(calViewSelect) calViewSelect.addEventListener('change', (e)=>{ calView = e.target.value; renderCalendar(); });
 
 function navCal(delta){
   if(calView === 'day') calDate.setDate(calDate.getDate() + delta);
@@ -847,10 +808,11 @@ function startOfWeek(d){
 }
 
 async function renderCalendar(){
+  if(!calendarGrid) return;
   calendarGrid.innerHTML = '';
   if(calView === 'day'){
     const d = new Date(calDate);
-    calLabel.textContent = d.toLocaleDateString('pt-PT', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+    if(calLabel) calLabel.textContent = d.toLocaleDateString('pt-PT', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
     const el = document.createElement('div'); el.className='cal-day'; el.style.gridColumn='1 / -1'; el.style.padding='20px';
     el.innerHTML = `<div style="font-weight:800">${d.toLocaleDateString('pt-PT',{day:'numeric',month:'short'})}</div><div class="small-note">${d.toLocaleDateString('pt-PT',{weekday:'long'})}</div>`;
     el.addEventListener('click', ()=> selectCalDay(d));
@@ -860,7 +822,7 @@ async function renderCalendar(){
 
   if(calView === 'week'){
     const start = startOfWeek(calDate);
-    calLabel.textContent = start.toLocaleDateString('pt-PT', { day:'numeric', month:'long', year:'numeric' }) + ' — semana';
+    if(calLabel) calLabel.textContent = start.toLocaleDateString('pt-PT', { day:'numeric', month:'long', year:'numeric' }) + ' — semana';
     const days = [];
     for(let i=0;i<7;i++){ const dd = new Date(start); dd.setDate(start.getDate()+i); days.push(dd); }
     for(const d of days){
@@ -875,7 +837,7 @@ async function renderCalendar(){
 
   if(calView === 'month'){
     const y = calDate.getFullYear(), m = calDate.getMonth();
-    calLabel.textContent = calDate.toLocaleDateString('pt-PT', { month:'long', year:'numeric' });
+    if(calLabel) calLabel.textContent = calDate.toLocaleDateString('pt-PT', { month:'long', year:'numeric' });
     const first = new Date(y,m,1), last = new Date(y,m+1,0);
     const startDay = (first.getDay()||7) - 1;
     for(let i=0;i<startDay;i++){ const ph = document.createElement('div'); ph.style.visibility='hidden'; calendarGrid.appendChild(ph); }
@@ -892,11 +854,11 @@ async function renderCalendar(){
   }
 
   if(calView === 'year'){
-    calLabel.textContent = calDate.getFullYear();
+    if(calLabel) calLabel.textContent = calDate.getFullYear();
     for(let i=0;i<12;i++){
       const dt = new Date(calDate.getFullYear(), i, 1);
       const el = document.createElement('div'); el.className='cal-day'; el.innerHTML = `<div style="font-weight:800">${dt.toLocaleDateString('pt-PT',{month:'short'})}</div>`;
-      el.addEventListener('click', ()=> { calDate = new Date(dt); calView = 'month'; calViewSelect.value = 'month'; renderCalendar(); });
+      el.addEventListener('click', ()=> { calDate = new Date(dt); calView = 'month'; if(calViewSelect) calViewSelect.value = 'month'; renderCalendar(); });
       calendarGrid.appendChild(el);
     }
   }
@@ -904,6 +866,7 @@ async function renderCalendar(){
 
 async function markCalEntries(days){
   try{
+    if(!days || days.length===0) return;
     const start = days[0].toISOString().slice(0,10), end = days[days.length-1].toISOString().slice(0,10);
     const { data } = await supabase.from('calendar_entries').select('*').gte('day_date', start).lte('day_date', end);
     const DOMdays = Array.from(document.querySelectorAll('.cal-day')).filter(x=> x.style.visibility !== 'hidden');
@@ -919,10 +882,11 @@ async function selectCalDay(d){
   selectedCalDay = d;
   const key = d.toISOString().slice(0,10);
   const { data } = await supabase.from('calendar_entries').select('*').eq('day_date', key).limit(1);
-  document.getElementById('dayNote').value = data?.[0]?.text || '';
+  const dayNoteEl = document.getElementById('dayNote');
+  if(dayNoteEl) dayNoteEl.value = data?.[0]?.text || '';
 }
 
-document.getElementById('saveDayBtn').addEventListener('click', async ()=>{
+if(document.getElementById('saveDayBtn')) document.getElementById('saveDayBtn').addEventListener('click', async ()=>{
   if(!selectedCalDay) return alert('Seleciona um dia primeiro.');
   const key = selectedCalDay.toISOString().slice(0,10);
   const txt = document.getElementById('dayNote').value.trim();
@@ -942,28 +906,26 @@ function updateTempo(){
   if(d.years) parts.push(`${d.years} ${d.years===1? 'ano':'anos'}`);
   if(d.months) parts.push(`${d.months} ${d.months===1? 'mês':'meses'}`);
   if(d.days) parts.push(`${d.days} ${d.days===1? 'dia':'dias'}`);
-  document.getElementById('tempoYMD').textContent = parts.length ? parts.join(' • ') : '0 dias';
-  document.getElementById('tempoHMS').textContent = `${pad2(d.hours)}:${pad2(d.minutes)}:${pad2(d.seconds)}`;
-  document.getElementById('tempoSentence').textContent = `Para te lembrares quantos dias passaram desde que tomei a melhor decisão da minha vida... \nE que possamos voltar aqui e ver que os dias só aumentaram. \nAmo-te daqui até ao infinito e mais além ❤️\n(${d.totalDays} ${d.totalDays===1?'dia':'dias'})`;
+  const elYMD = document.getElementById('tempoYMD');
+  const elHMS = document.getElementById('tempoHMS');
+  const elSentence = document.getElementById('tempoSentence');
+  if(elYMD) elYMD.textContent = parts.length ? parts.join(' • ') : '0 dias';
+  if(elHMS) elHMS.textContent = `${pad2(d.hours)}:${pad2(d.minutes)}:${pad2(d.seconds)}`;
+  if(elSentence) elSentence.textContent = `Para te lembrares quantos dias passaram desde que tomei a melhor decisão da minha vida... \nE que possamos voltar aqui e ver que os dias só aumentaram. \nAmo-te daqui até ao infinito e mais além ❤️\n(${d.totalDays} ${d.totalDays===1?'dia':'dias'})`;
 }
 setInterval(updateTempo, 1000);
 updateTempo();
 
 /* ================== INITIALIZE AFTER LOGIN ================== */
 function initAfterLogin(){
-  loadAlbums(); // albums into selects
-  loadGallery();
-  loadNotes();
-  renderCalendar();
-  // ensure editor styles applied
-  applyEditorStyles();
+  try{ loadAlbums(); }catch(e){}
+  try{ loadGallery(); }catch(e){}
+  try{ loadNotes(); }catch(e){}
+  try{ renderCalendar(); }catch(e){}
+  try{ applyEditorStyles(); }catch(e){}
 }
 
-/* ================== PAGE BOILERPLATE ================== */
-// all pages have id page_home, page_sobre, etc. showPage handles
-// We'll also ensure first load hides app until login
-
-// Expose some functions for debugging
+/* Expose helpers */
 window.loadGallery = loadGallery;
 window.loadNotes = loadNotes;
 window.renderCalendar = renderCalendar;
@@ -971,5 +933,3 @@ window.renderCalendar = renderCalendar;
 </script>
 </body>
 </html>
-
-
