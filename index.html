@@ -357,14 +357,16 @@ body{
   </div>
 </div>
 
-<!-- Supabase client -->
+<!-- Supabase client (library) -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-/* ================== CONFIG SUPABASE ================== */
+/* ================== CONFIG SUPABASE (client named supabaseClient to avoid conflicts) ================== */
 const SUPABASE_URL = "https://qtzlyowxjqdsswyxcmzu.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF0emx5b3d4anFkc3N3eXhjbXp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ2MDc1MDUsImV4cCI6MjA4MDE4MzUwNX0.iLb7C7x-qyzY58SHd_n_Fdc2RkVy2hNBkf-n41st02c";
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// create client from the global `supabase` object provided by the library
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 /* ================== UTIL & DOM ================== */
 const loginCard = document.getElementById('loginCard');
@@ -398,7 +400,6 @@ menuItems.forEach(it=> it.addEventListener('click', ()=>{ closeDrawer(); showPag
 
   function doLoginAttempt(){
     const v = (codeInput.value || '').trim().toLowerCase();
-    // console.log('Login try', v);
     if(v === 'sasiboy'){
       loginError.style.display = 'none';
       loginCard.style.display = 'none';
@@ -407,7 +408,6 @@ menuItems.forEach(it=> it.addEventListener('click', ()=>{ closeDrawer(); showPag
       try{ if(typeof showPage === 'function') showPage('home'); }catch(e){ console.warn('showPage erro', e); }
     } else {
       loginError.style.display = 'block';
-      // small shake
       if(loginCard.animate){
         loginCard.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-6px)' }, { transform: 'translateX(0)' }], { duration: 200 });
       }
@@ -523,7 +523,7 @@ if(saveBiosBtn) saveBiosBtn.addEventListener('click', async ()=>{
   try{
     const leftText = bioLeft?.innerText.trim() || '';
     const rightText = bioRight?.innerText.trim() || '';
-    await supabase.from('notes').insert([
+    await supabaseClient.from('notes').insert([
       { content: JSON.stringify({ type:'bio', side:'left', text:leftText }) },
       { content: JSON.stringify({ type:'bio', side:'right', text:rightText }) }
     ]);
@@ -542,9 +542,9 @@ if(fileInput) fileInput.addEventListener('change', async (e)=>{
   try{
     const blob = await compressImageBlob(f, 0.7);
     const name = Date.now() + '_' + f.name.replace(/\s+/g,'_');
-    const { data, error } = await supabase.storage.from('photos').upload(name, blob);
+    const { data, error } = await supabaseClient.storage.from('photos').upload(name, blob);
     if(error) throw error;
-    await supabase.from('photos').insert([{ path: data.path }]);
+    await supabaseClient.from('photos').insert([{ path: data.path }]);
     loadGallery();
   }catch(err){ console.error(err); alert('Erro ao enviar foto'); }
 });
@@ -576,12 +576,12 @@ function compressImageBlob(file, quality){
 
 async function loadGallery(){
   try{
-    const { data } = await supabase.from('photos').select('*').order('uploaded_at',{ascending:false});
+    const { data } = await supabaseClient.from('photos').select('*').order('uploaded_at',{ascending:false});
     const grid = document.getElementById('galleryGrid');
     grid.innerHTML = '';
     if(!data || data.length === 0){ grid.innerHTML = '<div class="small-note">Galeria vazia.</div>'; return; }
     data.forEach(p=>{
-      const url = supabase.storage.from('photos').getPublicUrl(p.path).data.publicUrl;
+      const url = supabaseClient.storage.from('photos').getPublicUrl(p.path).data.publicUrl;
       const img = document.createElement('img');
       img.src = url; img.className = 'thumb';
       grid.appendChild(img);
@@ -671,7 +671,7 @@ if(saveNoteBtn) saveNoteBtn.addEventListener('click', async ()=>{
   const album = noteAlbum?.value || '__default';
   if(!content) return alert('Escreve algo na nota.');
   try{
-    await supabase.from('notes').insert([{ title, content, meta: JSON.stringify({ size, color, album }) }]);
+    await supabaseClient.from('notes').insert([{ title, content, meta: JSON.stringify({ size, color, album }) }]);
     if(noteEditorWrap) noteEditorWrap.style.display = 'none';
     loadNotes();
   }catch(e){ console.error(e); alert('Erro ao gravar nota'); }
@@ -688,7 +688,7 @@ if(editNotesBtn) editNotesBtn.addEventListener('click', ()=>{
 if(deleteAllBtn) deleteAllBtn.addEventListener('click', async ()=>{
   if(!confirm('Isto apagará todas as notas. Tens a certeza? Esta ação é irreversível.')) return;
   try{
-    await supabase.from('notes').delete().neq('id',0);
+    await supabaseClient.from('notes').delete().neq('id',0);
     loadNotes();
     alert('Todas as notas foram apagadas.');
   }catch(e){ console.error(e); alert('Erro ao apagar tudo'); }
@@ -697,7 +697,7 @@ if(deleteAllBtn) deleteAllBtn.addEventListener('click', async ()=>{
 async function loadNotes(){
   try{
     const filter = albumFilter?.value || '__all';
-    const { data } = await supabase.from('notes').select('*').order('created_at',{ascending:false});
+    const { data } = await supabaseClient.from('notes').select('*').order('created_at',{ascending:false});
     if(!notesList) return;
     notesList.innerHTML = '';
     if(!data || data.length===0){ notesList.innerHTML = '<div class="small-note">Sem notas.</div>'; return; }
@@ -725,7 +725,7 @@ async function loadNotes(){
           ev.stopPropagation();
           if(!confirm('Apagar esta nota?')) return;
           try{
-            await supabase.from('notes').delete().eq('id', n.id);
+            await supabaseClient.from('notes').delete().eq('id', n.id);
             card.remove();
           }catch(e){ console.error(e); alert('Erro ao apagar'); }
         });
@@ -760,7 +760,7 @@ if(modalSaveBtn) modalSaveBtn.addEventListener('click', async ()=>{
   const content = modalNoteEditor.innerHTML.trim();
   const meta = { size: modalNoteSize.value, color: modalNoteColor.value, album: modalNoteAlbum.value || '__default' };
   try{
-    await supabase.from('notes').update({ title, content, meta: JSON.stringify(meta) }).eq('id', id);
+    await supabaseClient.from('notes').update({ title, content, meta: JSON.stringify(meta) }).eq('id', id);
     if(modalBackdrop) modalBackdrop.style.display = 'none';
     currentEditingNote = null;
     loadNotes();
@@ -771,7 +771,7 @@ if(modalDeleteBtn) modalDeleteBtn.addEventListener('click', async ()=>{
   if(!currentEditingNote) return;
   if(!confirm('Apagar esta nota?')) return;
   try{
-    await supabase.from('notes').delete().eq('id', currentEditingNote.id);
+    await supabaseClient.from('notes').delete().eq('id', currentEditingNote.id);
     if(modalBackdrop) modalBackdrop.style.display='none';
     currentEditingNote = null;
     loadNotes();
@@ -868,7 +868,7 @@ async function markCalEntries(days){
   try{
     if(!days || days.length===0) return;
     const start = days[0].toISOString().slice(0,10), end = days[days.length-1].toISOString().slice(0,10);
-    const { data } = await supabase.from('calendar_entries').select('*').gte('day_date', start).lte('day_date', end);
+    const { data } = await supabaseClient.from('calendar_entries').select('*').gte('day_date', start).lte('day_date', end);
     const DOMdays = Array.from(document.querySelectorAll('.cal-day')).filter(x=> x.style.visibility !== 'hidden');
     for(let i=0;i<days.length;i++){
       const key = days[i].toISOString().slice(0,10);
@@ -881,7 +881,7 @@ let selectedCalDay = null;
 async function selectCalDay(d){
   selectedCalDay = d;
   const key = d.toISOString().slice(0,10);
-  const { data } = await supabase.from('calendar_entries').select('*').eq('day_date', key).limit(1);
+  const { data } = await supabaseClient.from('calendar_entries').select('*').eq('day_date', key).limit(1);
   const dayNoteEl = document.getElementById('dayNote');
   if(dayNoteEl) dayNoteEl.value = data?.[0]?.text || '';
 }
@@ -890,10 +890,10 @@ if(document.getElementById('saveDayBtn')) document.getElementById('saveDayBtn').
   if(!selectedCalDay) return alert('Seleciona um dia primeiro.');
   const key = selectedCalDay.toISOString().slice(0,10);
   const txt = document.getElementById('dayNote').value.trim();
-  const { data } = await supabase.from('calendar_entries').select('*').eq('day_date', key).limit(1);
+  const { data } = await supabaseClient.from('calendar_entries').select('*').eq('day_date', key).limit(1);
   try{
-    if(data && data.length) await supabase.from('calendar_entries').update({ text: txt }).eq('day_date', key);
-    else await supabase.from('calendar_entries').insert([{ day_date: key, text: txt }]);
+    if(data && data.length) await supabaseClient.from('calendar_entries').update({ text: txt }).eq('day_date', key);
+    else await supabaseClient.from('calendar_entries').insert([{ day_date: key, text: txt }]);
     alert('Guardado!'); renderCalendar();
   }catch(e){ console.error(e); alert('Erro ao gravar'); }
 });
