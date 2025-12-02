@@ -10,898 +10,929 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
 
 <style>
-
 :root{
   --pink:#d6336c;
   --bg1:#fff6f8;
   --bg2:#fff;
   --text:#222;
   --muted:#6b5860;
-  --card:#ffffffdd;
-  --shadow:0 6px 20px rgba(0,0,0,0.06);
+  --card:#ffffffee;
+  --glass: rgba(255,255,255,0.75);
+  --shadow: 0 8px 30px rgba(0,0,0,0.06);
+  --radius:14px;
 }
 
-/* RESET */
-*{box-sizing:border-box;margin:0;padding:0}
+/* Basic reset */
+*{box-sizing:border-box}
+html,body{height:100%}
 body{
-  font-family:Inter,Arial,sans-serif;
+  margin:0;
+  font-family:Inter, Arial, sans-serif;
   background:linear-gradient(180deg,var(--bg1),var(--bg2));
   color:var(--text);
-  min-height:100vh;
   -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
 }
 
-/* TOPBAR */
+/* Topbar */
 .topbar{
-  position:fixed;
-  top:0;left:0;right:0;
-  height:64px;
-  background:#ffffffdd;
-  backdrop-filter:blur(6px);
-  border-bottom:1px solid #0001;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:0 18px;
-  z-index:2000;
+  position:fixed;top:0;left:0;right:0;height:64px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 18px;background:rgba(255,255,255,0.9);backdrop-filter:blur(6px);
+  border-bottom:1px solid rgba(0,0,0,0.04);z-index:3000;
 }
-.brand{
-  font-weight:800;
-  font-size:18px;
-  color:var(--pink);
-}
-.currentPageName{
-  font-weight:700;
-  font-size:15px;
-  color:var(--muted);
-  margin-left:14px;
-}
-.hamb{
-  padding:8px 12px;
-  border-radius:10px;
-  border:1px solid #0002;
-  background:#fff;
-  cursor:pointer;
-}
+.brand{font-weight:800;color:var(--pink);font-size:18px}
+.top-right{display:flex;align-items:center;gap:10px}
+.icon-btn{padding:8px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);background:#fff;cursor:pointer}
 
-/* DRAWER */
-#drawerBg{
-  display:none;
-  position:fixed;inset:0;
-  background:#0005;
-  z-index:1500;
-}
-#drawer{
-  position:fixed;
-  top:0;right:-320px;
-  width:320px;
-  height:100vh;
-  background:#fff;
-  padding:20px;
-  box-shadow:-10px 0 25px #0003;
-  z-index:2001;
-  transition:.25s ease;
-}
-.menuitem{
-  padding:12px;
-  font-weight:700;
-  color:#333;
-  cursor:pointer;
-  border-radius:8px;
-}
-.menuitem:hover{background:#fff1f7}
+/* Drawer */
+.drawer-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.28);z-index:2900}
+.drawer-backdrop.open{display:block}
+.drawer{position:fixed;top:0;right:-100%;width:320px;max-width:100%;height:100vh;background:#fff;box-shadow:-12px 0 30px rgba(0,0,0,0.12);padding:20px;transition:transform .28s ease,right .28s ease;transform:translateX(100%);z-index:3000}
+.drawer.open{right:0;transform:translateX(0)}
+.menuitem{padding:12px;border-radius:10px;cursor:pointer;font-weight:700;margin-bottom:6px}
+.menuitem:hover{background:linear-gradient(90deg,#fff5f8,#fff)}
 
-/* CONTAINER */
-.container{
-  max-width:900px;
-  padding:90px 18px 40px;
-  margin:auto;
-}
-.card{
-  background:var(--card);
-  padding:20px;
-  border-radius:16px;
-  box-shadow:var(--shadow);
-  margin-bottom:22px;
-}
+/* Layout */
+.container{padding:100px 18px 40px;max-width:980px;margin:0 auto}
+.card{background:var(--card);padding:18px;border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:20px}
 
-.page{display:none}
-.page.active{display:block}
+/* HOME (decorated) */
+.home-hero{display:flex;gap:20px;align-items:center;justify-content:center;flex-direction:column;padding:28px;border-radius:12px;background:linear-gradient(180deg,#fff,#fffdfd);border:1px solid #f4e8ec}
+.digital-clock{font-family:Montserrat, Inter, Arial;font-size:54px;font-weight:800;color:var(--pink);letter-spacing:1px;text-align:center}
+.counter-row{display:flex;gap:12px;align-items:center;justify-content:center;margin-top:8px}
+.counter-pill{background:#fff;border-radius:10px;padding:10px 14px;border:1px solid #f2e7eb;min-width:110px;text-align:center}
+.counter-big{font-weight:800;font-size:18px}
+.counter-small{font-size:12px;color:var(--muted)}
 
-/* HOME */
-.digitalClock{
-  font-size:56px;
-  font-weight:800;
-  color:var(--pink);
-  text-align:center;
-  margin:40px 0;
-}
+/* small separator */
+.sep{height:1px;background:linear-gradient(90deg,transparent,#eee,transparent);margin:14px 0}
 
-/* SOBRE */
-.editorWrap{display:flex;gap:14px;align-items:flex-start}
-.toolbar{
-  width:130px;
-  padding:12px;
-  background:#fff;
-  border-radius:12px;
-  border:1px solid #eee;
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-}
+/* ABOUT editor */
+.editor-area{display:flex;gap:14px;align-items:flex-start}
+.toolbar{width:140px;background:#fff;border-radius:10px;padding:10px;border:1px solid #eee;display:flex;flex-direction:column;gap:8px}
 .toolbar label{font-size:12px;color:var(--muted)}
-.toolbar button{
-  padding:6px;border:1px solid #0002;
-  border-radius:6px;cursor:pointer;background:#fff;
-}
-.editorBox{
-  flex:1;background:#fff;border-radius:12px;
-  border:1px solid #eee;padding:14px;
-}
-.editable{
-  outline:none;
-  min-height:160px;
-  max-height:200px;
-  overflow:auto;
-  font-size:16px;
-  line-height:1.38;
-}
+.toolbar input[type=range]{width:100%}
+.toolbar .aligns{display:flex;gap:6px}
+.align-btn{padding:6px;border-radius:6px;border:1px solid #e8e8e8;background:#fff;cursor:pointer;min-width:34px}
 
-/* GALERIA */
-.gallery{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(110px,1fr));
-  gap:10px;margin-top:12px;
-}
-.thumb{
-  width:100%;height:110px;object-fit:cover;border-radius:10px;
-}
+/* two editor columns */
+.editor-col{flex:1;background:#fff;padding:12px;border-radius:10px;border:1px solid #eee;min-height:200px}
+.editor-title{font-weight:800;margin:6px 0}
+.editable-box{outline:none;min-height:140px;max-height:220px;overflow:auto;font-size:16px;line-height:1.4}
 
-/* NOTAS */
-.notesGrid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
-  gap:14px;margin-top:16px;
-}
-.noteCard{
-  background:#fff;border-radius:12px;border:1px solid #eee;padding:14px;
-}
+/* function to shrink text when overflow */
+.small-note{font-size:13px;color:var(--muted);margin-top:8px}
 
-/* CALENDÁRIO */
-.calHeader{
-  display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;
-}
-.calGrid{
-  display:grid;
-  grid-template-columns:repeat(7,1fr);
-  gap:8px;
-}
-.day{
-  text-align:center;
-  background:#fff;
-  padding:12px;
-  border-radius:10px;
-  border:1px solid #eee;
-  cursor:pointer;
-}
-.day.active{background:#ffd9e7}
+/* GALLERY */
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-top:12px}
+.thumb{width:100%;height:110px;object-fit:cover;border-radius:10px;display:block}
+
+/* NOTES */
+.notes-top{display:flex;align-items:center;gap:8px;justify-content:space-between}
+.notes-controls{display:flex;gap:8px;align-items:center}
+.btn-ghost{padding:8px 10px;border-radius:8px;border:1px solid #eee;background:#fff;cursor:pointer}
+.notes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-top:12px}
+.note-card{background:#fff;border:1px solid #eee;border-radius:10px;padding:12px;position:relative}
+.note-meta{font-size:12px;color:var(--muted)}
+.note-title{font-weight:700;margin:6px 0}
+.note-content{margin-top:6px}
+.note-actions{display:flex;gap:8px;margin-top:10px;justify-content:flex-end}
+.delete-btn{background:#fff;border:1px solid #f5c0c5;color:#b00020;padding:6px 8px;border-radius:8px;cursor:pointer}
+
+/* albums */
+.album-select{padding:8px;border-radius:8px;border:1px solid #eee;background:#fff}
+
+/* CALENDAR */
+.cal-controls{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.cal-day{background:#fff;border:1px solid #eee;border-radius:8px;padding:10px;text-align:center;cursor:pointer}
+.cal-day.active{background:rgba(214,51,108,0.12)}
 
 /* TEMPO */
-.bigDate{
-  font-size:28px;
-  color:var(--pink);
-  font-weight:800;
-  text-align:center;
-}
-.smallTime{
-  text-align:center;
-  font-weight:700;
-  margin-top:6px;
-  color:var(--muted);
-}
-.sep{
-  height:1px;
-  background:linear-gradient(90deg,transparent,#ddd,transparent);
-  margin:16px 0;
-}
+.tempo-date{font-size:14px;color:var(--muted);text-align:center;margin-bottom:8px}
+.tempo-ymd{font-weight:800;color:var(--pink);text-align:center;font-size:22px}
+.tempo-hms{font-weight:700;text-align:center;color:var(--muted);margin-top:6px}
+.tempo-sentence{margin-top:12px;text-align:center;color:var(--muted);white-space:pre-line}
 
+/* modal (inline edit note) */
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:4000;align-items:center;justify-content:center}
+.modal{background:#fff;border-radius:12px;padding:16px;max-width:760px;width:95%;box-shadow:var(--shadow)}
+.modal.show{display:flex}
+
+/* responsive */
+@media(max-width:860px){
+  .editor-area{flex-direction:column}
+  .toolbar{width:100%;flex-direction:row;gap:8px;overflow:auto;padding:8px}
+  .editor-col{min-height:140px}
+  .digital-clock{font-size:40px}
+}
 </style>
 </head>
-<div class="topbar">
-  <div style="display:flex;align-items:center">
-    <div class="brand">Salvador ❤ Assunção</div>
-    <div id="currentPageName" class="currentPageName"></div>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="brand">Salvador ❤ Assunção</div>
+  <div class="top-right">
+    <button id="openDrawerBtn" class="icon-btn" aria-label="Menu">☰</button>
   </div>
-  <button id="hamb" class="hamb">☰</button>
-</div>
+</header>
 
-<!-- Drawer -->
-<div id="drawerBg"></div>
-<div id="drawer">
-  <button id="closeDrawer" class="hamb">✖</button>
-  <h3 style="margin:14px 0;color:var(--pink)">Menu</h3>
-  <div class="menuitem" data-page="home">Página Inicial</div>
-  <div class="menuitem" data-page="come">Onde tudo começou</div>
-  <div class="menuitem" data-page="sobre">Sobre Nós</div>
-  <div class="menuitem" data-page="gal">Galeria</div>
-  <div class="menuitem" data-page="notas">Notas</div>
-  <div class="menuitem" data-page="cal">Calendário</div>
-  <div class="menuitem" data-page="tempo">Tempo</div>
-</div>
-
-<div class="container">
-
-<!-- LOGIN -->
-<div id="loginCard" class="card" style="max-width:460px;margin:auto">
-  <h2 style="color:var(--pink)">Entrar</h2>
-  <p class="note">Coloca aqui o código secreto</p>
-  <input id="codeInput" placeholder="escreve o código..." style="width:100%;padding:12px;border:1px solid #eee;border-radius:10px">
-  <button id="enterBtn" class="hamb" style="width:100%;margin-top:10px;background:var(--pink);color:#fff;border:0">Entrar</button>
-  <div id="loginError" style="display:none;color:#c00;margin-top:10px">Código errado!</div>
-  <p class="note">Dica: <strong>sasiboy</strong></p>
-</div>
-
-<!-- APP -->
-<div id="app" style="display:none">
-
-<!-- HOME -->
-<section id="page_home" class="page active">
-  <div class="card">
-    <div id="digitalClock" class="digitalClock">--:--:--</div>
+<!-- DRAWER -->
+<div id="drawerBackdrop" class="drawer-backdrop" aria-hidden="true"></div>
+<nav id="drawer" class="drawer" aria-hidden="true">
+  <button id="closeDrawerBtn" class="icon-btn" style="float:right">✖</button>
+  <h3 style="color:var(--pink);margin-top:6px">Menu</h3>
+  <div style="margin-top:12px">
+    <div class="menuitem" data-page="home">Página Inicial</div>
+    <div class="menuitem" data-page="come">Onde tudo começou</div>
+    <div class="menuitem" data-page="sobre">Sobre Nós</div>
+    <div class="menuitem" data-page="gal">Galeria</div>
+    <div class="menuitem" data-page="notas">Notas</div>
+    <div class="menuitem" data-page="cal">Calendário</div>
+    <div class="menuitem" data-page="tempo">Tempo</div>
   </div>
-</section>
+  <div class="small-note" style="margin-top:18px">Privado — apenas com o código secreto</div>
+</nav>
 
-<!-- ONDE TUDO COMEÇOU -->
-<section id="page_come" class="page">
-  <div class="card">
+<!-- MAIN -->
+<main class="container">
+
+  <!-- LOGIN CARD -->
+  <div id="loginCard" class="card" style="max-width:560px;margin:0 auto">
+    <h2 style="margin:0;color:var(--pink)">Entrar</h2>
+    <p class="small-note" style="margin-top:6px">Coloca aqui o código secreto</p>
+    <input id="codeInput" placeholder="escreve o código..." style="padding:12px;width:100%;border-radius:10px;border:1px solid #eee;margin-top:10px">
+    <button id="enterBtn" class="icon-btn" style="width:100%;margin-top:12px;background:var(--pink);color:#fff;border:0;padding:12px;font-weight:700">Entrar</button>
+    <div id="loginError" style="color:#b00020;margin-top:10px;display:none">Código errado!</div>
+    <div class="small-note" style="margin-top:12px">Dica: o código é <strong>sasiboy</strong></div>
+  </div>
+
+  <!-- APP (hidden until login) -->
+  <div id="app" style="display:none">
+
+  <!-- HOME -->
+  <section id="page_home" class="card page active" aria-labelledby="homeTitle">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+      <div class="home-hero" style="width:100%;max-width:720px">
+        <div style="display:flex;align-items:center;justify-content:center;gap:12px">
+          <div style="width:8px;height:8px;background:var(--pink);border-radius:50%"></div>
+          <div style="font-weight:700;color:var(--muted)">Temos isto juntos</div>
+        </div>
+
+        <div id="digitalClock" class="digital-clock">--:--:--</div>
+
+        <div class="counter-row" aria-hidden="false">
+          <div class="counter-pill"><div class="counter-big" id="yrs">0 anos</div><div class="counter-small">anos</div></div>
+          <div class="counter-pill"><div class="counter-big" id="mos">0 meses</div><div class="counter-small">meses</div></div>
+          <div class="counter-pill"><div class="counter-big" id="ds">0 dias</div><div class="counter-small">dias</div></div>
+        </div>
+
+        <div style="margin-top:8px;text-align:center;color:var(--muted)"><small id="clockHms">00:00:00</small></div>
+
+        <div class="sep" style="width:70%"></div>
+
+        <div style="text-align:center;color:var(--muted);padding:8px 6px">
+          <div style="font-weight:700;margin-bottom:6px">Para te lembrares</div>
+          <div style="font-size:14px">Para te lembrares quantos dias passaram desde que tomei a melhor decisão da minha vida... <br> Amo-te daqui até ao infinito e mais além ❤️</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ONDE TUDO COMEÇOU -->
+  <section id="page_come" class="card page" aria-labelledby="comeTitle">
     <h2>Onde tudo começou</h2>
-    <p class="note">(Escreve mais tarde)</p>
-  </div>
-</section>
+    <p class="small-note" style="margin-top:8px">(Escreve depois)</p>
+  </section>
 
-<!-- SOBRE NÓS -->
-<section id="page_sobre" class="page">
-  <div class="card">
+  <!-- SOBRE NÓS -->
+  <section id="page_sobre" class="card page" aria-labelledby="sobreTitle">
     <h2>Sobre Nós</h2>
 
-    <div class="editorWrap" style="margin-top:16px">
-      
-      <!-- TOOLBAR -->
-      <div class="toolbar">
+    <div class="editor-area" style="margin-top:12px">
+      <div class="toolbar" role="toolbar" aria-label="Editor controls">
         <label>Fonte</label>
-        <select id="fontFam">
+        <select id="fontFamily">
           <option value="Inter">Inter</option>
           <option value="Montserrat">Montserrat</option>
-          <option value="serif">Serif</option>
+          <option value="Georgia,serif">Serif</option>
         </select>
 
         <label>Tamanho</label>
-        <input id="fontSize" type="range" min="12" max="32" value="16">
+        <input id="fontSize" type="range" min="12" max="36" value="16">
 
         <label>Cor</label>
         <input id="fontColor" type="color" value="#222222">
 
         <label>Alinhamento</label>
-        <button id="aLeft"><</button>
-        <button id="aCenter">-</button>
-        <button id="aRight">></button>
-      </div>
-
-      <!-- EDITORES -->
-      <div class="editorBox">
-        <h3>Sassá</h3>
-        <div id="bio_left" class="editable" contenteditable="true">
-          Escreve sobre ti aqui...
+        <div class="aligns">
+          <button id="alignLeft" class="align-btn">&lt;</button>
+          <button id="alignCenter" class="align-btn">-</button>
+          <button id="alignRight" class="align-btn">&gt;</button>
         </div>
+
+        <div style="margin-top:6px" class="small-note">As alterações aplicam-se em tempo real.</div>
       </div>
 
-      <div class="editorBox">
-        <h3>Assunção</h3>
-        <div id="bio_right" class="editable" contenteditable="true">
-          Escreve sobre ela aqui...
-        </div>
+      <div class="editor-col" aria-label="Sassá editor">
+        <div class="editor-title">Sassá</div>
+        <div id="bio_left" class="editable-box" contenteditable="true">Escreve sobre ti aqui...</div>
       </div>
 
+      <div class="editor-col" aria-label="Assunção editor">
+        <div class="editor-title">Assunção</div>
+        <div id="bio_right" class="editable-box" contenteditable="true">Escreve sobre ela aqui...</div>
+      </div>
     </div>
 
-    <button id="saveBios" class="hamb" style="width:100%;background:var(--pink);color:#fff;border:0;margin-top:14px">Guardar</button>
-  </div>
-</section>
+    <button id="saveBios" class="icon-btn" style="margin-top:12px;background:var(--pink);color:#fff;border:0;padding:10px 14px">Guardar</button>
+    <div class="small-note" style="margin-top:8px">As caixas mantêm a altura; se o texto for maior, o tamanho da letra diminui automaticamente.</div>
+  </section>
 
-<!-- GALERIA -->
-<section id="page_gal" class="page">
-  <div class="card">
+  <!-- GALERIA -->
+  <section id="page_gal" class="card page" aria-labelledby="galTitle">
     <div style="display:flex;justify-content:space-between;align-items:center">
       <h2>Galeria</h2>
-      <button id="addPhotoBtn" class="hamb" style="background:var(--pink);color:#fff;border:0">+</button>
+      <div>
+        <button id="addPhotoBtn" class="icon-btn" style="background:var(--pink);color:#fff;border:0">Adicionar</button>
+      </div>
     </div>
 
     <input id="fileInput" type="file" accept="image/*" style="display:none">
-    
-    <div id="galleryGrid" class="gallery"></div>
+    <div id="galleryGrid" class="gallery" style="margin-top:12px"></div>
+    <div class="small-note" style="margin-top:12px">Adiciona fotos — tira no telemóvel ou escolhe da fototeca.</div>
+  </section>
 
-    <p class="note">Adiciona fotos do telemóvel ou da fototeca.</p>
-  </div>
-</section>
-
-<!-- NOTAS -->
-<section id="page_notas" class="page">
-  <div class="card">
-    <div style="display:flex;align-items:center;justify-content:space-between">
-      <h2 style="margin:0">Notas</h2>
-      <button id="newNoteBtn" class="hamb" style="background:var(--pink);color:#fff;border:0">+ Nota</button>
-    </div>
-
-    <!-- Editor -->
-    <div id="noteEditorWrap" style="display:none;margin-top:16px">
-      <input id="noteTitle" placeholder="Título" style="width:100%;padding:10px;border-radius:10px;border:1px solid #eee">
-
-      <div style="display:flex;gap:10px;margin-top:10px">
-        <select id="noteSize" style="padding:8px;border-radius:8px;border:1px solid #eee">
-          <option value="14">14</option>
-          <option value="16" selected>16</option>
-          <option value="18">18</option>
-          <option value="20">20</option>
+  <!-- NOTAS -->
+  <section id="page_notas" class="card page" aria-labelledby="notasTitle">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <h2>Notas</h2>
+      <div class="notes-controls">
+        <select id="albumFilter" class="album-select">
+          <option value="__all">Todos os álbuns</option>
         </select>
-
-        <input id="noteColor" type="color" value="#222222" />
-
-        <button id="saveNote" class="hamb" style="margin-left:auto;background:var(--pink);color:#fff;border:0">
-          Guardar
-        </button>
+        <button id="newNoteBtn" class="icon-btn" style="background:var(--pink);color:#fff;border:0">+ Nova</button>
+        <button id="editNotesBtn" class="btn-ghost" title="Editar notas">Editar</button>
+        <button id="deleteAllBtn" class="btn-ghost" title="Apagar todas">Apagar todas</button>
       </div>
-
-      <div id="noteEditor" contenteditable="true"
-           style="margin-top:12px;padding:12px;border:1px solid #eee;border-radius:12px;min-height:140px;background:#fff;overflow:auto"></div>
     </div>
 
-    <!-- Lista -->
-    <div id="notesList" class="notesGrid"></div>
-  </div>
-</section>
+    <!-- note editor -->
+    <div id="noteEditorWrap" style="display:none;margin-top:12px">
+      <input id="noteTitle" placeholder="Título" style="width:100%;padding:10px;border-radius:8px;border:1px solid #eee">
+      <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+        <select id="noteAlbum" class="album-select"></select>
+        <select id="noteSize" style="padding:8px;border-radius:8px;border:1px solid #eee">
+          <option value="14">14</option><option value="16" selected>16</option><option value="18">18</option>
+        </select>
+        <input id="noteColor" type="color" value="#222222">
+        <button id="saveNoteBtn" class="icon-btn" style="margin-left:auto;background:var(--pink);color:#fff;border:0">Guardar</button>
+      </div>
+      <div id="noteEditor" contenteditable="true" style="margin-top:8px;padding:12px;border-radius:8px;border:1px solid #eee;min-height:120px;background:#fff;overflow:auto"></div>
+    </div>
 
-<!-- CALENDÁRIO -->
-<section id="page_cal" class="page">
-  <div class="card">
+    <div id="notesList" class="notes-grid" style="margin-top:12px"></div>
+  </section>
+
+  <!-- CALENDÁRIO -->
+  <section id="page_cal" class="card page" aria-labelledby="calTitle">
     <h2>Calendário</h2>
 
-    <div class="calHeader">
-      <button id="calPrev" class="hamb">◀</button>
-      <div id="calLabel" class="note"></div>
-      <button id="calNext" class="hamb">▶</button>
+    <div class="cal-controls" style="margin-top:8px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <button id="calPrev" class="btn-ghost">◀</button>
+        <div id="calLabel" class="small-note"></div>
+        <button id="calNext" class="btn-ghost">▶</button>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <select id="calView" class="album-select">
+          <option value="week">Semana</option>
+          <option value="month">Mês</option>
+          <option value="year">Ano</option>
+          <option value="day">Dia</option>
+        </select>
+      </div>
     </div>
 
-    <select id="calView" style="padding:8px;border-radius:8px;border:1px solid #eee;margin-bottom:10px">
-      <option value="week">Semana</option>
-      <option value="month">Mês</option>
-      <option value="year">Ano</option>
-      <option value="day">Dia</option>
-    </select>
+    <div id="calendarGrid" class="cal-grid" style="margin-top:12px"></div>
 
-    <div id="calendarGrid" class="calGrid"></div>
+    <textarea id="dayNote" placeholder="Nota do dia..." style="width:100%;margin-top:12px;padding:10px;border-radius:8px;border:1px solid #eee;min-height:100px"></textarea>
+    <button id="saveDayBtn" class="icon-btn" style="width:100%;margin-top:10px;background:var(--pink);color:#fff;border:0">Guardar Dia</button>
+  </section>
 
-    <textarea id="dayNote" placeholder="Escreve algo sobre este dia..."
-              style="width:100%;margin-top:14px;min-height:100px;padding:10px;border:1px solid #eee;border-radius:10px"></textarea>
-
-    <button id="saveDay" class="hamb" style="width:100%;margin-top:10px;background:var(--pink);color:#fff;border:0">
-      Guardar Dia
-    </button>
-  </div>
-</section>
-
-<!-- TEMPO -->
-<section id="page_tempo" class="page">
-  <div class="card">
+  <!-- TEMPO -->
+  <section id="page_tempo" class="card page" aria-labelledby="tempoTitle">
     <h2>Tempo</h2>
+    <div class="tempo-date">17 de setembro de 2025 às 22:00</div>
+    <div id="tempoYMD" class="tempo-ymd">0 dias</div>
+    <div id="tempoHMS" class="tempo-hms">00:00:00</div>
+    <div class="sep" style="margin-top:12px"></div>
+    <div id="tempoSentence" class="tempo-sentence"></div>
+  </section>
 
-    <p class="note" style="text-align:center;margin-bottom:14px">
-      <small>17 de setembro de 2025 às 22:00</small>
-    </p>
+  </div> <!-- end app -->
 
-    <div id="ymd" class="bigDate"></div>
-    <div id="hms" class="smallTime"></div>
+</main>
 
-    <div class="sep"></div>
-
-    <p id="tempoSentence" class="note" style="text-align:center"></p>
+<!-- MODAL - Edit Note -->
+<div id="modalBackdrop" class="modal-backdrop" style="display:none;align-items:center;justify-content:center;">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="editNoteTitle">
+    <h3 id="editNoteTitle">Editar Nota</h3>
+    <input id="modalNoteTitle" placeholder="Título" style="width:100%;padding:8px;border-radius:8px;border:1px solid #eee;margin-top:8px">
+    <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+      <select id="modalNoteSize" style="padding:8px;border-radius:8px;border:1px solid #eee">
+        <option value="14">14</option><option value="16">16</option><option value="18">18</option>
+      </select>
+      <input id="modalNoteColor" type="color" value="#222222">
+      <select id="modalNoteAlbum" class="album-select"></select>
+      <div style="margin-left:auto;display:flex;gap:8px">
+        <button id="modalDeleteBtn" class="delete-btn">Apagar</button>
+        <button id="modalSaveBtn" class="icon-btn" style="background:var(--pink);color:#fff;border:0">Guardar</button>
+      </div>
+    </div>
+    <div id="modalNoteEditor" contenteditable="true" style="margin-top:10px;padding:10px;border-radius:8px;border:1px solid #eee;min-height:120px"></div>
+    <div style="text-align:right;margin-top:8px"><button id="modalClose" class="btn-ghost">Fechar</button></div>
   </div>
-</section>
+</div>
 
-</div> <!-- end app -->
-</div> <!-- end container -->
-<!-- Supabase -->
+<!-- Supabase client -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-
-/* ============================
-      SUPABASE CONFIG
-============================ */
+/* ================== CONFIG SUPABASE ================== */
 const SUPABASE_URL = "https://qtzlyowxjqdsswyxcmzu.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF0emx5b3d4anFkc3N3eXhjbXp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ2MDc1MDUsImV4cCI6MjA4MDE4MzUwNX0.iLb7C7x-qyzY58SHd_n_Fdc2RkVy2hNBkf-n41st02c";
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-/* ============================
-        ELEMENTOS BASE
-============================ */
+/* ================== UTIL & DOM ================== */
 const loginCard = document.getElementById('loginCard');
 const appDiv = document.getElementById('app');
-
 const enterBtn = document.getElementById('enterBtn');
 const codeInput = document.getElementById('codeInput');
 const loginError = document.getElementById('loginError');
 
-const hamb = document.getElementById('hamb');
+const openDrawerBtn = document.getElementById('openDrawerBtn');
 const drawer = document.getElementById('drawer');
-const drawerBg = document.getElementById('drawerBg');
-const closeDrawer = document.getElementById('closeDrawer');
+const drawerBackdrop = document.getElementById('drawerBackdrop');
+const closeDrawerBtn = document.getElementById('closeDrawerBtn');
 
-const currentPageName = document.getElementById('currentPageName');
+const menuItems = document.querySelectorAll('.menuitem');
 
-/* ============================
-        LOGIN
-============================ */
-enterBtn.addEventListener("click", () => {
-  const v = (codeInput.value || "").trim().toLowerCase();
-  if (v === "sasiboy") {
-    loginError.style.display = "none";
-    loginCard.style.display = "none";
-    appDiv.style.display = "block";
-    showPage("home");
+/* ================== NAV & DRAWER ================== */
+openDrawerBtn.addEventListener('click', ()=>{ drawer.classList.add('open'); drawerBackdrop.classList.add('open'); drawer.setAttribute('aria-hidden','false'); drawerBackdrop.setAttribute('aria-hidden','false'); });
+closeDrawerBtn.addEventListener('click', closeDrawer);
+drawerBackdrop.addEventListener('click', closeDrawer);
+function closeDrawer(){ drawer.classList.remove('open'); drawerBackdrop.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); drawerBackdrop.setAttribute('aria-hidden','true'); }
+menuItems.forEach(it=> it.addEventListener('click', ()=>{ closeDrawer(); showPage(it.dataset.page); }));
+
+/* ================== LOGIN ================== */
+enterBtn.addEventListener('click', ()=>{
+  const val = (codeInput.value||'').trim().toLowerCase();
+  if(val === 'sasiboy'){
+    loginError.style.display = 'none';
+    loginCard.style.display = 'none';
+    appDiv.style.display = 'block';
+    initAfterLogin();
+    showPage('home');
   } else {
-    loginError.style.display = "block";
+    loginError.style.display = 'block';
   }
 });
 
-/* ============================
-        MENU LATERAL
-============================ */
-hamb.onclick = () => {
-  drawer.style.right = "0px";
-  drawerBg.style.display = "block";
-};
-closeDrawer.onclick =
-drawerBg.onclick = () => {
-  drawer.style.right = "-320px";
-  drawerBg.style.display = "none";
-};
-
-document.querySelectorAll(".menuitem").forEach(m =>
-  m.onclick = () => {
-    showPage(m.dataset.page);
-    drawer.style.right = "-320px";
-    drawerBg.style.display = "none";
-  }
-);
-
-/* ============================
-        TROCA DE PÁGINAS
-============================ */
-function showPage(page) {
-  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-  document.getElementById("page_" + page).classList.add("active");
-
-  currentPageName.textContent = page.charAt(0).toUpperCase() + page.slice(1);
-
-  if (page === "gal") loadGallery();
-  if (page === "notas") loadNotes();
-  if (page === "cal") renderCalendar();
-  if (page === "tempo") updateTempoUI();
+/* ================== PAGE NAV ================== */
+function showPage(p){
+  document.querySelectorAll('.page').forEach(x=> x.classList.remove('active'));
+  const el = document.getElementById('page_' + p);
+  if(el) el.classList.add('active');
+  // close drawer if open
+  closeDrawer();
+  // some pages need immediate refresh
+  if(p==='gal') loadGallery();
+  if(p==='notas') loadNotes();
+  if(p==='cal') renderCalendar();
+  if(p==='tempo') updateTempo();
 }
 
-/* ============================
-        RELÓGIO HOME
-============================ */
-function updateClock() {
-  document.getElementById("digitalClock").textContent =
-    new Date().toLocaleTimeString("pt-PT");
-}
-setInterval(updateClock, 1000);
-updateClock();
-
-/* ============================
-    SOBRE NÓS – EDITOR LIVE
-============================ */
-const bioLeft = document.getElementById("bio_left");
-const bioRight = document.getElementById("bio_right");
-
-const fontFam = document.getElementById("fontFam");
-const fontSize = document.getElementById("fontSize");
-const fontColor = document.getElementById("fontColor");
-const aLeft = document.getElementById("aLeft");
-const aCenter = document.getElementById("aCenter");
-const aRight = document.getElementById("aRight");
-
-function applyLive() {
-  [bioLeft, bioRight].forEach(el => {
-    el.style.fontFamily = fontFam.value;
-    el.style.fontSize = fontSize.value + "px";
-    el.style.color = fontColor.value;
-  });
-}
-fontFam.oninput =
-fontSize.oninput =
-fontColor.oninput = applyLive;
-
-aLeft.onclick = () => [bioLeft, bioRight].forEach(e => e.style.textAlign = "left");
-aCenter.onclick = () => [bioLeft, bioRight].forEach(e => e.style.textAlign = "center");
-aRight.onclick = () => [bioLeft, bioRight].forEach(e => e.style.textAlign = "right");
-
-document.getElementById("saveBios").onclick = async () => {
-  try {
-    await supabaseClient.from("notes").insert([
-      { content: JSON.stringify({ type:'bio', side:'left', text: bioLeft.innerText }) },
-      { content: JSON.stringify({ type:'bio', side:'right', text: bioRight.innerText }) }
-    ]);
-    alert("Biografias salvas!");
-  } catch (e) {
-    console.error(e);
-    alert("Erro ao guardar");
-  }
-};
-
-/* ============================
-          GALERIA
-============================ */
-const fileInput = document.getElementById("fileInput");
-document.getElementById("addPhotoBtn").onclick = () => fileInput.click();
-
-fileInput.onchange = async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-
-  const comp = await compressImg(file, 0.7);
-  const name = Date.now() + "_" + file.name.replace(/\s/g,'');
-
-  const { data, error } = await supabaseClient
-    .storage.from("photos")
-    .upload(name, comp);
-
-  if (error) return alert(error.message);
-
-  await supabaseClient.from("photos").insert([{ path: data.path }]);
-  loadGallery();
-};
-
-function compressImg(file, q) {
-  return new Promise(res => {
-    const r = new FileReader();
-    r.onload = e => {
-      const img = new Image();
-      img.onload = () => {
-        const max = 2000;
-        let w = img.width, h = img.height;
-        if (w > max || h > max) {
-          const ratio = Math.min(max/w, max/h);
-          w *= ratio; h *= ratio;
-        }
-        const c = document.createElement("canvas");
-        c.width = w; c.height = h;
-        c.getContext("2d").drawImage(img,0,0,w,h);
-        c.toBlob(b => res(b),"image/jpeg",q);
-      };
-      img.src = e.target.result;
-    };
-    r.readAsDataURL(file);
-  });
-}
-
-async function loadGallery() {
-  const { data } = await supabaseClient.from("photos").select("*").order("uploaded_at",{ascending:false});
-  const grid = document.getElementById("galleryGrid");
-  grid.innerHTML = "";
-
-  if (!data || !data.length) {
-    grid.innerHTML = "<p class='note'>Galeria vazia.</p>";
-    return;
-  }
-
-  data.forEach(p => {
-    const url = supabaseClient.storage.from("photos").getPublicUrl(p.path).data.publicUrl;
-    const img = document.createElement("img");
-    img.src = url;
-    img.className = "thumb";
-    grid.appendChild(img);
-  });
-}
-
-/* ============================
-            NOTAS
-============================ */
-const noteEditorWrap = document.getElementById("noteEditorWrap");
-const noteEditor = document.getElementById("noteEditor");
-const noteTitle = document.getElementById("noteTitle");
-
-document.getElementById("newNoteBtn").onclick = () => {
-  noteEditorWrap.style.display = "block";
-  noteEditor.innerHTML = "";
-  noteTitle.value = "";
-};
-
-document.getElementById("saveNote").onclick = async () => {
-  const title = noteTitle.value.trim();
-  const content = noteEditor.innerHTML.trim();
-  const size = document.getElementById("noteSize").value;
-  const color = document.getElementById("noteColor").value;
-
-  if (!content) return alert("Escreve algo.");
-
-  await supabaseClient.from("notes").insert([
-    { title, content, meta: JSON.stringify({ size, color }) }
-  ]);
-
-  noteEditorWrap.style.display = "none";
-  loadNotes();
-};
-
-async function loadNotes() {
-  const { data } = await supabaseClient.from("notes").select("*").order("created_at",{ascending:false});
-  const list = document.getElementById("notesList");
-  list.innerHTML = "";
-
-  if (!data || !data.length) {
-    list.innerHTML = "<p class='note'>Sem notas ainda.</p>";
-    return;
-  }
-
-  data.forEach(n => {
-    const card = document.createElement("div");
-    card.className = "noteCard";
-
-    const meta = n.meta ? JSON.parse(n.meta) : { size:16,color:"#222" };
-
-    card.innerHTML = `
-      <div style="font-size:12px;color:var(--muted)">
-        ${new Date(n.created_at).toLocaleString()}
-      </div>
-      <h3 style="margin:8px 0">${n.title || "Sem título"}</h3>
-      <div style="font-size:${meta.size}px;color:${meta.color}">${n.content}</div>
-    `;
-    list.appendChild(card);
-  });
-}
-
-/* ============================
-         CALENDÁRIO
-============================ */
-let calDate = new Date();
-let calView = "week";
-
-document.getElementById("calPrev").onclick = () => navCal(-1);
-document.getElementById("calNext").onclick = () => navCal(1);
-document.getElementById("calView").onchange = (e) => {
-  calView = e.target.value;
-  renderCalendar();
-};
-
-function navCal(delta) {
-  if (calView === "day") calDate.setDate(calDate.getDate() + delta);
-  if (calView === "week") calDate.setDate(calDate.getDate() + delta*7);
-  if (calView === "month") calDate.setMonth(calDate.getMonth() + delta);
-  if (calView === "year") calDate.setFullYear(calDate.getFullYear() + delta);
-  renderCalendar();
-}
-
-function startOfWeek(d) {
-  const c = new Date(d);
-  const day = c.getDay();
-  const diff = c.getDate() - day + (day===0?-6:1);
-  return new Date(c.getFullYear(), c.getMonth(), diff);
-}
-
-async function renderCalendar() {
-  const grid = document.getElementById("calendarGrid");
-  grid.innerHTML = "";
-  const label = document.getElementById("calLabel");
-
-  /* DIA */
-  if (calView === "day") {
-    const d = new Date(calDate);
-    label.textContent = d.toLocaleDateString("pt-PT",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
-
-    const cell = document.createElement("div");
-    cell.className = "day";
-    cell.style.gridColumn = "1 / -1";
-    cell.style.padding = "25px";
-    cell.innerHTML = `
-      <div style="font-weight:800;font-size:18px">${d.getDate()}</div>
-      <div class="note">${d.toLocaleDateString("pt-PT",{weekday:"long"})}</div>
-    `;
-    cell.onclick = () => selectDay(d);
-    grid.appendChild(cell);
-    return;
-  }
-
-  /* SEMANA */
-  if (calView === "week") {
-    const start = startOfWeek(calDate);
-    label.textContent = `Semana de ${start.toLocaleDateString("pt-PT")}`;
-
-    const days = [];
-    for (let i=0;i<7;i++){
-      const dd = new Date(start);
-      dd.setDate(start.getDate()+i);
-      days.push(dd);
-    }
-
-    for (const d of days) {
-      const el = document.createElement("div");
-      el.className = "day";
-      el.innerHTML = `
-        <div style="color:var(--muted);font-size:13px">${d.toLocaleDateString("pt-PT",{weekday:"short"})}</div>
-        <div style="font-weight:700;font-size:18px">${d.getDate()}</div>
-      `;
-      el.onclick = () => selectDay(d);
-      grid.appendChild(el);
-    }
-
-    markEntries(days);
-    return;
-  }
-
-  /* MÊS */
-  if (calView === "month") {
-    const y = calDate.getFullYear();
-    const m = calDate.getMonth();
-    label.textContent = calDate.toLocaleDateString("pt-PT",{month:"long",year:"numeric"});
-
-    const first = new Date(y,m,1);
-    const last = new Date(y,m+1,0);
-    const startDay = (first.getDay()||7)-1;
-
-    for (let i=0;i<startDay;i++){
-      const ph = document.createElement("div");
-      ph.style.opacity = "0";
-      grid.appendChild(ph);
-    }
-
-    const days = [];
-    for (let d=1; d<=last.getDate(); d++){
-      const date = new Date(y,m,d);
-      days.push(date);
-
-      const el = document.createElement("div");
-      el.className = "day";
-      el.innerHTML = `
-        <div style="font-size:12px;color:var(--muted)">${date.toLocaleDateString("pt-PT",{weekday:"short"})}</div>
-        <div style="font-weight:700;font-size:18px">${d}</div>
-      `;
-      el.onclick = () => selectDay(date);
-      grid.appendChild(el);
-    }
-
-    markEntries(days);
-    return;
-  }
-
-  /* ANO */
-  if (calView === "year") {
-    label.textContent = calDate.getFullYear();
-
-    for (let i=0;i<12;i++){
-      const d = new Date(calDate.getFullYear(), i, 1);
-      const el = document.createElement("div");
-      el.className = "day";
-      el.innerHTML = `<div style="font-weight:700">${d.toLocaleDateString("pt-PT",{month:"short"})}</div>`;
-      el.onclick = () => {
-        calDate = new Date(d);
-        calView = "month";
-        document.getElementById("calView").value = "month";
-        renderCalendar();
-      };
-      grid.appendChild(el);
-    }
-  }
-}
-
-async function markEntries(days){
-  const start = days[0].toISOString().slice(0,10);
-  const end = days[days.length-1].toISOString().slice(0,10);
-
-  const { data } = await supabaseClient
-    .from("calendar_entries")
-    .select("*")
-    .gte("day_date", start)
-    .lte("day_date", end);
-
-  const cells = document.querySelectorAll(".day");
-
-  days.forEach((d,i)=>{
-    const key = d.toISOString().slice(0,10);
-    if (data && data.find(x=>x.day_date===key))
-      cells[i].classList.add("active");
-  });
-}
-
-let selectedDay = null;
-async function selectDay(d){
-  selectedDay = d;
-  const key = d.toISOString().slice(0,10);
-
-  const { data } = await supabaseClient
-    .from("calendar_entries")
-    .select("*")
-    .eq("day_date", key)
-    .limit(1);
-
-  document.getElementById("dayNote").value = data?.[0]?.text || "";
-}
-
-document.getElementById("saveDay").onclick = async () => {
-  if (!selectedDay) return alert("Seleciona um dia.");
-
-  const key = selectedDay.toISOString().slice(0,10);
-  const txt = document.getElementById("dayNote").value.trim();
-
-  const { data } = await supabaseClient
-    .from("calendar_entries")
-    .select("*")
-    .eq("day_date", key)
-    .limit(1);
-
-  if (data?.length)
-    await supabaseClient.from("calendar_entries").update({ text: txt }).eq("day_date", key);
-  else
-    await supabaseClient.from("calendar_entries").insert([{ day_date:key, text:txt }]);
-
-  alert("Guardado!");
-  renderCalendar();
-};
-
-/* ============================
-          TEMPO
-============================ */
+/* ================== HOME CLOCK & COUNTER ================== */
 const START = new Date("2025-09-17T22:00:00");
 
-function diff(start, now){
-  let y = now.getFullYear() - start.getFullYear();
-  let m = now.getMonth() - start.getMonth();
-  let d = now.getDate() - start.getDate();
-
-  if (d<0){
-    m--;
-    d += new Date(now.getFullYear(),now.getMonth(),0).getDate();
+function pad2(n){return String(n).padStart(2,'0');}
+function diffYMDHMS(start, now){
+  let years = now.getFullYear() - start.getFullYear();
+  let months = now.getMonth() - start.getMonth();
+  let days = now.getDate() - start.getDate();
+  if(days < 0){
+    months--;
+    const prev = new Date(now.getFullYear(), now.getMonth(), 0);
+    days += prev.getDate();
   }
-  if (m<0){
-    y--; m+=12;
+  if(months < 0){
+    years--; months += 12;
   }
-
-  const sec = Math.floor((now-start)/1000);
-  return {
-    years:y,
-    months:m,
-    days:d,
-    h: Math.floor(sec/3600)%24,
-    min: Math.floor(sec/60)%60,
-    s: sec%60,
-    totalDays: Math.floor(sec/86400)
-  };
+  const totalSec = Math.floor((now - start)/1000);
+  const hours = Math.floor(totalSec/3600) % 24;
+  const minutes = Math.floor(totalSec/60) % 60;
+  const seconds = totalSec % 60;
+  const totalDays = Math.floor((now - start)/(1000*60*60*24));
+  return { years, months, days, hours, minutes, seconds, totalDays };
 }
 
-function updateTempoUI(){
+function updateHomeClock(){
   const now = new Date();
-  const t = diff(START, now);
+  document.getElementById('digitalClock').textContent = now.toLocaleTimeString('pt-PT');
+  const d = diffYMDHMS(START, now);
+  document.getElementById('yrs').textContent = `${d.years} anos`;
+  document.getElementById('mos').textContent = `${d.months} meses`;
+  document.getElementById('ds').textContent = `${d.days} dias`;
+  document.getElementById('clockHms').textContent = `${pad2(d.hours)}:${pad2(d.minutes)}:${pad2(d.seconds)}`;
+}
+setInterval(updateHomeClock, 1000);
+updateHomeClock();
 
-  const ymd = [];
-  if (t.years) ymd.push(`${t.years} ano${t.years>1?"s":""}`);
-  if (t.months) ymd.push(`${t.months} mês${t.months>1?"es":""}`);
-  if (t.days) ymd.push(`${t.days} dia${t.days>1?"s":""}`);
+/* ================== SOBRE – live editor + auto-fit ================== */
+const bioLeft = document.getElementById('bio_left');
+const bioRight = document.getElementById('bio_right');
+const fontFamily = document.getElementById('fontFamily');
+const fontSize = document.getElementById('fontSize');
+const fontColor = document.getElementById('fontColor');
+const alignLeftBtn = document.getElementById('alignLeft');
+const alignCenterBtn = document.getElementById('alignCenter');
+const alignRightBtn = document.getElementById('alignRight');
+const saveBiosBtn = document.getElementById('saveBios');
 
-  document.getElementById("ymd").textContent = ymd.join(" • ") || "0 dias";
-  document.getElementById("hms").textContent =
-    `${String(t.h).padStart(2,"0")}:${String(t.min).padStart(2,"0")}:${String(t.s).padStart(2,"0")}`;
+function applyEditorStyles(){
+  [bioLeft, bioRight].forEach(el=>{
+    el.style.fontFamily = fontFamily.value;
+    el.style.fontSize = fontSize.value + 'px';
+    el.style.color = fontColor.value;
+    adjustFontToFit(el);
+  });
+}
+fontFamily.addEventListener('input', applyEditorStyles);
+fontSize.addEventListener('input', applyEditorStyles);
+fontColor.addEventListener('input', applyEditorStyles);
+alignLeftBtn.addEventListener('click', ()=> [bioLeft,bioRight].forEach(e=> e.style.textAlign='left'));
+alignCenterBtn.addEventListener('click', ()=> [bioLeft,bioRight].forEach(e=> e.style.textAlign='center'));
+alignRightBtn.addEventListener('click', ()=> [bioLeft,bioRight].forEach(e=> e.style.textAlign='right'));
 
-  document.getElementById("tempoSentence").textContent =
-    `Para te lembrares quantos dias passaram desde que tomei a melhor decisão da minha vida... ` +
-    `E que possamos voltar aqui e ver que os dias só aumentaram. ` +
-    `Amo-te daqui até ao infinito e mais além ❤️  ` +
-    `(${t.totalDays} dia${t.totalDays!==1?"s":""})`;
+// auto-shrink function: reduce font-size until content fits in box
+function adjustFontToFit(el){
+  // start from computed or current style
+  let style = window.getComputedStyle(el);
+  let f = parseInt(style.fontSize) || parseInt(fontSize.value) || 16;
+  const min = 12;
+  // if content fits, nothing
+  function fits(){ return el.scrollHeight <= el.clientHeight + 4; }
+  // increase if there's room (not needed often)
+  while(f < 40 && fits() && el.scrollHeight < el.clientHeight - 20){
+    f++;
+    el.style.fontSize = f + 'px';
+    if(f > parseInt(fontSize.max || 36)) break;
+  }
+  // reduce until fits or min
+  while(f > min && !fits()){
+    f--;
+    el.style.fontSize = f + 'px';
+  }
 }
 
-setInterval(updateTempoUI,1000);
-updateTempoUI();
+// adjust on input
+[bioLeft, bioRight].forEach(b=>{
+  b.addEventListener('input', ()=> adjustFontToFit(b));
+  // on paste, run adjust after short delay
+  b.addEventListener('paste', ()=> setTimeout(()=> adjustFontToFit(b),100));
+});
+
+// save bios to supabase (as notes flagged type:bio)
+saveBiosBtn.addEventListener('click', async ()=>{
+  try{
+    const leftText = bioLeft.innerText.trim();
+    const rightText = bioRight.innerText.trim();
+    await supabase.from('notes').insert([
+      { content: JSON.stringify({ type:'bio', side:'left', text:leftText }) },
+      { content: JSON.stringify({ type:'bio', side:'right', text:rightText }) }
+    ]);
+    alert('Biografias guardadas!');
+  }catch(e){ console.error(e); alert('Erro ao guardar bios'); }
+});
+
+/* ================== GALLERY ================== */
+const fileInput = document.getElementById('fileInput');
+const addPhotoBtn = document.getElementById('addPhotoBtn');
+addPhotoBtn.addEventListener('click', ()=> fileInput.click());
+
+fileInput.addEventListener('change', async (e)=>{
+  const f = e.target.files[0];
+  if(!f) return;
+  try{
+    const blob = await compressImageBlob(f, 0.7);
+    const name = Date.now() + '_' + f.name.replace(/\s+/g,'_');
+    const { data, error } = await supabase.storage.from('photos').upload(name, blob);
+    if(error) throw error;
+    await supabase.from('photos').insert([{ path: data.path }]);
+    loadGallery();
+  }catch(err){ console.error(err); alert('Erro ao enviar foto'); }
+});
+
+function compressImageBlob(file, quality){
+  return new Promise((resolve,reject)=>{
+    const reader = new FileReader();
+    reader.onload = e=>{
+      const img = new Image();
+      img.onload = ()=>{
+        const max = 2000;
+        let w = img.width, h = img.height;
+        if(w > max || h > max){
+          const r = Math.min(max/w, max/h);
+          w = Math.round(w*r); h = Math.round(h*r);
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img,0,0,w,h);
+        canvas.toBlob(b=> resolve(b), 'image/jpeg', quality);
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function loadGallery(){
+  try{
+    const { data } = await supabase.from('photos').select('*').order('uploaded_at',{ascending:false});
+    const grid = document.getElementById('galleryGrid');
+    grid.innerHTML = '';
+    if(!data || data.length === 0){ grid.innerHTML = '<div class="small-note">Galeria vazia.</div>'; return; }
+    data.forEach(p=>{
+      const url = supabase.storage.from('photos').getPublicUrl(p.path).data.publicUrl;
+      const img = document.createElement('img');
+      img.src = url; img.className = 'thumb';
+      grid.appendChild(img);
+    });
+  }catch(e){ console.error(e); }
+}
+
+/* ================== NOTES (albums, edit mode, inline edit modal) ================== */
+let editMode = false;
+const newNoteBtn = document.getElementById('newNoteBtn');
+const editNotesBtn = document.getElementById('editNotesBtn');
+const deleteAllBtn = document.getElementById('deleteAllBtn');
+const noteEditorWrap = document.getElementById('noteEditorWrap');
+const noteEditor = document.getElementById('noteEditor');
+const noteTitle = document.getElementById('noteTitle');
+const noteSize = document.getElementById('noteSize');
+const noteColor = document.getElementById('noteColor');
+const noteAlbum = document.getElementById('noteAlbum');
+const notesList = document.getElementById('notesList');
+const albumFilter = document.getElementById('albumFilter');
+
+const modalBackdrop = document.getElementById('modalBackdrop');
+const modalNoteTitle = document.getElementById('modalNoteTitle');
+const modalNoteEditor = document.getElementById('modalNoteEditor');
+const modalNoteSize = document.getElementById('modalNoteSize');
+const modalNoteColor = document.getElementById('modalNoteColor');
+const modalNoteAlbum = document.getElementById('modalNoteAlbum');
+const modalSaveBtn = document.getElementById('modalSaveBtn');
+const modalDeleteBtn = document.getElementById('modalDeleteBtn');
+const modalClose = document.getElementById('modalClose');
+
+let currentEditingNote = null;
+
+// albums stored in localStorage as array of {id,name}
+function loadAlbums(){
+  const raw = localStorage.getItem('sa_albums') || '[]';
+  let arr = [];
+  try{ arr = JSON.parse(raw) } catch(e){ arr = [] }
+  // ensure default album
+  if(!arr.find(a=>a.id==='__default')) arr.unshift({id:'__default', name:'Sem álbum'});
+  // populate selects
+  function fill(select){
+    select.innerHTML = '';
+    const allOpt = document.createElement('option');
+    allOpt.value = '__default'; allOpt.textContent = 'Sem álbum';
+    select.appendChild(allOpt);
+    arr.forEach(a=>{
+      const o = document.createElement('option'); o.value = a.id; o.textContent = a.name; select.appendChild(o);
+    });
+  }
+  fill(noteAlbum); fill(albumFilter); fill(modalNoteAlbum);
+  albumFilter.querySelectorAll('option')[0].textContent = 'Todos os álbuns';
+  modalNoteAlbum.querySelectorAll('option')[0].textContent = 'Sem álbum';
+  noteAlbum.querySelectorAll('option')[0].textContent = 'Sem álbum';
+}
+function saveAlbums(arr){ localStorage.setItem('sa_albums', JSON.stringify(arr)); }
+function createAlbum(name){
+  const arr = JSON.parse(localStorage.getItem('sa_albums') || '[]');
+  const id = 'alb_' + Date.now();
+  arr.push({id, name});
+  saveAlbums(arr);
+  loadAlbums();
+  return id;
+}
+
+// allow user to create album quickly via prompt
+function askCreateAlbum(){
+  const n = prompt('Nome do álbum:');
+  if(n && n.trim()){
+    createAlbum(n.trim());
+  }
+}
+
+// new note UI
+newNoteBtn.addEventListener('click', ()=>{
+  noteEditorWrap.style.display = 'block';
+  noteEditor.innerHTML = '';
+  noteTitle.value = '';
+  loadAlbums();
+  noteAlbum.value = '__default';
+});
+
+// save note
+document.getElementById('saveNoteBtn').addEventListener('click', async ()=>{
+  const title = (noteTitle.value||'').trim();
+  const content = (noteEditor.innerHTML||'').trim();
+  const size = noteSize.value;
+  const color = noteColor.value;
+  const album = noteAlbum.value || '__default';
+  if(!content) return alert('Escreve algo na nota.');
+  try{
+    await supabase.from('notes').insert([{ title, content, meta: JSON.stringify({ size, color, album }) }]);
+    noteEditorWrap.style.display = 'none';
+    loadNotes();
+  }catch(e){ console.error(e); alert('Erro ao gravar nota'); }
+});
+
+// edit mode toggle
+editNotesBtn.addEventListener('click', ()=>{
+  editMode = !editMode;
+  editNotesBtn.textContent = editMode ? 'Sair editar' : 'Editar';
+  editNotesBtn.style.background = editMode ? '#fff0f3' : '#fff';
+  editNotesBtn.style.color = editMode ? 'var(--pink)' : 'var(--muted)';
+  loadNotes();
+});
+
+// delete all notes
+deleteAllBtn.addEventListener('click', async ()=>{
+  if(!confirm('Isto apagará todas as notas. Tens a certeza? Esta ação é irreversível.')) return;
+  try{
+    await supabase.from('notes').delete().neq('id',0);
+    loadNotes();
+    alert('Todas as notas foram apagadas.');
+  }catch(e){ console.error(e); alert('Erro ao apagar tudo'); }
+});
+
+// load notes from supabase and render, with album filter and edit mode
+async function loadNotes(){
+  try{
+    const filter = albumFilter.value || '__all';
+    const { data } = await supabase.from('notes').select('*').order('created_at',{ascending:false});
+    notesList.innerHTML = '';
+    if(!data || data.length===0){ notesList.innerHTML = '<div class="small-note">Sem notas.</div>'; return; }
+    // populate albums select if none
+    loadAlbums();
+    // render notes
+    data.forEach(n=>{
+      // parse meta
+      let meta = {size:16,color:'#222',album:'__default'};
+      try{ if(n.meta) meta = Object.assign(meta, JSON.parse(n.meta)); }catch(e){}
+      if(filter !== '__all' && filter !== '__default' && meta.album !== filter) return;
+      if(filter === '__default' && meta.album !== '__default' && albumFilter.value === '__default') { /* special case handled */ }
+      const card = document.createElement('div'); card.className = 'note-card';
+      card.dataset.noteId = n.id;
+
+      card.innerHTML = `
+        <div class="note-meta">${new Date(n.created_at).toLocaleString()}</div>
+        <div class="note-title">${n.title || 'Sem título'}</div>
+        <div class="note-content" style="font-size:${meta.size}px;color:${meta.color}">${n.content}</div>
+      `;
+
+      // clicking opens modal (edit inline)
+      card.addEventListener('click', ()=>{
+        if(editMode) return; // in edit mode we don't open editor (to prevent accidental edits)
+        openEditModal(n);
+      });
+
+      // if editMode show delete button
+      if(editMode){
+        const del = document.createElement('button');
+        del.className = 'delete-btn';
+        del.textContent = 'Apagar';
+        del.addEventListener('click', async (ev)=>{
+          ev.stopPropagation();
+          if(!confirm('Apagar esta nota?')) return;
+          try{
+            await supabase.from('notes').delete().eq('id', n.id);
+            card.remove();
+          }catch(e){ console.error(e); alert('Erro ao apagar'); }
+        });
+        card.appendChild(del);
+      }
+
+      notesList.appendChild(card);
+    });
+  }catch(e){ console.error(e); notesList.innerHTML = '<div class="small-note">Erro ao carregar notas.</div>'; }
+}
+
+// modal functions
+function openEditModal(note){
+  currentEditingNote = note;
+  modalBackdrop.style.display = 'flex';
+  modalNoteTitle.value = note.title || '';
+  modalNoteEditor.innerHTML = note.content || '';
+  try{
+    const meta = note.meta ? JSON.parse(note.meta) : {};
+    modalNoteSize.value = meta.size || '16';
+    modalNoteColor.value = meta.color || '#222';
+    loadAlbums(); modalNoteAlbum.value = meta.album || '__default';
+  }catch(e){ console.warn(e); }
+}
+
+modalClose.addEventListener('click', ()=> { modalBackdrop.style.display = 'none'; currentEditingNote = null; });
+modalBackdrop.addEventListener('click', (e)=>{ if(e.target === modalBackdrop) { modalBackdrop.style.display='none'; currentEditingNote=null; } });
+
+// modal save
+modalSaveBtn.addEventListener('click', async ()=>{
+  if(!currentEditingNote) return;
+  const id = currentEditingNote.id;
+  const title = modalNoteTitle.value.trim();
+  const content = modalNoteEditor.innerHTML.trim();
+  const meta = { size: modalNoteSize.value, color: modalNoteColor.value, album: modalNoteAlbum.value || '__default' };
+  try{
+    await supabase.from('notes').update({ title, content, meta: JSON.stringify(meta) }).eq('id', id);
+    modalBackdrop.style.display = 'none';
+    currentEditingNote = null;
+    loadNotes();
+  }catch(e){ console.error(e); alert('Erro ao guardar'); }
+});
+
+// modal delete
+modalDeleteBtn.addEventListener('click', async ()=>{
+  if(!currentEditingNote) return;
+  if(!confirm('Apagar esta nota?')) return;
+  try{
+    await supabase.from('notes').delete().eq('id', currentEditingNote.id);
+    modalBackdrop.style.display='none';
+    currentEditingNote = null;
+    loadNotes();
+  }catch(e){ console.error(e); alert('Erro ao apagar'); }
+});
+
+// create album quick: double-click album select to add
+noteAlbum.addEventListener('dblclick', ()=> askCreateAlbum());
+modalNoteAlbum.addEventListener('dblclick', ()=> askCreateAlbum());
+albumFilter.addEventListener('change', ()=> loadNotes());
+
+/* ================== CALENDAR (week/month/year/day) ================== */
+let calDate = new Date();
+let calView = 'week';
+const calViewSelect = document.getElementById('calView');
+const calLabel = document.getElementById('calLabel');
+const calendarGrid = document.getElementById('calendarGrid');
+document.getElementById('calPrev').addEventListener('click', ()=> navCal(-1));
+document.getElementById('calNext').addEventListener('click', ()=> navCal(1));
+calViewSelect.addEventListener('change', (e)=>{ calView = e.target.value; renderCalendar(); });
+
+function navCal(delta){
+  if(calView === 'day') calDate.setDate(calDate.getDate() + delta);
+  else if(calView === 'week') calDate.setDate(calDate.getDate() + delta*7);
+  else if(calView === 'month') calDate.setMonth(calDate.getMonth() + delta);
+  else if(calView === 'year') calDate.setFullYear(calDate.getFullYear() + delta);
+  renderCalendar();
+}
+
+function startOfWeek(d){
+  const n = new Date(d);
+  const day = n.getDay();
+  const diff = n.getDate() - day + (day === 0 ? -6 : 1);
+  return new Date(n.getFullYear(), n.getMonth(), diff);
+}
+
+async function renderCalendar(){
+  calendarGrid.innerHTML = '';
+  if(calView === 'day'){
+    const d = new Date(calDate);
+    calLabel.textContent = d.toLocaleDateString('pt-PT', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+    const el = document.createElement('div'); el.className='cal-day'; el.style.gridColumn='1 / -1'; el.style.padding='20px';
+    el.innerHTML = `<div style="font-weight:800">${d.toLocaleDateString('pt-PT',{day:'numeric',month:'short'})}</div><div class="small-note">${d.toLocaleDateString('pt-PT',{weekday:'long'})}</div>`;
+    el.addEventListener('click', ()=> selectCalDay(d));
+    calendarGrid.appendChild(el);
+    return;
+  }
+
+  if(calView === 'week'){
+    const start = startOfWeek(calDate);
+    calLabel.textContent = start.toLocaleDateString('pt-PT', { day:'numeric', month:'long', year:'numeric' }) + ' — semana';
+    const days = [];
+    for(let i=0;i<7;i++){ const dd = new Date(start); dd.setDate(start.getDate()+i); days.push(dd); }
+    for(const d of days){
+      const c = document.createElement('div'); c.className='cal-day';
+      c.innerHTML = `<div class="small-note">${d.toLocaleDateString('pt-PT',{weekday:'short'})}</div><div style="font-weight:800">${d.getDate()}</div>`;
+      c.addEventListener('click', ()=> selectCalDay(d));
+      calendarGrid.appendChild(c);
+    }
+    markCalEntries(days);
+    return;
+  }
+
+  if(calView === 'month'){
+    const y = calDate.getFullYear(), m = calDate.getMonth();
+    calLabel.textContent = calDate.toLocaleDateString('pt-PT', { month:'long', year:'numeric' });
+    const first = new Date(y,m,1), last = new Date(y,m+1,0);
+    const startDay = (first.getDay()||7) - 1;
+    for(let i=0;i<startDay;i++){ const ph = document.createElement('div'); ph.style.visibility='hidden'; calendarGrid.appendChild(ph); }
+    const days=[];
+    for(let d=1; d<= last.getDate(); d++){
+      const dt = new Date(y,m,d); days.push(dt);
+      const el = document.createElement('div'); el.className='cal-day';
+      el.innerHTML = `<div class="small-note">${dt.toLocaleDateString('pt-PT',{weekday:'short'})}</div><div style="font-weight:800">${d}</div>`;
+      el.addEventListener('click', ()=> selectCalDay(dt));
+      calendarGrid.appendChild(el);
+    }
+    markCalEntries(days);
+    return;
+  }
+
+  if(calView === 'year'){
+    calLabel.textContent = calDate.getFullYear();
+    for(let i=0;i<12;i++){
+      const dt = new Date(calDate.getFullYear(), i, 1);
+      const el = document.createElement('div'); el.className='cal-day'; el.innerHTML = `<div style="font-weight:800">${dt.toLocaleDateString('pt-PT',{month:'short'})}</div>`;
+      el.addEventListener('click', ()=> { calDate = new Date(dt); calView = 'month'; calViewSelect.value = 'month'; renderCalendar(); });
+      calendarGrid.appendChild(el);
+    }
+  }
+}
+
+async function markCalEntries(days){
+  try{
+    const start = days[0].toISOString().slice(0,10), end = days[days.length-1].toISOString().slice(0,10);
+    const { data } = await supabase.from('calendar_entries').select('*').gte('day_date', start).lte('day_date', end);
+    const DOMdays = Array.from(document.querySelectorAll('.cal-day')).filter(x=> x.style.visibility !== 'hidden');
+    for(let i=0;i<days.length;i++){
+      const key = days[i].toISOString().slice(0,10);
+      if(data && data.find(x=> x.day_date === key)) DOMdays[i].classList.add('active');
+    }
+  }catch(e){ console.error(e); }
+}
+
+let selectedCalDay = null;
+async function selectCalDay(d){
+  selectedCalDay = d;
+  const key = d.toISOString().slice(0,10);
+  const { data } = await supabase.from('calendar_entries').select('*').eq('day_date', key).limit(1);
+  document.getElementById('dayNote').value = data?.[0]?.text || '';
+}
+
+document.getElementById('saveDayBtn').addEventListener('click', async ()=>{
+  if(!selectedCalDay) return alert('Seleciona um dia primeiro.');
+  const key = selectedCalDay.toISOString().slice(0,10);
+  const txt = document.getElementById('dayNote').value.trim();
+  const { data } = await supabase.from('calendar_entries').select('*').eq('day_date', key).limit(1);
+  try{
+    if(data && data.length) await supabase.from('calendar_entries').update({ text: txt }).eq('day_date', key);
+    else await supabase.from('calendar_entries').insert([{ day_date: key, text: txt }]);
+    alert('Guardado!'); renderCalendar();
+  }catch(e){ console.error(e); alert('Erro ao gravar'); }
+});
+
+/* ================== TEMPO (page) ================== */
+function updateTempo(){
+  const now = new Date();
+  const d = diffYMDHMS(START, now);
+  const parts = [];
+  if(d.years) parts.push(`${d.years} ${d.years===1? 'ano':'anos'}`);
+  if(d.months) parts.push(`${d.months} ${d.months===1? 'mês':'meses'}`);
+  if(d.days) parts.push(`${d.days} ${d.days===1? 'dia':'dias'}`);
+  document.getElementById('tempoYMD').textContent = parts.length ? parts.join(' • ') : '0 dias';
+  document.getElementById('tempoHMS').textContent = `${pad2(d.hours)}:${pad2(d.minutes)}:${pad2(d.seconds)}`;
+  document.getElementById('tempoSentence').textContent = `Para te lembrares quantos dias passaram desde que tomei a melhor decisão da minha vida... \nE que possamos voltar aqui e ver que os dias só aumentaram. \nAmo-te daqui até ao infinito e mais além ❤️\n(${d.totalDays} ${d.totalDays===1?'dia':'dias'})`;
+}
+setInterval(updateTempo, 1000);
+updateTempo();
+
+/* ================== INITIALIZE AFTER LOGIN ================== */
+function initAfterLogin(){
+  loadAlbums(); // albums into selects
+  loadGallery();
+  loadNotes();
+  renderCalendar();
+  // ensure editor styles applied
+  applyEditorStyles();
+}
+
+/* ================== PAGE BOILERPLATE ================== */
+// all pages have id page_home, page_sobre, etc. showPage handles
+// We'll also ensure first load hides app until login
+
+// Expose some functions for debugging
+window.loadGallery = loadGallery;
+window.loadNotes = loadNotes;
+window.renderCalendar = renderCalendar;
 
 </script>
 </body>
 </html>
-
