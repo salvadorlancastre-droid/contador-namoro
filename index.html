@@ -36,7 +36,6 @@ body{
 .currentPageName{font-weight:700;color:var(--muted);padding:6px 8px;border-radius:8px;min-width:100px;text-align:center;}
 .controls{display:flex;align-items:center;gap:8px}
 .hamb-btn{padding:8px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);background:transparent;cursor:pointer}
-/* ensure page name never overlapped */
 .currentPageName{position:relative;z-index:2100;margin-right:6px}
 
 /* Drawer */
@@ -78,7 +77,13 @@ body{
 /* notes */
 .notes-header{display:flex;gap:8px;align-items:center}
 .notes-list{margin-top:12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
-.note-card{background:#fff;padding:12px;border-radius:10px;border:1px solid #f2f2f2}
+.note-card{background:#fff;padding:12px;border-radius:10px;border:1px solid #f2f2f2;display:flex;flex-direction:column;gap:8px}
+.note-meta{font-size:12px;color:var(--muted)}
+.note-title{font-weight:700}
+.note-content{white-space:pre-wrap}
+.note-actions{display:flex;gap:8px;justify-content:flex-end}
+.edit-btn{padding:6px 8px;border-radius:8px;border:1px solid #ddd;background:#fff;cursor:pointer}
+.del-btn{padding:6px 8px;border-radius:8px;border:1px solid #f5c0c5;background:#fff;color:#b00020;cursor:pointer}
 
 /* calendar */
 .calendar-controls{display:flex;justify-content:space-between;align-items:center;gap:8px}
@@ -90,8 +95,6 @@ body{
 /* clock */
 .clock-wrap{display:flex;justify-content:center;align-items:center;gap:18px}
 .digital-clock{font-family:Montserrat,Inter,Arial;font-weight:700;font-size:48px;color:var(--pink)}
-.analog{width:120px;height:120px;border-radius:50%;background:linear-gradient(180deg,#fff,#fffefc);box-shadow:0 6px 18px rgba(0,0,0,0.06);display:flex;align-items:center;justify-content:center}
-.analog svg{width:88px;height:88px}
 
 /* small separator */
 .sep{height:1px;background:linear-gradient(90deg,transparent,#eee,transparent);margin:12px 0}
@@ -146,23 +149,9 @@ body{
     <!-- HOME -->
     <section id="page_home" class="page active">
       <div class="card" style="max-width:720px;margin:0 auto;text-align:center">
-        <div class="clock-wrap">
-          <div class="analog" aria-hidden="true">
-            <!-- simple SVG clock -->
-            <svg viewBox="0 0 100 100">
-              <circle cx="50" cy="50" r="48" stroke="#f2f2f2" stroke-width="2" fill="none"></circle>
-              <g id="hands">
-                <line id="hourHand" x1="50" y1="50" x2="50" y2="30" stroke="#333" stroke-width="3" stroke-linecap="round" transform-origin="50 50"></line>
-                <line id="minHand" x1="50" y1="50" x2="50" y2="20" stroke="#333" stroke-width="2" stroke-linecap="round" transform-origin="50 50"></line>
-                <line id="secHand" x1="50" y1="50" x2="50" y2="16" stroke="var(--pink)" stroke-width="1" stroke-linecap="round" transform-origin="50 50"></line>
-              </g>
-              <circle cx="50" cy="50" r="1.6" fill="#333"></circle>
-            </svg>
-          </div>
-          <div>
-            <div id="digitalClock" class="digital-clock" aria-live="polite">--:--:--</div>
-            <div class="note" style="text-align:center">Relógio em tempo real — bonito e limpo.</div>
-          </div>
+        <!-- Removed analog clock and phrase as requested -->
+        <div>
+          <div id="digitalClock" class="digital-clock" aria-live="polite">--:--:--</div>
         </div>
       </div>
     </section>
@@ -200,7 +189,7 @@ body{
                 <button class="toolbar-btn" id="alignRight">≡</button>
               </div>
 
-              <div style="margin-top:8px"><button id="applyStyle" class="btn" style="width:100%">Aplicar</button></div>
+              <!-- removed apply button; live apply now -->
             </div>
 
             <div class="editor">
@@ -293,12 +282,13 @@ body{
     <section id="page_tempo" class="page">
       <div class="card">
         <h2>Tempo</h2>
-        <p id="tempoIntro" class="note" style="margin-bottom:12px">
-          Estamos juntos desde <strong>17 de setembro de 2025 às 22:00</strong>. Aqui podes ver há quanto tempo estamos juntos — em anos/meses/dias e num temporizador H:M:S.
+        <!-- removed long intro; kept date small and centered -->
+        <p id="tempoIntro" class="note" style="text-align:center;margin-bottom:12px">
+          <small>17 de setembro de 2025 às 22:00</small>
         </p>
 
         <div id="ymd" class="bigDate"></div>
-        <div id="hms" class="smallTime"></div>
+        <!-- removed hms display as requested -->
         <div class="sep"></div>
         <div id="tempoSentence" class="note" style="text-align:center;margin-top:6px"></div>
       </div>
@@ -334,7 +324,6 @@ function showPage(p){
   const el = document.getElementById('page_' + p);
   if(el) el.classList.add('active');
   document.getElementById('currentPageName').textContent = p.charAt(0).toUpperCase() + p.slice(1);
-  // small shift so name never hidden by top-right buttons
   document.getElementById('currentPageName').style.paddingRight = '14px';
   if(p==='gal') loadGallery();
   if(p==='notas') loadNotes();
@@ -361,76 +350,59 @@ function closeDrawer(){ drawer.classList.remove('open'); drawerBackdrop.classLis
 hamb.addEventListener('click', openDrawer);
 closeDrawerBtn.addEventListener('click', closeDrawer);
 drawerBackdrop.addEventListener('click', closeDrawer);
-document.querySelectorAll('.menuitem').forEach(it=>it.addEventListener('click', ()=>{closeDrawer(); showPage(it.dataset.page);}));
+document.querySelectorAll('.menuitem').forEach(it=>it.addEventListener('click', ()=>{closeDrawer(); showPage(it.dataset.page);} ));
 
 /* =================== CLOCK (HOME) =================== */
 function updateHomeClock(){
   const d = new Date();
-  document.getElementById('digitalClock').textContent = d.toLocaleTimeString('pt-PT');
-  // analog hands
-  const sec = d.getSeconds();
-  const min = d.getMinutes();
-  const hr = d.getHours()%12;
-  const secDeg = sec * 6; // 360/60
-  const minDeg = min * 6 + sec*0.1; // smooth
-  const hrDeg = hr*30 + min*0.5; // smooth
-  const secHand = document.getElementById('secHand');
-  const minHand = document.getElementById('minHand');
-  const hourHand = document.getElementById('hourHand');
-  if(secHand) secHand.setAttribute('transform', `rotate(${secDeg} 50 50)`);
-  if(minHand) minHand.setAttribute('transform', `rotate(${minDeg} 50 50)`);
-  if(hourHand) hourHand.setAttribute('transform', `rotate(${hrDeg} 50 50)`);
+  const digital = document.getElementById('digitalClock');
+  if(digital) digital.textContent = d.toLocaleTimeString('pt-PT');
 }
-setInterval(updateHomeClock, 250);
+setInterval(updateHomeClock, 1000);
 updateHomeClock();
 
-/* =================== ABOUT EDITOR behavior =================== */
+/* =================== ABOUT EDITOR behavior (LIVE apply) =================== */
 // keep editable boxes fixed height; if content overflows, reduce font-size to fit
 const editableBoxes = document.querySelectorAll('.editableBox');
 function adjustFontToFit(el){
-  // start at declared font size and reduce until fits or minimum
   let style = window.getComputedStyle(el);
-  let fontSize = parseInt(style.fontSize);
+  let fontSize = parseInt(style.fontSize) || 16;
   const min = 12;
-  // allow some steps
-  function fits(){
-    return el.scrollHeight <= el.clientHeight + 6; // small tolerance
-  }
-  // if smaller content, try increase up to 22
+  function fits(){ return el.scrollHeight <= el.clientHeight + 6; }
   while(fontSize > min && !fits()){
     fontSize -= 1;
     el.style.fontSize = fontSize + 'px';
   }
 }
 editableBoxes.forEach(box=>{
-  // ensure fixed height
   box.style.maxHeight = '220px';
   box.style.overflow = 'auto';
   box.addEventListener('input', ()=> adjustFontToFit(box));
+  box.addEventListener('paste', ()=> setTimeout(()=> adjustFontToFit(box), 80));
 });
 
-// toolbar controls for Sobre
+// toolbar controls for Sobre - LIVE application (no apply button)
 const fontFamily = document.getElementById('fontFamily');
 const fontSize = document.getElementById('fontSize');
 const fontColor = document.getElementById('fontColor');
 const alignLeft = document.getElementById('alignLeft');
 const alignCenter = document.getElementById('alignCenter');
 const alignRight = document.getElementById('alignRight');
-const applyStyle = document.getElementById('applyStyle');
 
-applyStyle.addEventListener('click', ()=>{
+function applyLiveStyles(){
   const ff = fontFamily.value;
   const fs = fontSize.value + 'px';
   const fc = fontColor.value;
-  // apply to both boxes
   [document.getElementById('bio_left'), document.getElementById('bio_right')].forEach(el=>{
     el.style.fontFamily = ff;
     el.style.fontSize = fs;
     el.style.color = fc;
-    // re-adjust
     adjustFontToFit(el);
   });
-});
+}
+fontFamily.addEventListener('input', applyLiveStyles);
+fontSize.addEventListener('input', applyLiveStyles);
+fontColor.addEventListener('input', applyLiveStyles);
 alignLeft.addEventListener('click', ()=>{ document.querySelectorAll('.editableBox').forEach(e=>e.style.textAlign='left'); });
 alignCenter.addEventListener('click', ()=>{ document.querySelectorAll('.editableBox').forEach(e=>e.style.textAlign='center'); });
 alignRight.addEventListener('click', ()=>{ document.querySelectorAll('.editableBox').forEach(e=>e.style.textAlign='right'); });
@@ -483,7 +455,7 @@ async function loadGallery(){
   }catch(err){console.error(err);}
 }
 
-/* =================== NOTES =================== */
+/* =================== NOTES (with Edit + Delete per card) =================== */
 const newNoteBtn = document.getElementById('newNote');
 newNoteBtn.addEventListener('click', ()=>{
   document.getElementById('noteEditorWrap').style.display = 'flex';
@@ -510,12 +482,65 @@ async function loadNotes(){
     const list = document.getElementById('notesList'); list.innerHTML='';
     if(!data || data.length===0){ list.innerHTML = '<div class="note">Sem notas ainda</div>'; return; }
     for(const n of data){
-      const card = document.createElement('div'); card.className='note-card';
+      const card = document.createElement('div'); card.className='note-card'; card.dataset.id = n.id;
       const meta = n.meta ? JSON.parse(n.meta) : {};
-      card.innerHTML = `<div style="font-size:12px;color:var(--muted)">${new Date(n.created_at).toLocaleString()}</div><h3 style="margin:6px 0">${n.title||'Sem título'}</h3><div style="font-size:${meta.size||16}px;color:${meta.color||'#222'}">${n.content}</div>`;
+      const titleHtml = `<div class="note-meta">${new Date(n.created_at).toLocaleString()}</div><div class="note-title">${n.title||'Sem título'}</div>`;
+      const contentHtml = `<div class="note-content" style="font-size:${meta.size||16}px;color:${meta.color||'#222'}">${n.content}</div>`;
+      const actionsWrap = document.createElement('div'); actionsWrap.className = 'note-actions';
+      const editBtn = document.createElement('button'); editBtn.className='edit-btn'; editBtn.textContent='Editar';
+      const delBtn = document.createElement('button'); delBtn.className='del-btn'; delBtn.textContent='Apagar';
+      // attach handlers
+      editBtn.addEventListener('click', (ev)=>{
+        ev.stopPropagation();
+        openInlineEditor(card, n);
+      });
+      delBtn.addEventListener('click', async (ev)=>{
+        ev.stopPropagation();
+        if(!confirm('Apagar esta nota?')) return;
+        try{
+          await supabaseClient.from('notes').delete().eq('id', n.id);
+          card.remove();
+        }catch(e){ console.error(e); alert('Erro ao apagar'); }
+      });
+      actionsWrap.appendChild(editBtn); actionsWrap.appendChild(delBtn);
+      card.innerHTML = titleHtml + contentHtml;
+      card.appendChild(actionsWrap);
       list.appendChild(card);
     }
   }catch(err){console.error(err);}
+}
+
+// inline editor inside card
+function openInlineEditor(card, note){
+  // replace content with inputs
+  const meta = note.meta ? JSON.parse(note.meta) : {};
+  card.innerHTML = '';
+  const metaDiv = document.createElement('div'); metaDiv.className = 'note-meta'; metaDiv.textContent = new Date(note.created_at).toLocaleString();
+  const titleInput = document.createElement('input'); titleInput.style.width='100%'; titleInput.style.padding='8px'; titleInput.style.border='1px solid #eee'; titleInput.style.borderRadius='8px'; titleInput.value = note.title || '';
+  const editorDiv = document.createElement('div'); editorDiv.contentEditable = 'true'; editorDiv.style.minHeight = '120px'; editorDiv.style.border = '1px solid #eee'; editorDiv.style.padding='8px'; editorDiv.style.borderRadius='8px'; editorDiv.innerHTML = note.content || '';
+  const controls = document.createElement('div'); controls.style.display='flex'; controls.style.gap='8px'; controls.style.marginTop='8px'; controls.style.justifyContent='flex-end';
+  const saveBtn = document.createElement('button'); saveBtn.className='btn'; saveBtn.textContent='Guardar';
+  const cancelBtn = document.createElement('button'); cancelBtn.className='btn ghost'; cancelBtn.textContent='Cancelar';
+  const deleteBtn = document.createElement('button'); deleteBtn.className='del-btn'; deleteBtn.textContent='Apagar';
+  controls.appendChild(deleteBtn); controls.appendChild(cancelBtn); controls.appendChild(saveBtn);
+  card.appendChild(metaDiv); card.appendChild(titleInput); card.appendChild(editorDiv); card.appendChild(controls);
+
+  cancelBtn.addEventListener('click', ()=> loadNotes());
+  deleteBtn.addEventListener('click', async ()=>{
+    if(!confirm('Apagar esta nota?')) return;
+    try{
+      await supabaseClient.from('notes').delete().eq('id', note.id);
+      loadNotes();
+    }catch(e){ console.error(e); alert('Erro ao apagar'); }
+  });
+  saveBtn.addEventListener('click', async ()=>{
+    const newTitle = titleInput.value.trim();
+    const newContent = editorDiv.innerHTML.trim();
+    try{
+      await supabaseClient.from('notes').update({ title: newTitle, content: newContent, meta: JSON.stringify({ size: meta.size||16, color: meta.color||'#222' }) }).eq('id', note.id);
+      loadNotes();
+    }catch(e){ console.error(e); alert('Erro ao guardar'); }
+  });
 }
 
 /* =================== CALENDAR (improved) =================== */
@@ -543,7 +568,6 @@ async function renderCalendar(){
   if(calView==='day'){
     const d = new Date(calDate);
     calLabel.textContent = d.toLocaleDateString('pt-PT', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
-    // show single day big
     const el = document.createElement('div'); el.className='calendar-day'; el.style.gridColumn='1 / -1'; el.style.padding='24px'; el.innerHTML = `<div style="font-weight:800">${d.toLocaleDateString('pt-PT')}</div><div style="margin-top:6px;color:var(--muted)">${d.toLocaleString()}</div>`;
     el.addEventListener('click', ()=> selectDay(d));
     calGrid.appendChild(el);
@@ -557,16 +581,13 @@ async function renderCalendar(){
   } else if(calView==='month'){
     const year = calDate.getFullYear(); const month = calDate.getMonth();
     calLabel.textContent = calDate.toLocaleDateString('pt-PT',{month:'long',year:'numeric'});
-    const first = new Date(year, month, 1); const last = new Date(year, month+1, 0); const startDay = first.getDay()||7; // monday-start
-    // create placeholders
-    const totalCells = startDay-1 + last.getDate();
+    const first = new Date(year, month, 1); const last = new Date(year, month+1, 0); const startDay = first.getDay()||7;
     for(let i=0;i<startDay-1;i++){ const ph=document.createElement('div'); ph.className='calendar-day'; ph.style.background='transparent'; ph.style.border='0'; calGrid.appendChild(ph); }
     const days=[];
     for(let d=1; d<= last.getDate(); d++){ const date=new Date(year,month,d); days.push(date); const el=document.createElement('div'); el.className='calendar-day'; el.innerHTML = `<div style="color:var(--muted);font-size:12px">${date.toLocaleDateString('pt-PT',{weekday:'short'})}</div><div style="font-weight:800">${d}</div>`; el.addEventListener('click', ()=> selectDay(date)); calGrid.appendChild(el); }
     await markCalEntries(days);
   } else if(calView==='year'){
     calLabel.textContent = calDate.getFullYear();
-    // show months grid
     const months = Array.from({length:12}, (_,i)=> new Date(calDate.getFullYear(), i, 1));
     for(const m of months){ const el=document.createElement('div'); el.className='calendar-day'; el.innerHTML = `<div style="font-weight:800">${m.toLocaleDateString('pt-PT',{month:'short'})}</div>`; el.addEventListener('click', ()=>{ calDate = new Date(m); calView='month'; calViewSelect.value='month'; renderCalendar(); }); calGrid.appendChild(el); }
   }
@@ -578,10 +599,9 @@ async function markCalEntries(days){
     const end = days[days.length-1].toISOString().slice(0,10);
     const { data } = await supabaseClient.from('calendar_entries').select('*').gte('day_date', start).lte('day_date', end);
     const elems = document.querySelectorAll('.calendar-grid .calendar-day');
-    // iterate through days and mark
     for(let i=0;i<days.length;i++){
       const dd = days[i].toISOString().slice(0,10);
-      if(data && data.find(x=>x.day_date===dd)) elems[i].classList.add('active');
+      if(data && data.find(x=>x.day_date===dd) && elems[i]) elems[i].classList.add('active');
     }
   }catch(err){console.error(err);}
 }
@@ -606,7 +626,7 @@ document.getElementById('saveDay').addEventListener('click', async ()=>{
   }catch(err){console.error(err);alert('Erro ao gravar');}
 });
 
-/* =================== TEMPO COUNTER =================== */
+/* =================== TEMPO COUNTER (no H:M:S on tempo page) =================== */
 const START = new Date("2025-09-17T22:00:00");
 function diffYMDHMS(start, now){
   const s = new Date(start.getTime()); const n = new Date(now.getTime());
@@ -639,10 +659,8 @@ function updateTempoUI(){
   if(d.months) parts.push(`${d.months} ${d.months===1? 'mês':'meses'}`);
   if(d.days) parts.push(`${d.days} ${d.days===1? 'dia':'dias'}`);
   const ymdText = parts.length ? parts.join(' • ') : '0 dias';
-  const hmsText = `${pad2(d.hours)}:${pad2(d.minutes)}:${pad2(d.seconds)}`;
-  const ymdEl = document.getElementById('ymd'); const hmsEl = document.getElementById('hms'); const sentenceEl = document.getElementById('tempoSentence');
+  const ymdEl = document.getElementById('ymd'); const sentenceEl = document.getElementById('tempoSentence');
   if(ymdEl) ymdEl.textContent = ymdText;
-  if(hmsEl) hmsEl.textContent = `${hmsText} — tempo decorrido (H:M:S)`;
   if(sentenceEl) sentenceEl.textContent = buildReadableSentence(d);
 }
 setInterval(updateTempoUI, 1000); updateTempoUI();
