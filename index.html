@@ -4,11 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Salvador ❤ Assunção</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --pink:#d6336c;
@@ -17,48 +13,111 @@
   --text:#222;
   --muted:#6b5860;
   --card:#ffffffee;
-  --glass: rgba(255,255,255,0.75);
-  --shadow: 0 8px 30px rgba(0,0,0,0.06);
   --radius:14px;
+  --shadow: 0 8px 30px rgba(0,0,0,0.06);
 }
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
-  margin:0;
-  font-family:Inter, Arial, sans-serif;
+  margin:0;font-family:Inter,Arial,Helvetica,sans-serif;
   background:linear-gradient(180deg,var(--bg1),var(--bg2));
-  color:var(--text);
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
+  color:var(--text);-webkit-font-smoothing:antialiased;
 }
-/* Topbar + drawer + utilities (compact CSS - kept same look) */
-.topbar{position:fixed;top:0;left:0;right:0;height:64px;display:flex;align-items:center;justify-content:space-between;padding:10px 18px;background:rgba(255,255,255,0.9);backdrop-filter:blur(6px);border-bottom:1px solid rgba(0,0,0,0.04);z-index:3000;}
+
+/* Topbar */
+.topbar{position:fixed;top:0;left:0;right:0;height:64px;display:flex;align-items:center;justify-content:space-between;padding:10px 18px;background:rgba(255,255,255,0.92);backdrop-filter:blur(6px);border-bottom:1px solid rgba(0,0,0,0.04);z-index:3000}
 .brand{font-weight:800;color:var(--pink);font-size:18px}
-.icon-btn{padding:8px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);background:#fff;cursor:pointer}
+.top-actions{display:flex;gap:8px;align-items:center}
+
+/* Drawer */
 .drawer-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.28);z-index:2900}
 .drawer-backdrop.open{display:block}
-.drawer{position:fixed;top:0;right:-100%;width:320px;max-width:100%;height:100vh;background:#fff;box-shadow:-12px 0 30px rgba(0,0,0,0.12);padding:20px;transition:transform .28s ease,right .28s ease;transform:translateX(100%);z-index:3000}
+.drawer{position:fixed;top:0;right:-100%;width:320px;height:100vh;background:#fff;box-shadow:-12px 0 30px rgba(0,0,0,0.12);padding:20px;transition:transform .28s ease,right .28s ease;transform:translateX(100%);z-index:3000}
 .drawer.open{right:0;transform:translateX(0)}
 .menuitem{padding:12px;border-radius:10px;cursor:pointer;font-weight:700;margin-bottom:6px}
-.container{padding:100px 18px 40px;max-width:980px;margin:0 auto}
-.card{background:var(--card);padding:18px;border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:20px}
+.menuitem:hover{background:#fff0f6}
 
-/* small shared */
-.small-note{font-size:13px;color:var(--muted);margin-top:8px}
+/* Layout */
+.container{padding:100px 18px 40px;max-width:980px;margin:0 auto}
+.card{background:var(--card);padding:18px;border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:18px}
+.page{display:none}
+.page.active{display:block}
+
+/* Home */
+.home-hero{display:flex;flex-direction:column;align-items:center;gap:12px;padding:26px;border-radius:12px;background:linear-gradient(180deg,#fff,#fffdfd);border:1px solid #f4e8ec}
+.digital-clock{font-family:Montserrat,Inter,Arial;font-size:52px;font-weight:700;color:var(--pink)}
+.counter-row{display:flex;gap:10px;align-items:center;justify-content:center;margin-top:6px}
+.counter-pill{background:#fff;border-radius:10px;padding:10px 12px;border:1px solid #f2e7eb;min-width:110px;text-align:center}
+.counter-big{font-weight:800;font-size:18px}
+.counter-small{font-size:12px;color:var(--muted)}
+
+/* Editor (Sobre) */
+.editor-wrap{display:flex;gap:14px;align-items:flex-start}
+.toolbar{width:140px;padding:10px;background:#fff;border-radius:10px;border:1px solid #eee;display:flex;flex-direction:column;gap:8px}
+.toolbar label{font-size:12px;color:var(--muted)}
+.toolbar input[type=range]{width:100%}
+.aligns{display:flex;gap:6px}
+.align-btn{padding:6px;border-radius:6px;border:1px solid #eee;background:#fff;cursor:pointer;min-width:34px}
+.editor-col{flex:1;background:#fff;padding:12px;border-radius:10px;border:1px solid #eee;min-height:160px}
+.editor-title{font-weight:800;margin-bottom:6px}
+.editable-box{outline:none;min-height:120px;max-height:220px;overflow:auto;font-size:16px;line-height:1.4;resize:none}
+
+/* Gallery */
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-top:12px}
+.thumb{width:100%;height:110px;object-fit:cover;border-radius:10px;display:block}
+
+/* Notes */
+.notes-top{display:flex;align-items:center;gap:8px;justify-content:space-between}
+.notes-controls{display:flex;gap:8px;align-items:center}
+.btn-ghost{padding:8px 10px;border-radius:8px;border:1px solid #eee;background:#fff;cursor:pointer}
+.notes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-top:12px}
+.note-card{background:#fff;border:1px solid #eee;border-radius:10px;padding:12px;position:relative;display:flex;flex-direction:column;gap:8px}
+.note-meta{font-size:12px;color:var(--muted)}
+.note-title{font-weight:700}
+.note-content{white-space:pre-wrap}
+.note-actions{display:flex;gap:8px;justify-content:flex-end}
+.edit-btn{padding:6px 8px;border-radius:8px;border:1px solid #ddd;background:#fff;cursor:pointer}
+.del-btn{padding:6px 8px;border-radius:8px;border:1px solid #f5c0c5;background:#fff;color:#b00020;cursor:pointer}
+
+/* Calendar */
+.cal-controls{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.cal-day{background:#fff;border:1px solid #eee;border-radius:8px;padding:12px;text-align:center;cursor:pointer}
+.cal-day.active{background:rgba(214,51,108,0.12)}
+
+/* Tempo page */
+.tempo-date{font-size:14px;color:var(--muted);text-align:center;margin-bottom:8px}
+.tempo-ymd{font-weight:800;color:var(--pink);text-align:center;font-size:22px}
+.tempo-hms{font-weight:700;text-align:center;color:var(--muted);margin-top:6px}
+.tempo-sentence{margin-top:12px;text-align:center;color:var(--muted);white-space:pre-line}
+
+/* Modal */
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:4000;align-items:center;justify-content:center}
+.modal{background:#fff;border-radius:12px;padding:16px;max-width:760px;width:95%;box-shadow:var(--shadow)}
+.modal.show{display:flex}
+
+/* Responsive */
+@media(max-width:860px){
+  .editor-wrap{flex-direction:column}
+  .toolbar{width:100%;flex-direction:row;gap:8px;overflow:auto;padding:8px}
+  .digital-clock{font-size:40px}
+  .cal-grid{grid-template-columns:repeat(2,1fr)}
+  .notes-grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+}
 </style>
 </head>
 <body>
 
 <header class="topbar">
   <div class="brand">Salvador ❤ Assunção</div>
-  <div class="top-right">
-    <button id="openDrawerBtn" class="icon-btn" aria-label="Menu">☰</button>
+  <div class="top-actions">
+    <button id="openDrawer" class="btn-ghost" title="Menu">☰</button>
   </div>
 </header>
 
 <div id="drawerBackdrop" class="drawer-backdrop" aria-hidden="true"></div>
 <nav id="drawer" class="drawer" aria-hidden="true">
-  <button id="closeDrawerBtn" class="icon-btn" style="float:right">✖</button>
+  <button id="closeDrawer" class="btn-ghost" style="float:right">✖</button>
   <h3 style="color:var(--pink);margin-top:6px">Menu</h3>
   <div style="margin-top:12px">
     <div class="menuitem" data-page="home">Página Inicial</div>
@@ -69,598 +128,680 @@ body{
     <div class="menuitem" data-page="cal">Calendário</div>
     <div class="menuitem" data-page="tempo">Tempo</div>
   </div>
-  <div class="small-note" style="margin-top:18px">Privado — apenas com o código secreto</div>
+  <div class="note" style="margin-top:16px">Privado — apenas com o código secreto</div>
 </nav>
 
 <main class="container">
 
-  <!-- LOGIN CARD -->
-  <div id="loginCard" class="card" style="max-width:560px;margin:0 auto">
+  <!-- LOGIN -->
+  <div id="loginCard" class="card" style="max-width:640px;margin:12px auto">
     <h2 style="margin:0;color:var(--pink)">Entrar</h2>
-    <p class="small-note" style="margin-top:6px">Coloca aqui o código secreto</p>
+    <p style="color:var(--muted);margin-top:6px">Coloca aqui o código secreto</p>
     <input id="codeInput" placeholder="escreve o código..." style="padding:12px;width:100%;border-radius:10px;border:1px solid #eee;margin-top:10px">
-    <button id="enterBtn" class="icon-btn" style="width:100%;margin-top:12px;background:var(--pink);color:#fff;border:0;padding:12px;font-weight:700">Entrar</button>
+    <button id="enterBtn" class="btn" style="margin-top:12px;width:100%">Entrar</button>
     <div id="loginError" style="color:#b00020;margin-top:10px;display:none">Código errado!</div>
-    <div class="small-note" style="margin-top:12px">Dica: o código é <strong>sasiboy</strong></div>
+    <div class="note" style="margin-top:12px">Dica: o código é <strong>sasiboy</strong></div>
   </div>
 
-  <!-- APP (hidden until login) -->
+  <!-- APP -->
   <div id="app" style="display:none">
-  <!-- HOME -->
-  <section id="page_home" class="card page active" aria-labelledby="homeTitle">
-    <div style="display:flex;flex-direction:column;align-items:center;gap:12px">
-      <div class="home-hero" style="width:100%;max-width:720px">
-        <div style="display:flex;align-items:center;justify-content:center;gap:12px">
+
+    <!-- HOME -->
+    <section id="page_home" class="card page active">
+      <div class="home-hero" style="max-width:720px;margin:0 auto">
+        <div style="display:flex;align-items:center;gap:10px">
           <div style="width:8px;height:8px;background:var(--pink);border-radius:50%"></div>
           <div style="font-weight:700;color:var(--muted)">Temos isto juntos</div>
         </div>
 
-        <div id="digitalClock" class="digital-clock" style="font-size:48px;font-weight:800;color:var(--pink);text-align:center;margin:18px 0">--:--:--</div>
+        <div id="homeClock" class="digital-clock">--:--:--</div>
 
-        <div class="counter-row" aria-hidden="false">
-          <div class="counter-pill"><div class="counter-big" id="yrs">0 anos</div><div class="counter-small">anos</div></div>
-          <div class="counter-pill"><div class="counter-big" id="mos">0 meses</div><div class="counter-small">meses</div></div>
-          <div class="counter-pill"><div class="counter-big" id="ds">0 dias</div><div class="counter-small">dias</div></div>
+        <div class="counter-row">
+          <div class="counter-pill"><div id="yrs" class="counter-big">0 anos</div><div class="counter-small">anos</div></div>
+          <div class="counter-pill"><div id="mos" class="counter-big">0 meses</div><div class="counter-small">meses</div></div>
+          <div class="counter-pill"><div id="ds" class="counter-big">0 dias</div><div class="counter-small">dias</div></div>
         </div>
 
-        <div style="margin-top:8px;text-align:center;color:var(--muted)"><small id="clockHms">00:00:00</small></div>
+        <div style="margin-top:8px;color:var(--muted)"><small id="clockHms">00:00:00</small></div>
 
-        <div class="sep" style="width:70%"></div>
+        <div style="width:70%;margin-top:12px">
+          <hr style="border:none;border-top:1px solid #eee">
+        </div>
 
         <div style="text-align:center;color:var(--muted);padding:8px 6px">
           <div style="font-weight:700;margin-bottom:6px">Para te lembrares</div>
           <div style="font-size:14px">Para te lembrares quantos dias passaram desde que tomei a melhor decisão da minha vida... <br> Amo-te daqui até ao infinito e mais além ❤️</div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ONDE TUDO COMEÇOU -->
-  <section id="page_come" class="card page" aria-labelledby="comeTitle">
-    <h2>Onde tudo começou</h2>
-    <p class="small-note" style="margin-top:8px">(Escreve depois)</p>
-  </section>
+    <!-- ONDE TUDO COMEÇOU -->
+    <section id="page_come" class="card page" aria-labelledby="comeTitle">
+      <h2>Onde tudo começou</h2>
+      <p class="note" style="margin-top:8px">(Escreve mais tarde)</p>
+    </section>
 
-  <!-- SOBRE NÓS -->
-  <section id="page_sobre" class="card page" aria-labelledby="sobreTitle">
-    <h2>Sobre Nós</h2>
-
-    <div class="editor-area" style="margin-top:12px">
-      <div class="toolbar" role="toolbar" aria-label="Editor controls">
-        <label>Fonte</label>
-        <select id="fontFamily">
-          <option value="Inter">Inter</option>
-          <option value="Montserrat">Montserrat</option>
-          <option value="Georgia,serif">Serif</option>
-        </select>
-
-        <label>Tamanho</label>
-        <input id="fontSize" type="range" min="12" max="36" value="16">
-
-        <label>Cor</label>
-        <input id="fontColor" type="color" value="#222222">
-
-        <label>Alinhamento</label>
-        <div class="aligns">
-          <button id="alignLeft" class="align-btn">&lt;</button>
-          <button id="alignCenter" class="align-btn">-</button>
-          <button id="alignRight" class="align-btn">&gt;</button>
+    <!-- SOBRE -->
+    <section id="page_sobre" class="card page" aria-labelledby="sobreTitle">
+      <h2>Sobre Nós</h2>
+      <div class="editor-wrap" style="margin-top:12px">
+        <div class="toolbar" role="toolbar" aria-label="Editor controls">
+          <label>Fonte</label>
+          <select id="fontFamily"><option>Inter</option><option>Montserrat</option><option>Georgia,serif</option></select>
+          <label>Tamanho</label>
+          <input id="fontSize" type="range" min="12" max="36" value="16">
+          <label>Cor</label>
+          <input id="fontColor" type="color" value="#222222">
+          <label>Alinhamento</label>
+          <div class="aligns">
+            <button id="alignLeft" class="align-btn">&lt;</button>
+            <button id="alignCenter" class="align-btn">-</button>
+            <button id="alignRight" class="align-btn">&gt;</button>
+          </div>
+          <div style="margin-top:6px" class="note">Alterações em tempo real — sem aplicar</div>
         </div>
 
-        <div style="margin-top:6px" class="small-note">As alterações aplicam-se em tempo real.</div>
+        <div class="editor-col" aria-label="Sassá editor">
+          <div class="editor-title">Sassá</div>
+          <div id="bio_left" class="editable-box" contenteditable="true">Escreve sobre ti aqui...</div>
+        </div>
+
+        <div class="editor-col" aria-label="Assunção editor">
+          <div class="editor-title">Assunção</div>
+          <div id="bio_right" class="editable-box" contenteditable="true">Escreve sobre ela aqui...</div>
+        </div>
       </div>
 
-      <div class="editor-col" aria-label="Sassá editor">
-        <div class="editor-title">Sassá</div>
-        <div id="bio_left" class="editable-box" contenteditable="true">Escreve sobre ti aqui...</div>
+      <button id="saveBios" class="btn" style="margin-top:12px;width:100%">Guardar</button>
+      <div class="note" style="margin-top:8px">As caixas mantêm a altura; se o texto for maior, o tamanho da letra diminui automaticamente.</div>
+    </section>
+
+    <!-- GALERIA -->
+    <section id="page_gal" class="card page">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <h2>Galeria</h2>
+        <div>
+          <button id="addPhotoBtn" class="btn">Adicionar</button>
+        </div>
+      </div>
+      <input id="fileInput" type="file" accept="image/*" style="display:none">
+      <div id="galleryGrid" class="gallery"></div>
+      <div class="note" style="margin-top:12px">Adiciona fotos — tira no telemóvel ou escolhe da fototeca.</div>
+    </section>
+
+    <!-- NOTAS -->
+    <section id="page_notas" class="card page">
+      <div class="notes-top">
+        <h2 style="margin:0">Notas</h2>
+        <div class="notes-controls">
+          <select id="albumFilter" class="album-select" style="padding:8px;border-radius:8px;border:1px solid #eee;background:#fff">
+            <option value="__all">Todos os álbuns</option>
+          </select>
+          <button id="newNoteBtn" class="btn-ghost">+ Nova</button>
+          <button id="editNotesToggle" class="btn-ghost">Editar</button>
+          <button id="deleteAllNotes" class="btn-ghost">Apagar todas</button>
+        </div>
       </div>
 
-      <div class="editor-col" aria-label="Assunção editor">
-        <div class="editor-title">Assunção</div>
-        <div id="bio_right" class="editable-box" contenteditable="true">Escreve sobre ela aqui...</div>
+      <div id="noteEditorWrap" style="display:none;margin-top:12px">
+        <input id="noteTitle" placeholder="Título" style="width:100%;padding:10px;border-radius:8px;border:1px solid #eee">
+        <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+          <select id="noteAlbum" class="album-select" style="padding:8px;border-radius:8px;border:1px solid #eee"></select>
+          <select id="noteSize" style="padding:8px;border-radius:8px;border:1px solid #eee">
+            <option value="14">14</option><option value="16" selected>16</option><option value="18">18</option>
+          </select>
+          <input id="noteColor" type="color" value="#222222">
+          <button id="saveNoteBtn" class="btn" style="margin-left:auto">Guardar</button>
+        </div>
+        <div id="noteEditor" contenteditable="true" style="margin-top:8px;padding:12px;border-radius:8px;border:1px solid #eee;min-height:120px;background:#fff;overflow:auto"></div>
       </div>
-    </div>
 
-    <button id="saveBios" class="icon-btn" style="margin-top:12px;background:var(--pink);color:#fff;border:0;padding:10px 14px">Guardar</button>
-    <div class="small-note" style="margin-top:8px">As caixas mantêm a altura; se o texto for maior, o tamanho da letra diminui automaticamente.</div>
-  </section>
+      <div id="notesList" class="notes-grid" style="margin-top:12px"></div>
+    </section>
 
-  <!-- GALERIA -->
-  <section id="page_gal" class="card page" aria-labelledby="galTitle">
-    <div style="display:flex;justify-content:space-between;align-items:center">
-      <h2>Galeria</h2>
-      <div>
-        <button id="addPhotoBtn" class="icon-btn" style="background:var(--pink);color:#fff;border:0">Adicionar</button>
+    <!-- CALENDÁRIO -->
+    <section id="page_cal" class="card page">
+      <h2>Calendário</h2>
+      <div class="cal-controls" style="margin-top:8px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <button id="calPrev" class="btn-ghost">◀</button>
+          <div id="calLabel" class="note" style="min-width:160px;text-align:center"></div>
+          <button id="calNext" class="btn-ghost">▶</button>
+        </div>
+        <div>
+          <select id="calView" style="padding:8px;border-radius:8px;border:1px solid #eee">
+            <option value="week">Semana</option>
+            <option value="month">Mês</option>
+            <option value="year">Ano</option>
+            <option value="day">Dia</option>
+          </select>
+        </div>
       </div>
-    </div>
 
-    <input id="fileInput" type="file" accept="image/*" style="display:none">
-    <div id="galleryGrid" class="gallery" style="margin-top:12px"></div>
-    <div class="small-note" style="margin-top:12px">Adiciona fotos — tira no telemóvel ou escolhe da fototeca.</div>
-  </section>
+      <div id="calendarGrid" class="cal-grid" style="margin-top:12px"></div>
 
-  <!-- NOTAS -->
-  <section id="page_notas" class="card page" aria-labelledby="notasTitle">
-    <div style="display:flex;justify-content:space-between;align-items:center">
-      <h2>Notas</h2>
-      <div class="notes-controls">
-        <select id="albumFilter" class="album-select">
-          <option value="__all">Todos os álbuns</option>
-        </select>
-        <button id="newNoteBtn" class="icon-btn" style="background:var(--pink);color:#fff;border:0">+ Nova</button>
-        <button id="editNotesBtn" class="btn-ghost" title="Editar notas">Editar</button>
-        <button id="deleteAllBtn" class="btn-ghost" title="Apagar todas">Apagar todas</button>
-      </div>
-    </div>
+      <textarea id="dayNote" placeholder="Nota do dia..." style="width:100%;margin-top:12px;padding:10px;border-radius:8px;border:1px solid #eee;min-height:100px"></textarea>
+      <button id="saveDayBtn" class="btn" style="width:100%;margin-top:10px">Guardar Dia</button>
+    </section>
 
-    <!-- note editor -->
-    <div id="noteEditorWrap" style="display:none;margin-top:12px">
-      <input id="noteTitle" placeholder="Título" style="width:100%;padding:10px;border-radius:8px;border:1px solid #eee">
-      <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
-        <select id="noteAlbum" class="album-select"></select>
-        <select id="noteSize" style="padding:8px;border-radius:8px;border:1px solid #eee">
-          <option value="14">14</option><option value="16" selected>16</option><option value="18">18</option>
-        </select>
-        <input id="noteColor" type="color" value="#222222">
-        <button id="saveNoteBtn" class="icon-btn" style="margin-left:auto;background:var(--pink);color:#fff;border:0">Guardar</button>
-      </div>
-      <div id="noteEditor" contenteditable="true" style="margin-top:8px;padding:12px;border-radius:8px;border:1px solid #eee;min-height:120px;background:#fff;overflow:auto"></div>
-    </div>
+    <!-- TEMPO -->
+    <section id="page_tempo" class="card page">
+      <h2>Tempo</h2>
+      <div class="tempo-date">17 de setembro de 2025 às 22:00</div>
+      <div id="tempoYMD" class="tempo-ymd">0 dias</div>
+      <div id="tempoHMS" class="tempo-hms">00:00:00</div>
+      <div style="height:10px"></div>
+      <div id="tempoSentence" class="tempo-sentence"></div>
+    </section>
 
-    <div id="notesList" class="notes-grid" style="margin-top:12px"></div>
-  </section>
-
-  <!-- CALENDÁRIO -->
-  <section id="page_cal" class="card page" aria-labelledby="calTitle">
-    <h2>Calendário</h2>
-
-    <div class="cal-controls" style="margin-top:8px">
-      <div style="display:flex;align-items:center;gap:8px">
-        <button id="calPrev" class="btn-ghost">◀</button>
-        <div id="calLabel" class="small-note"></div>
-        <button id="calNext" class="btn-ghost">▶</button>
-      </div>
-      <div style="display:flex;gap:8px;align-items:center">
-        <select id="calView" class="album-select">
-          <option value="week">Semana</option>
-          <option value="month">Mês</option>
-          <option value="year">Ano</option>
-          <option value="day">Dia</option>
-        </select>
-      </div>
-    </div>
-
-    <div id="calendarGrid" class="cal-grid" style="margin-top:12px"></div>
-
-    <textarea id="dayNote" placeholder="Nota do dia..." style="width:100%;margin-top:12px;padding:10px;border-radius:8px;border:1px solid #eee;min-height:100px"></textarea>
-    <button id="saveDayBtn" class="icon-btn" style="width:100%;margin-top:10px;background:var(--pink);color:#fff;border:0">Guardar Dia</button>
-  </section>
-
-  <!-- TEMPO -->
-  <section id="page_tempo" class="card page" aria-labelledby="tempoTitle">
-    <h2>Tempo</h2>
-    <div class="tempo-date">17 de setembro de 2025 às 22:00</div>
-    <div id="tempoYMD" class="tempo-ymd">0 dias</div>
-    <div id="tempoHMS" class="tempo-hms">00:00:00</div>
-    <div class="sep" style="margin-top:12px"></div>
-    <div id="tempoSentence" class="tempo-sentence"></div>
-  </section>
   </div> <!-- end app -->
+
 </main>
 
-<!-- MODAL - Edit Note -->
-<div id="modalBackdrop" class="modal-backdrop" style="display:none;align-items:center;justify-content:center;">
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="editNoteTitle">
-    <h3 id="editNoteTitle">Editar Nota</h3>
-    <input id="modalNoteTitle" placeholder="Título" style="width:100%;padding:8px;border-radius:8px;border:1px solid #eee;margin-top:8px">
+<!-- Modal for note editing -->
+<div id="modalBackdrop" class="modal-backdrop" style="display:none;align-items:center;justify-content:center">
+  <div class="modal" role="dialog" aria-modal="true">
+    <h3>Editar Nota</h3>
+    <input id="modalTitle" placeholder="Título" style="width:100%;padding:8px;border-radius:8px;border:1px solid #eee;margin-top:8px">
     <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
-      <select id="modalNoteSize" style="padding:8px;border-radius:8px;border:1px solid #eee">
-        <option value="14">14</option><option value="16">16</option><option value="18">18</option>
+      <select id="modalSize" style="padding:8px;border-radius:8px;border:1px solid #eee">
+        <option>14</option><option>16</option><option>18</option>
       </select>
-      <input id="modalNoteColor" type="color" value="#222222">
-      <select id="modalNoteAlbum" class="album-select"></select>
+      <input id="modalColor" type="color" value="#222222">
+      <select id="modalAlbum" class="album-select" style="padding:8px;border-radius:8px;border:1px solid #eee"></select>
       <div style="margin-left:auto;display:flex;gap:8px">
-        <button id="modalDeleteBtn" class="delete-btn">Apagar</button>
-        <button id="modalSaveBtn" class="icon-btn" style="background:var(--pink);color:#fff;border:0">Guardar</button>
+        <button id="modalDelete" class="del-btn">Apagar</button>
+        <button id="modalSave" class="btn">Guardar</button>
       </div>
     </div>
-    <div id="modalNoteEditor" contenteditable="true" style="margin-top:10px;padding:10px;border-radius:8px;border:1px solid #eee;min-height:120px"></div>
+    <div id="modalEditor" contenteditable="true" style="margin-top:10px;padding:10px;border-radius:8px;border:1px solid #eee;min-height:120px"></div>
     <div style="text-align:right;margin-top:8px"><button id="modalClose" class="btn-ghost">Fechar</button></div>
   </div>
 </div>
 
-<!-- Supabase client (library) -->
+<!-- Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-/* ========== Supabase client ========== */
-const SUPABASE_URL = "https://qtzlyowxjqdsswyxcmzu.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF0emx5b3d4anFkc3N3eXhjbXp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ2MDc1MDUsImV4cCI6MjA4MDE4MzUwNX0.iLb7C7x-qyzY58SHd_n_Fdc2RkVy2hNBkf-n41st02c";
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+/* ==========================
+   Full app init on DOMContentLoaded
+   ========================== */
+document.addEventListener('DOMContentLoaded', () => {
 
-/* ========== Basic DOM refs ========== */
-const loginCard = document.getElementById('loginCard');
-const appDiv = document.getElementById('app');
-const enterBtn = document.getElementById('enterBtn');
-const codeInput = document.getElementById('codeInput');
-const loginError = document.getElementById('loginError');
+  /* ----------- Supabase client (avoid TDZ) ----------- */
+  const SUPABASE_URL = "https://qtzlyowxjqdsswyxcmzu.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF0emx5b3d4anFkc3N3eXhjbXp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ2MDc1MDUsImV4cCI6MjA4MDE4MzUwNX0.iLb7C7x-qyzY58SHd_n_Fdc2RkVy2hNBkf-n41st02c";
+  if(!window.supabase){
+    console.error('Supabase JS não carregado — verifica a tag <script> que carrega supabase.');
+  }
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-const openDrawerBtn = document.getElementById('openDrawerBtn');
-const drawer = document.getElementById('drawer');
-const drawerBackdrop = document.getElementById('drawerBackdrop');
-const closeDrawerBtn = document.getElementById('closeDrawerBtn');
-const menuItems = document.querySelectorAll('.menuitem');
+  /* ----------- DOM refs ----------- */
+  const loginCard = document.getElementById('loginCard');
+  const appDiv = document.getElementById('app');
+  const enterBtn = document.getElementById('enterBtn');
+  const codeInput = document.getElementById('codeInput');
+  const loginError = document.getElementById('loginError');
 
-/* ========== Drawer handlers ========== */
-openDrawerBtn?.addEventListener('click', ()=>{ drawer.classList.add('open'); drawerBackdrop.classList.add('open'); drawer.setAttribute('aria-hidden','false'); drawerBackdrop.setAttribute('aria-hidden','false'); });
-closeDrawerBtn?.addEventListener('click', closeDrawer);
-drawerBackdrop?.addEventListener('click', closeDrawer);
-function closeDrawer(){ drawer.classList.remove('open'); drawerBackdrop.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); drawerBackdrop.setAttribute('aria-hidden','true'); }
-menuItems.forEach(it=> it.addEventListener('click', ()=>{ closeDrawer(); showPage(it.dataset.page); }));
+  const openDrawer = document.getElementById('openDrawer');
+  const drawer = document.getElementById('drawer');
+  const drawerBackdrop = document.getElementById('drawerBackdrop');
+  const closeDrawerBtn = document.getElementById('closeDrawer');
+  const menuitems = document.querySelectorAll('.menuitem');
 
-/* ========== Login (robust) ========== */
-(function initLogin(){
-  if(!enterBtn || !codeInput || !loginError || !loginCard || !appDiv) return;
+  /* pages */
+  function showPage(page){
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    const el = document.getElementById('page_' + page);
+    if(el) el.classList.add('active');
+    // call per-page loaders
+    if(page === 'gal') loadGallery();
+    if(page === 'notas') loadNotes();
+    if(page === 'cal') renderCalendar();
+    if(page === 'tempo') updateTempoUI();
+    // close drawer if open
+    closeDrawer();
+  }
+
+  /* ------- Drawer handlers ------- */
+  function openMenu(){ drawer.classList.add('open'); drawerBackdrop.classList.add('open'); drawer.setAttribute('aria-hidden','false'); drawerBackdrop.setAttribute('aria-hidden','false'); }
+  function closeDrawer(){ drawer.classList.remove('open'); drawerBackdrop.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); drawerBackdrop.setAttribute('aria-hidden','true'); }
+  openDrawer.addEventListener('click', openMenu);
+  closeDrawerBtn.addEventListener('click', closeDrawer);
+  drawerBackdrop.addEventListener('click', closeDrawer);
+  menuitems.forEach(it=> it.addEventListener('click', ()=> showPage(it.dataset.page)));
+
+  /* ------- Login (works with Enter) ------- */
   enterBtn.type = 'button';
-  function doLoginAttempt(){
+  function attemptLogin(){
     const v = (codeInput.value || '').trim().toLowerCase();
     if(v === 'sasiboy'){
       loginError.style.display = 'none';
       loginCard.style.display = 'none';
       appDiv.style.display = 'block';
-      try{ initAfterLogin(); }catch(e){}
-      try{ showPage('home'); }catch(e){}
+      initAfterLogin();
+      showPage('home');
     } else {
       loginError.style.display = 'block';
-      if(loginCard.animate) loginCard.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-6px)' }, { transform: 'translateX(0)' }], { duration: 200 });
       codeInput.focus();
+      loginCard.animate([{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(0)'}],{duration:180});
     }
   }
-  enterBtn.addEventListener('click', doLoginAttempt);
-  codeInput.addEventListener('keydown', (e)=>{ if(e.key === 'Enter'){ e.preventDefault(); doLoginAttempt(); } });
-  setTimeout(()=> codeInput.focus(), 150);
-})();
+  enterBtn.addEventListener('click', attemptLogin);
+  codeInput.addEventListener('keydown', e=>{ if(e.key === 'Enter'){ e.preventDefault(); attemptLogin(); } });
 
-/* ========== Page navigation ========== */
-function showPage(p){
-  document.querySelectorAll('.page').forEach(x=> x.classList.remove('active'));
-  const el = document.getElementById('page_' + p);
-  if(el) el.classList.add('active');
-  closeDrawer();
-  if(p==='gal') loadGallery();
-  if(p==='notas') loadNotes();
-  if(p==='cal') renderCalendar();
-  if(p==='tempo') updateTempo();
-}
+  /* ------- Home clock & counter ------- */
+  const START = new Date('2025-09-17T22:00:00');
 
-/* ========== Home clock & counter ========== */
-const START = new Date("2025-09-17T22:00:00");
-function pad2(n){return String(n).padStart(2,'0');}
-function diffYMDHMS(start, now){
-  let years = now.getFullYear() - start.getFullYear();
-  let months = now.getMonth() - start.getMonth();
-  let days = now.getDate() - start.getDate();
-  if(days < 0){ months--; const prev = new Date(now.getFullYear(), now.getMonth(), 0); days += prev.getDate(); }
-  if(months < 0){ years--; months += 12; }
-  const totalSec = Math.floor((now - start)/1000);
-  const hours = Math.floor(totalSec/3600) % 24;
-  const minutes = Math.floor(totalSec/60) % 60;
-  const seconds = totalSec % 60;
-  const totalDays = Math.floor((now - start)/(1000*60*60*24));
-  return { years, months, days, hours, minutes, seconds, totalDays };
-}
-function updateHomeClock(){
-  const now = new Date();
-  const d = diffYMDHMS(START, now);
-  const digitalEl = document.getElementById('digitalClock');
-  if(digitalEl) digitalEl.textContent = now.toLocaleTimeString('pt-PT');
-  document.getElementById('yrs') && (document.getElementById('yrs').textContent = `${d.years} anos`);
-  document.getElementById('mos') && (document.getElementById('mos').textContent = `${d.months} meses`);
-  document.getElementById('ds') && (document.getElementById('ds').textContent = `${d.days} dias`);
-  document.getElementById('clockHms') && (document.getElementById('clockHms').textContent = `${pad2(d.hours)}:${pad2(d.minutes)}:${pad2(d.seconds)}`);
-}
-setInterval(updateHomeClock, 1000);
-updateHomeClock();
+  function pad2(n){ return String(n).padStart(2,'0'); }
 
-/* ========== Sobre editor live & autoshrink ========== */
-const bioLeft = document.getElementById('bio_left');
-const bioRight = document.getElementById('bio_right');
-const fontFamily = document.getElementById('fontFamily');
-const fontSize = document.getElementById('fontSize');
-const fontColor = document.getElementById('fontColor');
-const alignLeftBtn = document.getElementById('alignLeft');
-const alignCenterBtn = document.getElementById('alignCenter');
-const alignRightBtn = document.getElementById('alignRight');
-const saveBiosBtn = document.getElementById('saveBios');
+  function diffYMDHMS(start, now){
+    let years = now.getFullYear() - start.getFullYear();
+    let months = now.getMonth() - start.getMonth();
+    let days = now.getDate() - start.getDate();
+    if(days < 0){
+      months--;
+      const prev = new Date(now.getFullYear(), now.getMonth(), 0);
+      days += prev.getDate();
+    }
+    if(months < 0){ years--; months += 12; }
+    const totalSec = Math.floor((now - start)/1000);
+    const hours = Math.floor(totalSec/3600) % 24;
+    const minutes = Math.floor(totalSec/60) % 60;
+    const seconds = totalSec % 60;
+    const totalDays = Math.floor((now - start)/(1000*60*60*24));
+    return { years, months, days, hours, minutes, seconds, totalDays };
+  }
 
-function applyEditorStyles(){
-  [bioLeft, bioRight].forEach(el=>{
-    if(!el) return;
-    el.style.fontFamily = fontFamily.value;
-    el.style.fontSize = fontSize.value + 'px';
-    el.style.color = fontColor.value;
-    adjustFontToFit(el);
+  function updateHomeClock(){
+    const now = new Date();
+    const homeClock = document.getElementById('homeClock');
+    if(homeClock) homeClock.textContent = now.toLocaleTimeString('pt-PT');
+    const d = diffYMDHMS(START, now);
+    const yrs = document.getElementById('yrs'); if(yrs) yrs.textContent = `${d.years} anos`;
+    const mos = document.getElementById('mos'); if(mos) mos.textContent = `${d.months} meses`;
+    const ds = document.getElementById('ds'); if(ds) ds.textContent = `${d.days} dias`;
+    const clockHms = document.getElementById('clockHms'); if(clockHms) clockHms.textContent = `${pad2(d.hours)}:${pad2(d.minutes)}:${pad2(d.seconds)}`;
+    // tempo page elements
+    const tempoYMD = document.getElementById('tempoYMD'); if(tempoYMD) tempoYMD.textContent = (d.years||d.months||d.days) ? `${d.years} anos • ${d.months} meses • ${d.days} dias` : '0 dias';
+    const tempoHMS = document.getElementById('tempoHMS'); if(tempoHMS) tempoHMS.textContent = `${pad2(d.hours)}:${pad2(d.minutes)}:${pad2(d.seconds)}`;
+    const tempoSentence = document.getElementById('tempoSentence'); if(tempoSentence) tempoSentence.textContent = `Para te lembrares quantos dias passaram desde que tomei a melhor decisão da minha vida...\nE que possamos voltar aqui e ver que os dias só aumentaram.\nAmo-te daqui até ao infinito e mais além ❤️\n(${d.totalDays} ${d.totalDays===1?'dia':'dias'})`;
+  }
+  setInterval(updateHomeClock, 1000);
+  updateHomeClock();
+
+  /* ------- Gallery (compress + upload) ------- */
+  const fileInput = document.getElementById('fileInput');
+  document.getElementById('addPhotoBtn').addEventListener('click', ()=> fileInput.click());
+  fileInput.addEventListener('change', async (e)=>{
+    const f = e.target.files[0]; if(!f) return;
+    try{
+      const blob = await compressImage(f, 0.7);
+      const name = Date.now() + '_' + f.name.replace(/\s+/g,'_');
+      const { data, error } = await supabase.storage.from('photos').upload(name, blob);
+      if(error) throw error;
+      await supabase.from('photos').insert([{ path: data.path }]);
+      loadGallery();
+    }catch(err){ console.error(err); alert('Erro ao enviar foto: ' + (err.message || err)); }
   });
-}
-fontFamily?.addEventListener('input', applyEditorStyles);
-fontSize?.addEventListener('input', applyEditorStyles);
-fontColor?.addEventListener('input', applyEditorStyles);
-alignLeftBtn?.addEventListener('click', ()=> [bioLeft,bioRight].forEach(e=> e.style.textAlign='left'));
-alignCenterBtn?.addEventListener('click', ()=> [bioLeft,bioRight].forEach(e=> e.style.textAlign='center'));
-alignRightBtn?.addEventListener('click', ()=> [bioLeft,bioRight].forEach(e=> e.style.textAlign='right'));
 
-function adjustFontToFit(el){
-  if(!el) return;
-  let style = window.getComputedStyle(el);
-  let f = parseInt(style.fontSize) || parseInt(fontSize?.value) || 16;
-  const min = 12;
-  function fits(){ return el.scrollHeight <= el.clientHeight + 4; }
-  while(f < 40 && fits() && el.scrollHeight < el.clientHeight - 20){
-    f++;
-    el.style.fontSize = f + 'px';
-    if(f > parseInt(fontSize?.max || 36)) break;
-  }
-  while(f > min && !fits()){
-    f--;
-    el.style.fontSize = f + 'px';
-  }
-}
-[bioLeft, bioRight].forEach(b=>{ b?.addEventListener('input', ()=> adjustFontToFit(b)); b?.addEventListener('paste', ()=> setTimeout(()=> adjustFontToFit(b),100)); });
-
-saveBiosBtn?.addEventListener('click', async ()=>{
-  try{
-    const leftText = bioLeft?.innerText.trim() || '';
-    const rightText = bioRight?.innerText.trim() || '';
-    await supabaseClient.from('notes').insert([
-      { content: JSON.stringify({ type:'bio', side:'left', text:leftText }) },
-      { content: JSON.stringify({ type:'bio', side:'right', text:rightText }) }
-    ]);
-    alert('Biografias guardadas!');
-  }catch(e){ console.error(e); alert('Erro ao guardar bios'); }
-});
-
-/* ========== Gallery ========== */
-const fileInput = document.getElementById('fileInput');
-const addPhotoBtn = document.getElementById('addPhotoBtn');
-addPhotoBtn?.addEventListener('click', ()=> fileInput.click());
-fileInput?.addEventListener('change', async (e)=>{
-  const f = e.target.files[0];
-  if(!f) return;
-  try{
-    const blob = await compressImageBlob(f, 0.7);
-    const name = Date.now() + '_' + f.name.replace(/\s+/g,'_');
-    const { data, error } = await supabaseClient.storage.from('photos').upload(name, blob);
-    if(error) throw error;
-    await supabaseClient.from('photos').insert([{ path: data.path }]);
-    loadGallery();
-  }catch(err){ console.error(err); alert('Erro ao enviar foto'); }
-});
-function compressImageBlob(file, quality){
-  return new Promise((resolve,reject)=>{
-    const reader = new FileReader();
-    reader.onload = e=>{
-      const img = new Image();
-      img.onload = ()=>{
-        const max = 2000;
-        let w = img.width, h = img.height;
-        if(w > max || h > max){ const r = Math.min(max/w, max/h); w = Math.round(w*r); h = Math.round(h*r); }
-        const canvas = document.createElement('canvas'); canvas.width = w; canvas.height = h;
-        const ctx = canvas.getContext('2d'); ctx.drawImage(img,0,0,w,h);
-        canvas.toBlob(b=> resolve(b), 'image/jpeg', quality);
+  function compressImage(file, quality){
+    return new Promise((resolve, reject)=>{
+      const reader = new FileReader();
+      reader.onload = e=>{
+        const img = new Image();
+        img.onload = ()=>{
+          const max = 2000;
+          let w = img.width, h = img.height;
+          if(w > max || h > max){ const r = Math.min(max/w, max/h); w = Math.round(w*r); h = Math.round(h*r); }
+          const c = document.createElement('canvas'); c.width = w; c.height = h;
+          const ctx = c.getContext('2d'); ctx.drawImage(img,0,0,w,h);
+          c.toBlob(blob => resolve(blob), 'image/jpeg', quality);
+        };
+        img.onerror = reject; img.src = e.target.result;
       };
-      img.onerror = reject; img.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
-  });
-}
-async function loadGallery(){
-  try{
-    const { data } = await supabaseClient.from('photos').select('*').order('uploaded_at',{ascending:false});
-    const grid = document.getElementById('galleryGrid'); if(!grid) return;
-    grid.innerHTML = '';
-    if(!data || data.length === 0){ grid.innerHTML = '<div class="small-note">Galeria vazia.</div>'; return; }
-    data.forEach(p=>{
-      const url = supabaseClient.storage.from('photos').getPublicUrl(p.path).data.publicUrl;
-      const img = document.createElement('img'); img.src = url; img.className = 'thumb';
-      grid.appendChild(img);
+      reader.readAsDataURL(file);
     });
-  }catch(e){ console.error(e); }
-}
-
-/* ========== Notes (albums + modal editing + delete) ========== */
-let editMode = false;
-const newNoteBtn = document.getElementById('newNoteBtn');
-const editNotesBtn = document.getElementById('editNotesBtn');
-const deleteAllBtn = document.getElementById('deleteAllBtn');
-const noteEditorWrap = document.getElementById('noteEditorWrap');
-const noteEditor = document.getElementById('noteEditor');
-const noteTitle = document.getElementById('noteTitle');
-const noteSize = document.getElementById('noteSize');
-const noteColor = document.getElementById('noteColor');
-const noteAlbum = document.getElementById('noteAlbum');
-const notesList = document.getElementById('notesList');
-const albumFilter = document.getElementById('albumFilter');
-
-const modalBackdrop = document.getElementById('modalBackdrop');
-const modalNoteTitle = document.getElementById('modalNoteTitle');
-const modalNoteEditor = document.getElementById('modalNoteEditor');
-const modalNoteSize = document.getElementById('modalNoteSize');
-const modalNoteColor = document.getElementById('modalNoteColor');
-const modalNoteAlbum = document.getElementById('modalNoteAlbum');
-const modalSaveBtn = document.getElementById('modalSaveBtn');
-const modalDeleteBtn = document.getElementById('modalDeleteBtn');
-const modalClose = document.getElementById('modalClose');
-
-let currentEditingNote = null;
-
-function loadAlbums(){
-  const raw = localStorage.getItem('sa_albums') || '[]';
-  let arr = [];
-  try{ arr = JSON.parse(raw) } catch(e){ arr = [] }
-  if(!arr.find(a=>a.id==='__default')) arr.unshift({id:'__default', name:'Sem álbum'});
-  function fill(select){
-    if(!select) return;
-    select.innerHTML = '';
-    const allOpt = document.createElement('option'); allOpt.value = '__default'; allOpt.textContent = 'Sem álbum'; select.appendChild(allOpt);
-    arr.forEach(a=>{ const o = document.createElement('option'); o.value = a.id; o.textContent = a.name; select.appendChild(o); });
   }
-  fill(noteAlbum); fill(albumFilter); fill(modalNoteAlbum);
-  albumFilter.querySelectorAll('option')[0].textContent = 'Todos os álbuns';
-  modalNoteAlbum.querySelectorAll('option')[0].textContent = 'Sem álbum';
-  noteAlbum.querySelectorAll('option')[0].textContent = 'Sem álbum';
-}
-function saveAlbums(arr){ localStorage.setItem('sa_albums', JSON.stringify(arr)); }
-function createAlbum(name){ const arr = JSON.parse(localStorage.getItem('sa_albums') || '[]'); const id = 'alb_' + Date.now(); arr.push({id, name}); saveAlbums(arr); loadAlbums(); return id; }
-function askCreateAlbum(){ const n = prompt('Nome do álbum:'); if(n && n.trim()) createAlbum(n.trim()); }
 
-newNoteBtn?.addEventListener('click', ()=>{ noteEditorWrap.style.display = 'block'; if(noteEditor) noteEditor.innerHTML = ''; if(noteTitle) noteTitle.value = ''; loadAlbums(); if(noteAlbum) noteAlbum.value = '__default'; });
+  async function loadGallery(){
+    try{
+      const { data } = await supabase.from('photos').select('*').order('uploaded_at',{ascending:false});
+      const grid = document.getElementById('galleryGrid'); grid.innerHTML = '';
+      if(!data || !data.length){ grid.innerHTML = '<div class="note">Galeria vazia.</div>'; return; }
+      data.forEach(p=>{ const url = supabase.storage.from('photos').getPublicUrl(p.path).data.publicUrl; const img = document.createElement('img'); img.src = url; img.className = 'thumb'; grid.appendChild(img); });
+    }catch(e){ console.error(e); }
+  }
 
-document.getElementById('saveNoteBtn')?.addEventListener('click', async ()=>{
-  const title = (noteTitle?.value||'').trim();
-  const content = (noteEditor?.innerHTML||'').trim();
-  const size = noteSize?.value;
-  const color = noteColor?.value;
-  const album = noteAlbum?.value || '__default';
-  if(!content) return alert('Escreve algo na nota.');
-  try{
-    await supabaseClient.from('notes').insert([{ title, content, meta: JSON.stringify({ size, color, album }) }]);
-    if(noteEditorWrap) noteEditorWrap.style.display = 'none';
-    loadNotes();
-  }catch(e){ console.error(e); alert('Erro ao gravar nota'); }
-});
+  /* ------- Notes (albums + modal edit + delete) ------- */
+  const newNoteBtn = document.getElementById('newNoteBtn');
+  const noteEditorWrap = document.getElementById('noteEditorWrap');
+  const noteEditor = document.getElementById('noteEditor');
+  const noteTitle = document.getElementById('noteTitle');
+  const noteAlbum = document.getElementById('noteAlbum');
+  const noteSize = document.getElementById('noteSize');
+  const noteColor = document.getElementById('noteColor');
+  const notesList = document.getElementById('notesList');
+  const albumFilter = document.getElementById('albumFilter');
+  const editNotesToggle = document.getElementById('editNotesToggle');
+  const deleteAllNotes = document.getElementById('deleteAllNotes');
+  const saveNoteBtn = document.getElementById('saveNoteBtn');
 
-editNotesBtn?.addEventListener('click', ()=>{ editMode = !editMode; editNotesBtn.textContent = editMode ? 'Sair editar' : 'Editar'; editNotesBtn.style.background = editMode ? '#fff0f3' : '#fff'; editNotesBtn.style.color = editMode ? 'var(--pink)' : 'var(--muted)'; loadNotes(); });
+  // modal refs
+  const modalBackdrop = document.getElementById('modalBackdrop');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalEditor = document.getElementById('modalEditor');
+  const modalSize = document.getElementById('modalSize');
+  const modalColor = document.getElementById('modalColor');
+  const modalAlbum = document.getElementById('modalAlbum');
+  const modalSave = document.getElementById('modalSave');
+  const modalDelete = document.getElementById('modalDelete');
+  const modalClose = document.getElementById('modalClose');
 
-deleteAllBtn?.addEventListener('click', async ()=>{ if(!confirm('Isto apagará todas as notas. Tens a certeza? Esta ação é irreversível.')) return; try{ await supabaseClient.from('notes').delete().neq('id',0); loadNotes(); alert('Todas as notas foram apagadas.'); }catch(e){ console.error(e); alert('Erro ao apagar tudo'); } });
+  let editMode = false;
+  let currentModalNote = null;
 
-async function loadNotes(){
-  try{
-    const filter = albumFilter?.value || '__all';
-    const { data } = await supabaseClient.from('notes').select('*').order('created_at',{ascending:false});
-    if(!notesList) return;
-    notesList.innerHTML = '';
-    if(!data || data.length===0){ notesList.innerHTML = '<div class="small-note">Sem notas.</div>'; return; }
-    loadAlbums();
-    data.forEach(n=>{
-      let meta = {size:16,color:'#222',album:'__default'};
-      try{ if(n.meta) meta = Object.assign(meta, JSON.parse(n.meta)); }catch(e){}
-      if(filter !== '__all' && filter !== '__default' && meta.album !== filter) return;
-      const card = document.createElement('div'); card.className = 'note-card'; card.dataset.noteId = n.id;
-      card.innerHTML = `<div class="note-meta">${new Date(n.created_at).toLocaleString()}</div><div class="note-title">${n.title || 'Sem título'}</div><div class="note-content" style="font-size:${meta.size}px;color:${meta.color}">${n.content}</div>`;
-      card.addEventListener('click', ()=>{ if(editMode) return; openEditModal(n); });
-      if(editMode){
-        const del = document.createElement('button'); del.className = 'delete-btn'; del.textContent = 'Apagar';
-        del.addEventListener('click', async (ev)=>{ ev.stopPropagation(); if(!confirm('Apagar esta nota?')) return; try{ await supabaseClient.from('notes').delete().eq('id', n.id); card.remove(); }catch(e){ console.error(e); alert('Erro ao apagar'); } });
-        card.appendChild(del);
+  // albums: stored in localStorage as array [{id,name}]
+  function loadAlbumsInto(selects = [noteAlbum, albumFilter, modalAlbum]){
+    let arr = [];
+    try{ arr = JSON.parse(localStorage.getItem('sa_albums') || '[]'); }catch(e){ arr = []; }
+    // ensure default album
+    if(!arr.find(a=>a.id==='__default')) arr.unshift({id:'__default', name:'Sem álbum'});
+    selects.forEach(sel=>{
+      if(!sel) return;
+      sel.innerHTML = '';
+      if(sel === albumFilter){
+        const opt = document.createElement('option'); opt.value='__all'; opt.textContent='Todos os álbuns'; sel.appendChild(opt);
+      } else {
+        const opt = document.createElement('option'); opt.value='__default'; opt.textContent='Sem álbum'; sel.appendChild(opt);
       }
-      notesList.appendChild(card);
+      arr.forEach(a=>{ const o = document.createElement('option'); o.value = a.id; o.textContent = a.name; sel.appendChild(o); });
     });
-  }catch(e){ console.error(e); if(notesList) notesList.innerHTML = '<div class="small-note">Erro ao carregar notas.</div>'; }
-}
-
-function openEditModal(note){
-  currentEditingNote = note;
-  if(!modalBackdrop) return;
-  modalBackdrop.style.display = 'flex';
-  modalNoteTitle.value = note.title || '';
-  modalNoteEditor.innerHTML = note.content || '';
-  try{ const meta = note.meta ? JSON.parse(note.meta) : {}; modalNoteSize.value = meta.size || '16'; modalNoteColor.value = meta.color || '#222'; loadAlbums(); modalNoteAlbum.value = meta.album || '__default'; }catch(e){ console.warn(e); }
-}
-modalClose?.addEventListener('click', ()=> { modalBackdrop.style.display = 'none'; currentEditingNote = null; });
-modalBackdrop?.addEventListener('click', (e)=>{ if(e.target === modalBackdrop) { modalBackdrop.style.display='none'; currentEditingNote=null; } });
-modalSaveBtn?.addEventListener('click', async ()=>{ if(!currentEditingNote) return; const id = currentEditingNote.id; const title = modalNoteTitle.value.trim(); const content = modalNoteEditor.innerHTML.trim(); const meta = { size: modalNoteSize.value, color: modalNoteColor.value, album: modalNoteAlbum.value || '__default' }; try{ await supabaseClient.from('notes').update({ title, content, meta: JSON.stringify(meta) }).eq('id', id); modalBackdrop.style.display = 'none'; currentEditingNote = null; loadNotes(); }catch(e){ console.error(e); alert('Erro ao guardar'); } });
-modalDeleteBtn?.addEventListener('click', async ()=>{ if(!currentEditingNote) return; if(!confirm('Apagar esta nota?')) return; try{ await supabaseClient.from('notes').delete().eq('id', currentEditingNote.id); modalBackdrop.style.display='none'; currentEditingNote = null; loadNotes(); }catch(e){ console.error(e); alert('Erro ao apagar'); } });
-
-noteAlbum?.addEventListener('dblclick', ()=> askCreateAlbum());
-modalNoteAlbum?.addEventListener('dblclick', ()=> askCreateAlbum());
-albumFilter?.addEventListener('change', ()=> loadNotes());
-
-/* ========== Calendar ========== */
-let calDate = new Date();
-let calView = 'week';
-const calViewSelect = document.getElementById('calView');
-const calLabel = document.getElementById('calLabel');
-const calendarGrid = document.getElementById('calendarGrid');
-document.getElementById('calPrev')?.addEventListener('click', ()=> navCal(-1));
-document.getElementById('calNext')?.addEventListener('click', ()=> navCal(1));
-calViewSelect?.addEventListener('change', (e)=>{ calView = e.target.value; renderCalendar(); });
-
-function navCal(delta){
-  if(calView === 'day') calDate.setDate(calDate.getDate() + delta);
-  else if(calView === 'week') calDate.setDate(calDate.getDate() + delta*7);
-  else if(calView === 'month') calDate.setMonth(calDate.getMonth() + delta);
-  else if(calView === 'year') calDate.setFullYear(calDate.getFullYear() + delta);
-  renderCalendar();
-}
-function startOfWeek(d){ const n = new Date(d); const day = n.getDay(); const diff = n.getDate() - day + (day === 0 ? -6 : 1); return new Date(n.getFullYear(), n.getMonth(), diff); }
-
-async function renderCalendar(){
-  if(!calendarGrid) return;
-  calendarGrid.innerHTML = '';
-  if(calView === 'day'){
-    const d = new Date(calDate); calLabel && (calLabel.textContent = d.toLocaleDateString('pt-PT', { weekday:'long', day:'numeric', month:'long', year:'numeric' }));
-    const el = document.createElement('div'); el.className='cal-day'; el.style.gridColumn='1 / -1'; el.style.padding='20px';
-    el.innerHTML = `<div style="font-weight:800">${d.toLocaleDateString('pt-PT',{day:'numeric',month:'short'})}</div><div class="small-note">${d.toLocaleDateString('pt-PT',{weekday:'long'})}</div>`;
-    el.addEventListener('click', ()=> selectCalDay(d)); calendarGrid.appendChild(el); return;
   }
-  if(calView === 'week'){
-    const start = startOfWeek(calDate); calLabel && (calLabel.textContent = start.toLocaleDateString('pt-PT', { day:'numeric', month:'long', year:'numeric' }) + ' — semana');
-    const days = []; for(let i=0;i<7;i++){ const dd = new Date(start); dd.setDate(start.getDate()+i); days.push(dd); }
-    for(const d of days){ const c = document.createElement('div'); c.className='cal-day'; c.innerHTML = `<div class="small-note">${d.toLocaleDateString('pt-PT',{weekday:'short'})}</div><div style="font-weight:800">${d.getDate()}</div>`; c.addEventListener('click', ()=> selectCalDay(d)); calendarGrid.appendChild(c); }
-    markCalEntries(days); return;
+  function saveAlbum(name){
+    if(!name) return;
+    const arr = JSON.parse(localStorage.getItem('sa_albums') || '[]');
+    const id = 'alb_' + Date.now();
+    arr.push({id, name});
+    localStorage.setItem('sa_albums', JSON.stringify(arr));
+    loadAlbumsInto();
   }
-  if(calView === 'month'){
-    const y = calDate.getFullYear(), m = calDate.getMonth(); calLabel && (calLabel.textContent = calDate.toLocaleDateString('pt-PT', { month:'long', year:'numeric' }));
-    const first = new Date(y,m,1), last = new Date(y,m+1,0); const startDay = (first.getDay()||7) - 1;
-    for(let i=0;i<startDay;i++){ const ph = document.createElement('div'); ph.style.visibility='hidden'; calendarGrid.appendChild(ph); }
-    const days=[]; for(let d=1; d<= last.getDate(); d++){ const dt = new Date(y,m,d); days.push(dt); const el = document.createElement('div'); el.className='cal-day'; el.innerHTML = `<div class="small-note">${dt.toLocaleDateString('pt-PT',{weekday:'short'})}</div><div style="font-weight:800">${d}</div>`; el.addEventListener('click', ()=> selectCalDay(dt)); calendarGrid.appendChild(el); }
-    markCalEntries(days); return;
+  // quick album creation by double click
+  [noteAlbum, modalAlbum].forEach(el => { if(el) el.addEventListener('dblclick', ()=> { const n = prompt('Nome do álbum:'); if(n) saveAlbum(n.trim()); }); });
+
+  newNoteBtn.addEventListener('click', ()=> {
+    noteEditorWrap.style.display = 'block';
+    noteEditor.innerHTML = ''; noteTitle.value = '';
+    loadAlbumsInto();
+    noteAlbum.value = '__default';
+    noteTitle.focus();
+  });
+
+  saveNoteBtn.addEventListener('click', async () => {
+    const title = (noteTitle.value||'').trim();
+    const content = (noteEditor.innerHTML||'').trim();
+    const size = noteSize.value;
+    const color = noteColor.value;
+    const album = noteAlbum.value || '__default';
+    if(!content) return alert('Escreve algo primeiro.');
+    try{
+      await supabase.from('notes').insert([{ title, content, meta: JSON.stringify({ size, color, album }) }]);
+      noteEditorWrap.style.display = 'none';
+      loadNotes();
+    }catch(e){ console.error(e); alert('Erro ao gravar nota'); }
+  });
+
+  editNotesToggle.addEventListener('click', ()=>{
+    editMode = !editMode;
+    editNotesToggle.textContent = editMode ? 'Sair editar' : 'Editar';
+    loadNotes();
+  });
+
+  deleteAllNotes.addEventListener('click', async ()=>{
+    if(!confirm('Apagar todas as notas? Esta ação é irreversível.')) return;
+    try{
+      await supabase.from('notes').delete().neq('id',0);
+      loadNotes();
+      alert('Todas as notas foram apagadas.');
+    }catch(e){ console.error(e); alert('Erro ao apagar todas'); }
+  });
+
+  async function loadNotes(){
+    try{
+      loadAlbumsInto();
+      const filter = albumFilter.value || '__all';
+      const { data } = await supabase.from('notes').select('*').order('created_at',{ascending:false});
+      notesList.innerHTML = '';
+      if(!data || !data.length){ notesList.innerHTML = '<div class="note">Sem notas.</div>'; return; }
+      data.forEach(n=>{
+        let meta = { size:16, color:'#222', album:'__default' };
+        try{ if(n.meta) meta = Object.assign(meta, JSON.parse(n.meta)); }catch(e){}
+        if(filter !== '__all' && meta.album !== filter) return;
+        const card = document.createElement('div'); card.className='note-card'; card.dataset.id = n.id;
+        card.innerHTML = `<div class="note-meta">${new Date(n.created_at).toLocaleString()}</div>
+                          <div class="note-title">${n.title || 'Sem título'}</div>
+                          <div class="note-content" style="font-size:${meta.size}px;color:${meta.color}">${n.content}</div>`;
+        // actions
+        const actions = document.createElement('div'); actions.className='note-actions';
+        const edit = document.createElement('button'); edit.className='edit-btn'; edit.textContent='Editar';
+        edit.addEventListener('click', (ev)=> { ev.stopPropagation(); openModalForNote(n); });
+        const del = document.createElement('button'); del.className='del-btn'; del.textContent='Apagar';
+        del.addEventListener('click', async (ev)=> { ev.stopPropagation(); if(!confirm('Apagar esta nota?')) return; try{ await supabase.from('notes').delete().eq('id', n.id); loadNotes(); }catch(e){ console.error(e); alert('Erro ao apagar'); } });
+        if(editMode){
+          actions.appendChild(edit); actions.appendChild(del);
+        } else {
+          // clicking opens modal read-only -> allow viewing/editing too
+          card.addEventListener('click', ()=> openModalForNote(n));
+        }
+        card.appendChild(actions);
+        notesList.appendChild(card);
+      });
+    }catch(e){ console.error(e); notesList.innerHTML = '<div class="note">Erro ao carregar notas.</div>'; }
   }
-  if(calView === 'year'){ calLabel && (calLabel.textContent = calDate.getFullYear()); for(let i=0;i<12;i++){ const dt = new Date(calDate.getFullYear(), i, 1); const el = document.createElement('div'); el.className='cal-day'; el.innerHTML = `<div style="font-weight:800">${dt.toLocaleDateString('pt-PT',{month:'short'})}</div>`; el.addEventListener('click', ()=> { calDate = new Date(dt); calView = 'month'; calViewSelect && (calViewSelect.value = 'month'); renderCalendar(); }); calendarGrid.appendChild(el); } }
-}
 
-async function markCalEntries(days){
-  try{
-    if(!days || days.length===0) return;
-    const start = days[0].toISOString().slice(0,10), end = days[days.length-1].toISOString().slice(0,10);
-    const { data } = await supabaseClient.from('calendar_entries').select('*').gte('day_date', start).lte('day_date', end);
-    const DOMdays = Array.from(document.querySelectorAll('.cal-day')).filter(x=> x.style.visibility !== 'hidden');
-    for(let i=0;i<days.length;i++){ const key = days[i].toISOString().slice(0,10); if(data && data.find(x=> x.day_date === key)) DOMdays[i].classList.add('active'); }
-  }catch(e){ console.error(e); }
-}
-let selectedCalDay = null;
-async function selectCalDay(d){ selectedCalDay = d; const key = d.toISOString().slice(0,10); const { data } = await supabaseClient.from('calendar_entries').select('*').eq('day_date', key).limit(1); const dayNoteEl = document.getElementById('dayNote'); if(dayNoteEl) dayNoteEl.value = data?.[0]?.text || ''; }
-document.getElementById('saveDayBtn')?.addEventListener('click', async ()=>{ if(!selectedCalDay) return alert('Seleciona um dia primeiro.'); const key = selectedCalDay.toISOString().slice(0,10); const txt = document.getElementById('dayNote').value.trim(); const { data } = await supabaseClient.from('calendar_entries').select('*').eq('day_date', key).limit(1); try{ if(data && data.length) await supabaseClient.from('calendar_entries').update({ text: txt }).eq('day_date', key); else await supabaseClient.from('calendar_entries').insert([{ day_date: key, text: txt }]); alert('Guardado!'); renderCalendar(); }catch(e){ console.error(e); alert('Erro ao gravar'); } });
+  // modal functions
+  function openModalForNote(note){
+    currentModalNote = note;
+    modalBackdrop.style.display = 'flex';
+    modalTitle.value = note.title || '';
+    modalEditor.innerHTML = note.content || '';
+    try{
+      const meta = note.meta ? JSON.parse(note.meta) : {};
+      modalSize.value = meta.size || '16';
+      modalColor.value = meta.color || '#222';
+      loadAlbumsInto([modalAlbum]);
+      modalAlbum.value = (meta.album || '__default');
+    }catch(e){ console.warn(e); }
+  }
+  function closeModal(){ modalBackdrop.style.display = 'none'; currentModalNote = null; }
 
-/* ========== Tempo page ========== */
-function updateTempo(){
-  const now = new Date();
-  const d = diffYMDHMS(START, now);
-  const parts = [];
-  if(d.years) parts.push(`${d.years} ${d.years===1? 'ano':'anos'}`);
-  if(d.months) parts.push(`${d.months} ${d.months===1? 'mês':'meses'}`);
-  if(d.days) parts.push(`${d.days} ${d.days===1? 'dia':'dias'}`);
-  const elYMD = document.getElementById('tempoYMD'); const elHMS = document.getElementById('tempoHMS'); const elSentence = document.getElementById('tempoSentence');
-  if(elYMD) elYMD.textContent = parts.length ? parts.join(' • ') : '0 dias';
-  if(elHMS) elHMS.textContent = `${pad2(d.hours)}:${pad2(d.minutes)}:${pad2(d.seconds)}`;
-  if(elSentence) elSentence.textContent = `Para te lembrares quantos dias passaram desde que tomei a melhor decisão da minha vida... \nE que possamos voltar aqui e ver que os dias só aumentaram. \nAmo-te daqui até ao infinito e mais além ❤️\n(${d.totalDays} ${d.totalDays===1?'dia':'dias'})`;
-}
-setInterval(updateTempo, 1000);
-updateTempo();
+  modalClose.addEventListener('click', closeModal);
+  modalBackdrop.addEventListener('click', (e)=> { if(e.target === modalBackdrop) closeModal(); });
 
-/* ========== Init after login ========== */
-function initAfterLogin(){
-  try{ loadAlbums(); }catch(e){}
-  try{ loadGallery(); }catch(e){}
-  try{ loadNotes(); }catch(e){}
-  try{ renderCalendar(); }catch(e){}
-  try{ applyEditorStyles(); }catch(e){}
-}
+  modalSave.addEventListener('click', async ()=>{
+    if(!currentModalNote) return;
+    const id = currentModalNote.id;
+    const title = modalTitle.value.trim();
+    const content = modalEditor.innerHTML.trim();
+    const meta = { size: modalSize.value, color: modalColor.value, album: modalAlbum.value || '__default' };
+    try{
+      await supabase.from('notes').update({ title, content, meta: JSON.stringify(meta) }).eq('id', id);
+      closeModal();
+      loadNotes();
+    }catch(e){ console.error(e); alert('Erro ao guardar'); }
+  });
 
-/* expose helpers for debug */
-window.loadGallery = loadGallery;
-window.loadNotes = loadNotes;
-window.renderCalendar = renderCalendar;
+  modalDelete.addEventListener('click', async ()=>{
+    if(!currentModalNote) return;
+    if(!confirm('Apagar esta nota?')) return;
+    try{
+      await supabase.from('notes').delete().eq('id', currentModalNote.id);
+      closeModal();
+      loadNotes();
+    }catch(e){ console.error(e); alert('Erro ao apagar'); }
+  });
+
+  albumFilter.addEventListener('change', ()=> loadNotes());
+
+  /* ------- Calendar (week/month/year/day) ------- */
+  let calDate = new Date();
+  let calView = 'week';
+  const calViewEl = document.getElementById('calView');
+  const calLabel = document.getElementById('calLabel');
+  const calendarGrid = document.getElementById('calendarGrid');
+  let selectedCalDay = null;
+
+  document.getElementById('calPrev').addEventListener('click', ()=> navCal(-1));
+  document.getElementById('calNext').addEventListener('click', ()=> navCal(1));
+  calViewEl.addEventListener('change', (e)=>{ calView = e.target.value; renderCalendar(); });
+
+  function navCal(delta){
+    if(calView === 'day') calDate.setDate(calDate.getDate() + delta);
+    else if(calView === 'week') calDate.setDate(calDate.getDate() + delta*7);
+    else if(calView === 'month') calDate.setMonth(calDate.getMonth() + delta);
+    else calDate.setFullYear(calDate.getFullYear() + delta);
+    renderCalendar();
+  }
+
+  function startOfWeek(d){
+    const n = new Date(d); const day = n.getDay(); const diff = n.getDate() - day + (day === 0 ? -6 : 1); return new Date(n.getFullYear(), n.getMonth(), diff);
+  }
+
+  async function renderCalendar(){
+    calendarGrid.innerHTML = '';
+    if(calView === 'day'){
+      const d = new Date(calDate);
+      calLabel.textContent = d.toLocaleDateString('pt-PT', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+      const el = document.createElement('div'); el.className='cal-day'; el.style.gridColumn='1 / -1';
+      el.innerHTML = `<div style="font-weight:800">${d.toLocaleDateString('pt-PT')}</div><div class="note">${d.toLocaleDateString('pt-PT',{weekday:'long'})}</div>`;
+      el.addEventListener('click', ()=> selectCalDay(d));
+      calendarGrid.appendChild(el); return;
+    }
+    if(calView === 'week'){
+      const start = startOfWeek(calDate);
+      calLabel.textContent = start.toLocaleDateString('pt-PT', { day:'numeric', month:'long', year:'numeric' }) + ' — semana';
+      const days = [];
+      for(let i=0;i<7;i++){ const dd = new Date(start); dd.setDate(start.getDate()+i); days.push(dd); }
+      days.forEach(d=>{ const c = document.createElement('div'); c.className='cal-day'; c.innerHTML = `<div class="note">${d.toLocaleDateString('pt-PT',{weekday:'short'})}</div><div style="font-weight:800">${d.getDate()}</div>`; c.addEventListener('click', ()=> selectCalDay(d)); calendarGrid.appendChild(c); });
+      markCalEntries(days); return;
+    }
+    if(calView === 'month'){
+      const y = calDate.getFullYear(), m = calDate.getMonth();
+      calLabel.textContent = calDate.toLocaleDateString('pt-PT', { month:'long', year:'numeric' });
+      const first = new Date(y,m,1), last = new Date(y,m+1,0);
+      const startDay = (first.getDay()||7) - 1;
+      for(let i=0;i<startDay;i++){ const ph = document.createElement('div'); ph.style.visibility='hidden'; calendarGrid.appendChild(ph); }
+      const days = [];
+      for(let d=1; d<= last.getDate(); d++){ const dt = new Date(y,m,d); days.push(dt); const el = document.createElement('div'); el.className='cal-day'; el.innerHTML = `<div class="note">${dt.toLocaleDateString('pt-PT',{weekday:'short'})}</div><div style="font-weight:800">${d}</div>`; el.addEventListener('click', ()=> selectCalDay(dt)); calendarGrid.appendChild(el); }
+      markCalEntries(days); return;
+    }
+    if(calView === 'year'){
+      calLabel.textContent = calDate.getFullYear();
+      for(let i=0;i<12;i++){ const dt = new Date(calDate.getFullYear(), i, 1); const el = document.createElement('div'); el.className='cal-day'; el.innerHTML = `<div style="font-weight:800">${dt.toLocaleDateString('pt-PT',{month:'short'})}</div>`; el.addEventListener('click', ()=> { calDate = new Date(dt); calView = 'month'; calViewEl.value = 'month'; renderCalendar(); }); calendarGrid.appendChild(el); }
+    }
+  }
+
+  async function markCalEntries(days){
+    try{
+      if(!days || days.length===0) return;
+      const start = days[0].toISOString().slice(0,10);
+      const end = days[days.length-1].toISOString().slice(0,10);
+      const { data } = await supabase.from('calendar_entries').select('*').gte('day_date', start).lte('day_date', end);
+      const domDays = Array.from(document.querySelectorAll('.cal-day')).filter(x => x.style.visibility !== 'hidden');
+      for(let i=0;i<days.length;i++){
+        const key = days[i].toISOString().slice(0,10);
+        if(data && data.find(x => x.day_date === key)) domDays[i].classList.add('active');
+      }
+    }catch(e){ console.error(e); }
+  }
+
+  async function selectCalDay(d){
+    selectedCalDay = d;
+    const key = d.toISOString().slice(0,10);
+    try{
+      const { data } = await supabase.from('calendar_entries').select('*').eq('day_date', key).limit(1);
+      document.getElementById('dayNote').value = data?.[0]?.text || '';
+    }catch(e){ console.error(e); }
+  }
+
+  document.getElementById('saveDayBtn').addEventListener('click', async ()=>{
+    if(!selectedCalDay) return alert('Selecciona um dia primeiro.');
+    const key = selectedCalDay.toISOString().slice(0,10);
+    const txt = document.getElementById('dayNote').value.trim();
+    try{
+      const { data } = await supabase.from('calendar_entries').select('*').eq('day_date', key).limit(1);
+      if(data && data.length) await supabase.from('calendar_entries').update({ text: txt }).eq('day_date', key);
+      else await supabase.from('calendar_entries').insert([{ day_date: key, text: txt }]);
+      alert('Guardado!');
+      renderCalendar();
+    }catch(e){ console.error(e); alert('Erro ao gravar'); }
+  });
+
+  /* ------- Tempo page update (also handled by home counter) ------- */
+  function updateTempoUI(){ updateHomeClock(); } // already handled every second via setInterval above
+
+  /* ------- Auto-shrink for editor boxes (Sobre) ------- */
+  const bioLeft = document.getElementById('bio_left');
+  const bioRight = document.getElementById('bio_right');
+  const fontFamily = document.getElementById('fontFamily');
+  const fontSize = document.getElementById('fontSize');
+  const fontColor = document.getElementById('fontColor');
+  const alignLeft = document.getElementById('alignLeft');
+  const alignCenter = document.getElementById('alignCenter');
+  const alignRight = document.getElementById('alignRight');
+  const saveBios = document.getElementById('saveBios');
+
+  function adjustFontToFit(el){
+    // reduce font until content fits or until min size
+    const min = 12;
+    let computed = parseInt(window.getComputedStyle(el).fontSize) || parseInt(fontSize.value) || 16;
+    // if too tall reduce
+    while(computed > min && el.scrollHeight > el.clientHeight + 6){
+      computed -= 1;
+      el.style.fontSize = computed + 'px';
+    }
+  }
+  function applyEditorLive(){
+    [bioLeft, bioRight].forEach(el => {
+      el.style.fontFamily = fontFamily.value;
+      el.style.fontSize = fontSize.value + 'px';
+      el.style.color = fontColor.value;
+      adjustFontToFit(el);
+    });
+  }
+  [fontFamily, fontSize, fontColor].forEach(x => x.addEventListener('input', applyEditorLive));
+  [bioLeft, bioRight].forEach(b => { b.addEventListener('input', ()=> adjustFontToFit(b)); b.addEventListener('paste', ()=> setTimeout(()=> adjustFontToFit(b),100)); });
+
+  alignLeft.addEventListener('click', ()=> [bioLeft,bioRight].forEach(e=>e.style.textAlign='left'));
+  alignCenter.addEventListener('click', ()=> [bioLeft,bioRight].forEach(e=>e.style.textAlign='center'));
+  alignRight.addEventListener('click', ()=> [bioLeft,bioRight].forEach(e=>e.style.textAlign='right'));
+
+  saveBios.addEventListener('click', async ()=>{
+    try{
+      const left = bioLeft.innerText.trim(), right = bioRight.innerText.trim();
+      await supabase.from('notes').insert([{ content: JSON.stringify({ type:'bio', side:'left', text:left }) }, { content: JSON.stringify({ type:'bio', side:'right', text:right }) }]);
+      alert('Biografias guardadas!');
+    }catch(e){ console.error(e); alert('Erro ao gravar bios'); }
+  });
+
+  /* ------- initAfterLogin ------- */
+  function initAfterLogin(){
+    loadAlbumsInto();
+    loadGallery();
+    loadNotes();
+    renderCalendar();
+    applyEditorLive();
+  }
+
+  // initial state
+  appDiv.style.display = 'none';
+  loginCard.style.display = 'block';
+
+  // expose some helpers for debugging in console (optional)
+  window._sa = {
+    loadGallery, loadNotes, renderCalendar, supabase
+  };
+});
 </script>
 </body>
 </html>
